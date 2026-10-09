@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SmartCourse – Cài Đặt</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+</head>
+<body class="app-body">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-logo">
+      <i class="fa-solid fa-graduation-cap"></i>
+      <span>SmartCourse</span>
+    </div>
+    <nav class="sidebar-nav">
+      <a href="home.html" class="nav-item">
+        <i class="fa-solid fa-house"></i><span>Trang chủ</span>
+      </a>
+      <a href="courses.html" class="nav-item">
+        <i class="fa-solid fa-book"></i><span>Đăng ký môn học</span>
+      </a>
+      <a href="schedule.html" class="nav-item">
+        <i class="fa-solid fa-calendar-week"></i><span>Thời khóa biểu</span>
+      </a>
+      <a href="tuition.html" class="nav-item">
+        <i class="fa-solid fa-file-invoice-dollar"></i><span>Học phí</span>
+      </a>
+      <a href="settings.html" class="nav-item active">
+        <i class="fa-solid fa-gear"></i><span>Cài đặt</span>
+      </a>
+    </nav>
+    <div class="sidebar-user" id="sidebar-user">
+      <div class="user-avatar" id="sidebar-avatar">KH</div>
+      <div>
+        <div class="user-name" id="sidebar-name">Trần Văn Khoa</div>
+        <div class="user-id" id="sidebar-mssv">22110001</div>
+      </div>
+    </div>
+    <button class="btn-logout" id="btn-logout">
+      <i class="fa-solid fa-right-from-bracket"></i> Đăng xuất
+    </button>
+  </aside>
+
+  <!-- MAIN -->
+  <main class="main-content">
+    <header class="topbar">
+      <button class="sidebar-toggle" id="sidebar-toggle">
+        <i class="fa-solid fa-bars"></i>
+      </button>
+      <div class="topbar-title">Cài Đặt Tài Khoản</div>
+      <div class="topbar-right">
+        <div class="semester-wrapper">
+          <button class="semester-btn" id="semester-btn" type="button" aria-label="Chọn học kỳ" title="Nhấn để đổi học kỳ">
+            <i class="fa-solid fa-calendar-alt"></i>
+            <span class="semester-text">HK1 – 2026‑2027</span>
+            <i class="fa-solid fa-chevron-down semester-chevron"></i>
+          </button>
+          <div class="semester-dropdown hidden" id="semester-dropdown">
+            <div class="semester-dropdown-header">
+              <i class="fa-solid fa-clock-rotate-left"></i>
+              <span>Chọn học kỳ</span>
+            </div>
+            <div class="semester-dropdown-list">
+              <button type="button" class="sem-item active" data-sem="HK1 – 2026-2027">
+                <div class="sem-item-info">
+                  <span class="sem-name">Học kỳ 1 – 2026/2027</span>
+                  <span class="sem-badge sem-badge-current">Hiện tại</span>
+                </div>
+                <i class="fa-solid fa-check sem-check"></i>
+              </button>
+              <button type="button" class="sem-item" data-sem="HK2 – 2026-2027">
+                <div class="sem-item-info">
+                  <span class="sem-name">Học kỳ 2 – 2026/2027</span>
+                  <span class="sem-badge">Sắp mở</span>
+                </div>
+                <i class="fa-solid fa-check sem-check"></i>
+              </button>
+              <button type="button" class="sem-item" data-sem="HK Hè – 2026-2027">
+                <div class="sem-item-info">
+                  <span class="sem-name">Học kỳ Hè – 2026/2027</span>
+                  <span class="sem-badge">Dự kiến</span>
+                </div>
+                <i class="fa-solid fa-check sem-check"></i>
+              </button>
+              <button type="button" class="sem-item" data-sem="HK2 – 2025-2026">
+                <div class="sem-item-info">
+                  <span class="sem-name">Học kỳ 2 – 2025/2026</span>
+                  <span class="sem-badge sem-badge-past">Đã kết thúc</span>
+                </div>
+                <i class="fa-solid fa-check sem-check"></i>
+              </button>
+              <button type="button" class="sem-item" data-sem="HK1 – 2025-2026">
+                <div class="sem-item-info">
+                  <span class="sem-name">Học kỳ 1 – 2025/2026</span>
+                  <span class="sem-badge sem-badge-past">Đã kết thúc</span>
+                </div>
+                <i class="fa-solid fa-check sem-check"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+        <div class="notif-wrapper">
+          <button class="notif-btn" id="notif-btn" type="button" aria-label="Thông báo">
+            <i class="fa-solid fa-bell"></i>
+            <span class="notif-dot" id="notif-dot"></span>
+          </button>
+          <div class="notif-dropdown hidden" id="notif-dropdown">
+            <div class="notif-dropdown-header">
+              <div class="notif-header-title">
+                <i class="fa-solid fa-bell"></i>
+                <span>Thông báo</span>
+                <span class="notif-count-badge" id="notif-count-badge">0</span>
+              </div>
+              <button type="button" class="notif-mark-read" id="notif-mark-read">Đã đọc tất cả</button>
+            </div>
+            <div class="notif-dropdown-list" id="notif-dropdown-list"></div>
+            <div class="notif-dropdown-footer">
+              <a href="home.html"><i class="fa-solid fa-bullhorn"></i> Xem tất cả thông báo</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <div class="page-content">
+
+      <!-- Settings tabs -->
+      <div class="settings-tabs">
+        <button class="settings-tab active" data-tab="profile">
+          <i class="fa-solid fa-user"></i> Thông tin cá nhân
+        </button>
+        <button class="settings-tab" data-tab="password">
+          <i class="fa-solid fa-lock"></i> Đổi mật khẩu
+        </button>
+        <button class="settings-tab" data-tab="notifications">
+          <i class="fa-solid fa-bell"></i> Thông báo
+        </button>
+      </div>
+
+      <!-- TAB: Profile -->
+      <div class="settings-panel active" id="tab-profile">
+        <div class="card">
+          <div class="card-header">
+            <h3><i class="fa-solid fa-id-card"></i> Thông tin sinh viên</h3>
+          </div>
+          <div class="card-body">
+
+            <!-- Avatar area -->
+            <div class="avatar-section">
+              <div class="avatar-big" id="profile-avatar-big">KH</div>
+              <div class="avatar-info">
+                <div class="avatar-name" id="profile-name-display">Trần Văn Khoa</div>
+                <div class="avatar-sub" id="profile-major-display">Công nghệ thông tin · Năm 3</div>
+                <button class="btn btn-outline btn-sm" onclick="document.getElementById('avatar-upload').click()">
+                  <i class="fa-solid fa-camera"></i> Đổi ảnh
+                </button>
+                <input type="file" id="avatar-upload" accept="image/*" class="hidden" />
+              </div>
+            </div>
+
+            <hr class="settings-divider" />
+
+            <form id="profile-form" class="settings-form">
+              <div class="form-grid-2">
+                <div class="form-group">
+                  <label><i class="fa-solid fa-id-badge"></i> Mã số sinh viên</label>
+                  <input type="text" id="s-mssv" readonly class="readonly-input" />
+                </div>
+                <div class="form-group">
+                  <label><i class="fa-solid fa-user"></i> Họ và tên</label>
+                  <input type="text" id="s-name" placeholder="Họ và tên đầy đủ" required />
+                </div>
+              </div>
+              <div class="form-grid-2">
+                <div class="form-group">
+                  <label><i class="fa-solid fa-envelope"></i> Email trường</label>
+                  <div class="input-suffix-wrap">
+                    <input type="text" id="s-email-prefix" placeholder="vd: 22110001" />
+                    <span class="input-suffix">@lachong.edu.vn</span>
+                  </div>
+                  <small class="field-hint">Email chính thức: <strong id="s-email-full">22110001@lachong.edu.vn</strong></small>
+                </div>
+                <div class="form-group">
+                  <label><i class="fa-solid fa-phone"></i> Số điện thoại</label>
+                  <input type="tel" id="s-phone" placeholder="0901234567" />
+                </div>
+              </div>
+              <div class="form-grid-2">
+                <div class="form-group">
+                  <label><i class="fa-solid fa-book-open"></i> Ngành học</label>
+                  <select id="s-major" required>
+                    <option value="CNTT">Công nghệ thông tin</option>
+                    <option value="KTPM">Kỹ thuật phần mềm</option>
+                    <option value="KHMT">Khoa học máy tính</option>
+                    <option value="HTTT">Hệ thống thông tin</option>
+                    <option value="MMT">Mạng máy tính & Truyền thông</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label><i class="fa-solid fa-calendar-days"></i> Năm học</label>
+                  <select id="s-year" required>
+                    <option value="1">Năm 1</option>
+                    <option value="2">Năm 2</option>
+                    <option value="3">Năm 3</option>
+                    <option value="4">Năm 4</option>
+                  </select>
+                </div>
+              </div>
+              <div class="form-group">
+                <label><i class="fa-solid fa-location-dot"></i> Địa chỉ thường trú</label>
+                <input type="text" id="s-address" placeholder="Số nhà, đường, phường/xã, quận/huyện, tỉnh/TP..." />
+              </div>
+
+              <div id="profile-success" class="alert alert-success hidden">
+                <i class="fa-solid fa-circle-check"></i>
+                <span>Cập nhật thông tin thành công!</span>
+              </div>
+
+              <div class="form-actions">
+                <button type="button" class="btn btn-outline" id="btn-reset-profile">
+                  <i class="fa-solid fa-rotate-left"></i> Hoàn tác
+                </button>
+                <button type="submit" class="btn btn-primary">
+                  <i class="fa-solid fa-floppy-disk"></i> Lưu thay đổi
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+
+      <!-- TAB: Password -->
+      <div class="settings-panel" id="tab-password">
+        <div class="card">
+          <div class="card-header">
+            <h3><i class="fa-solid fa-key"></i> Đổi mật khẩu</h3>
+          </div>
+          <div class="card-body">
+            <div id="pw-change-success" class="alert alert-success hidden">
+              <i class="fa-solid fa-circle-check"></i>
+              <span>Đổi mật khẩu thành công!</span>
+            </div>
+            <div id="pw-change-error" class="alert alert-error hidden">
+              <i class="fa-solid fa-circle-exclamation"></i>
+              <span id="pw-change-err-msg"></span>
+            </div>
+            <form id="pw-change-form" class="settings-form" style="max-width:480px">
+              <div class="form-group">
+                <label><i class="fa-solid fa-lock"></i> Mật khẩu hiện tại</label>
+                <div class="input-eye">
+                  <input type="password" id="pw-current" placeholder="Nhập mật khẩu hiện tại" required />
+                  <button type="button" class="toggle-pw-btn" tabindex="-1"><i class="fa-solid fa-eye"></i></button>
+                </div>
+              </div>
+              <div class="form-group">
+                <label><i class="fa-solid fa-lock"></i> Mật khẩu mới</label>
+                <div class="input-eye">
+                  <input type="password" id="pw-new" placeholder="Tối thiểu 6 ký tự" required />
+                  <button type="button" class="toggle-pw-btn" tabindex="-1"><i class="fa-solid fa-eye"></i></button>
+                </div>
+                <div class="pw-strength-bar"><div id="pw-new-bar"></div></div>
+                <span id="pw-new-strength" class="pw-strength-text"></span>
+              </div>
+              <div class="form-group">
+                <label><i class="fa-solid fa-lock"></i> Xác nhận mật khẩu mới</label>
+                <div class="input-eye">
+                  <input type="password" id="pw-new2" placeholder="Nhập lại mật khẩu mới" required />
+                  <button type="button" class="toggle-pw-btn" tabindex="-1"><i class="fa-solid fa-eye"></i></button>
+                </div>
+              </div>
+              <div class="form-actions">
+                <button type="submit" class="btn btn-primary">
+                  <i class="fa-solid fa-key"></i> Đổi mật khẩu
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+
+      <!-- TAB: Notifications -->
+      <div class="settings-panel" id="tab-notifications">
+        <div class="card">
+          <div class="card-header">
+            <h3><i class="fa-solid fa-bell"></i> Tùy chọn thông báo</h3>
+          </div>
+          <div class="card-body">
+            <div class="notif-settings">
+              <div class="notif-row">
+                <div>
+                  <div class="notif-title">Nhắc nhở hạn đăng ký môn</div>
+                  <div class="notif-desc">Nhận thông báo trước 3 ngày khi hết hạn đăng ký</div>
+                </div>
+                <label class="toggle-switch">
+                  <input type="checkbox" id="notif-reg" checked />
+                  <span class="toggle-slider"></span>
+                </label>
+              </div>
+              <div class="notif-row">
+                <div>
+                  <div class="notif-title">Nhắc nhở học phí</div>
+                  <div class="notif-desc">Thông báo khi gần đến hạn đóng học phí</div>
+                </div>
+                <label class="toggle-switch">
+                  <input type="checkbox" id="notif-fee" checked />
+                  <span class="toggle-slider"></span>
+                </label>
+              </div>
+              <div class="notif-row">
+                <div>
+                  <div class="notif-title">Thông báo lịch thi</div>
+                  <div class="notif-desc">Cập nhật khi có thay đổi lịch thi giữa kỳ / cuối kỳ</div>
+                </div>
+                <label class="toggle-switch">
+                  <input type="checkbox" id="notif-exam" checked />
+                  <span class="toggle-slider"></span>
+                </label>
+              </div>
+              <div class="notif-row">
+                <div>
+                  <div class="notif-title">Thông báo học bổng</div>
+                  <div class="notif-desc">Tin tức về học bổng và hỗ trợ sinh viên</div>
+                </div>
+                <label class="toggle-switch">
+                  <input type="checkbox" id="notif-scholarship" />
+                  <span class="toggle-slider"></span>
+                </label>
+              </div>
+              <div class="notif-row">
+                <div>
+                  <div class="notif-title">Email thông báo</div>
+                  <div class="notif-desc">Gửi bản sao thông báo về email trường</div>
+                </div>
+                <label class="toggle-switch">
+                  <input type="checkbox" id="notif-email" checked />
+                  <span class="toggle-slider"></span>
+                </label>
+              </div>
+            </div>
+            <div class="form-actions" style="margin-top:1.5rem">
+              <button class="btn btn-primary" onclick="saveNotifSettings()">
+                <i class="fa-solid fa-floppy-disk"></i> Lưu cài đặt
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <div class="toast hidden" id="toast">
+    <i class="fa-solid fa-circle-check"></i>
+    <span id="toast-msg"></span>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
+

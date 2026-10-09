@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SmartCourse – Đăng Ký Tài Khoản</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+</head>
+<body class="auth-body">
+
+  <div class="bg-blob blob-1"></div>
+  <div class="bg-blob blob-2"></div>
+  <div class="bg-blob blob-3"></div>
+
+  <div class="auth-card auth-card--wide">
+    <div class="auth-logo">
+      <i class="fa-solid fa-graduation-cap"></i>
+      <span>SmartCourse</span>
+    </div>
+    <h2 class="auth-title">Tạo tài khoản sinh viên</h2>
+    <p class="auth-subtitle">Điền thông tin để bắt đầu đăng ký môn học</p>
+
+    <div id="reg-success" class="alert alert-success hidden">
+      <i class="fa-solid fa-circle-check"></i>
+      <span>Đăng ký thành công! Đang chuyển hướng...</span>
+    </div>
+    <div id="reg-error" class="alert alert-error hidden">
+      <i class="fa-solid fa-circle-exclamation"></i>
+      <span id="reg-error-msg"></span>
+    </div>
+
+    <form id="register-form" class="auth-form" autocomplete="off">
+      <div class="form-grid-2">
+        <div class="form-group">
+          <label for="r-mssv"><i class="fa-solid fa-id-card"></i> Mã số sinh viên</label>
+          <input type="text" id="r-mssv" placeholder="VD: 22110001" required />
+        </div>
+        <div class="form-group">
+          <label for="r-name"><i class="fa-solid fa-user"></i> Họ và tên</label>
+          <input type="text" id="r-name" placeholder="Nguyễn Văn A" required />
+        </div>
+      </div>
+      <div class="form-grid-2">
+        <div class="form-group">
+          <label for="r-email"><i class="fa-solid fa-envelope"></i> Email trường</label>
+          <input type="email" id="r-email" placeholder="22110001@lachong.edu.vn" required />
+        </div>
+        <div class="form-group">
+          <label for="r-phone"><i class="fa-solid fa-phone"></i> Số điện thoại</label>
+          <input type="tel" id="r-phone" placeholder="0901234567" />
+        </div>
+      </div>
+      <div class="form-grid-2">
+        <div class="form-group">
+          <label for="r-major"><i class="fa-solid fa-book-open"></i> Ngành học</label>
+          <select id="r-major" required>
+            <option value="">-- Chọn ngành --</option>
+            <option value="CNTT">Công nghệ thông tin</option>
+            <option value="KTPM">Kỹ thuật phần mềm</option>
+            <option value="KHMT">Khoa học máy tính</option>
+            <option value="HTTT">Hệ thống thông tin</option>
+            <option value="MMT">Mạng máy tính & Truyền thông</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="r-year"><i class="fa-solid fa-calendar-days"></i> Năm học</label>
+          <select id="r-year" required>
+            <option value="">-- Chọn năm --</option>
+            <option value="1">Năm 1</option>
+            <option value="2">Năm 2</option>
+            <option value="3">Năm 3</option>
+            <option value="4">Năm 4</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-grid-2">
+        <div class="form-group">
+          <label for="r-pw"><i class="fa-solid fa-lock"></i> Mật khẩu</label>
+          <div class="input-eye">
+            <input type="password" id="r-pw" placeholder="Tối thiểu 6 ký tự" required />
+            <button type="button" class="toggle-pw-btn" tabindex="-1"><i class="fa-solid fa-eye"></i></button>
+          </div>
+          <div class="pw-strength-bar"><div id="pw-bar"></div></div>
+          <span id="pw-strength-label" class="pw-strength-text"></span>
+        </div>
+        <div class="form-group">
+          <label for="r-pw2"><i class="fa-solid fa-lock"></i> Xác nhận mật khẩu</label>
+          <div class="input-eye">
+            <input type="password" id="r-pw2" placeholder="Nhập lại mật khẩu" required />
+            <button type="button" class="toggle-pw-btn" tabindex="-1"><i class="fa-solid fa-eye"></i></button>
+          </div>
+        </div>
+      </div>
+      <label class="checkbox-label">
+        <input type="checkbox" id="r-terms" required />
+        Tôi đồng ý với <a href="#" class="link-sm">điều khoản sử dụng</a> của SmartCourse
+      </label>
+      <button type="submit" class="btn btn-primary btn-block">
+        <span>Tạo tài khoản</span>
+        <i class="fa-solid fa-user-plus"></i>
+      </button>
+    </form>
+
+    <p class="auth-footer">Đã có tài khoản? <a href="index.html">Đăng nhập</a></p>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
+

@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SmartCourse – Đăng Ký Môn Học</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+</head>
+
+<body class="app-body">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-logo">
+      <i class="fa-solid fa-graduation-cap"></i>
+      <span>SmartCourse</span>
+    </div>
+    <nav class="sidebar-nav">
+      <a href="home.html" class="nav-item">
+        <i class="fa-solid fa-house"></i><span>Trang chủ</span>
+      </a>
+      <a href="courses.html" class="nav-item active">
+        <i class="fa-solid fa-book"></i><span>Đăng ký môn học</span>
+      </a>
+      <a href="schedule.html" class="nav-item">
+        <i class="fa-solid fa-calendar-week"></i><span>Thời khóa biểu</span>
+      </a>
+      <a href="tuition.html" class="nav-item">
+        <i class="fa-solid fa-file-invoice-dollar"></i><span>Học phí</span>
+      </a>
+      <a href="settings.html" class="nav-item">
+        <i class="fa-solid fa-gear"></i><span>Cài đặt</span>
+      </a>
+    </nav>
+    <div class="sidebar-user" id="sidebar-user">
+      <div class="user-avatar" id="sidebar-avatar">KH</div>
+      <div>
+        <div class="user-name" id="sidebar-name">Trần Văn Khoa</div>
+        <div class="user-id" id="sidebar-mssv">22110001</div>
+      </div>
+    </div>
+    <button class="btn-logout" id="btn-logout">
+      <i class="fa-solid fa-right-from-bracket"></i> Đăng xuất
+    </button>
+  </aside>
+
+  <!-- MAIN -->
+  <main class="main-content">
+    <header class="topbar">
+      <button class="sidebar-toggle" id="sidebar-toggle">
+        <i class="fa-solid fa-bars"></i>
+      </button>
+      <div class="topbar-title">Đăng Ký Môn Học</div>
+      <div class="topbar-right">
+        <span class="semester-badge"><i class="fa-solid fa-calendar-alt"></i> HK1 – 2025‑2026</span>
+        <div class="notif-wrapper">
+          <button class="notif-btn" id="notif-btn" type="button" aria-label="Thông báo">
+            <i class="fa-solid fa-bell"></i>
+            <span class="notif-dot" id="notif-dot"></span>
+          </button>
+          <div class="notif-dropdown hidden" id="notif-dropdown">
+            <div class="notif-dropdown-header">
+              <div class="notif-header-title">
+                <i class="fa-solid fa-bell"></i>
+                <span>Thông báo</span>
+                <span class="notif-count-badge" id="notif-count-badge">0</span>
+              </div>
+              <button type="button" class="notif-mark-read" id="notif-mark-read">Đã đọc tất cả</button>
+            </div>
+            <div class="notif-dropdown-list" id="notif-dropdown-list"></div>
+            <div class="notif-dropdown-footer">
+              <a href="home.html"><i class="fa-solid fa-bullhorn"></i> Xem tất cả thông báo</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <div class="page-content">
+      <!-- Credit summary bar -->
+      <div class="credit-summary-bar">
+        <div class="credit-item">
+          <i class="fa-solid fa-circle-check" style="color:var(--green)"></i>
+          <span>Đã đăng ký: <strong id="cr-registered">0</strong> TC</span>
+        </div>
+        <div class="credit-item">
+          <i class="fa-solid fa-circle-xmark" style="color:var(--orange)"></i>
+          <span>Tối đa: <strong>21</strong> TC / học kỳ</span>
+        </div>
+        <div class="credit-progress-wrap">
+          <div class="credit-progress-bar">
+            <div id="cr-bar" style="width:0%"></div>
+          </div>
+        </div>
+        <button class="btn btn-primary btn-sm" id="btn-confirm-reg" disabled>
+          <i class="fa-solid fa-floppy-disk"></i> Xác nhận đăng ký
+        </button>
+      </div>
+
+      <div class="courses-layout">
+        <!-- Filter panel -->
+        <aside class="filter-panel">
+          <h4><i class="fa-solid fa-filter"></i> Lọc môn học</h4>
+          <div class="form-group">
+            <label>Tìm kiếm</label>
+            <div class="search-input">
+              <i class="fa-solid fa-magnifying-glass"></i>
+              <input type="text" id="search-course" placeholder="Tên môn / mã môn..." />
+            </div>
+          </div>
+          <div class="form-group">
+            <label>Loại môn</label>
+            <select id="filter-type">
+              <option value="">Tất cả</option>
+              <option value="Bắt buộc">Bắt buộc</option>
+              <option value="Tự chọn">Tự chọn</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Số tín chỉ</label>
+            <select id="filter-credits">
+              <option value="">Tất cả</option>
+              <option value="2">2 TC</option>
+              <option value="3">3 TC</option>
+              <option value="4">4 TC</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Thứ trong tuần</label>
+            <select id="filter-day">
+              <option value="">Tất cả</option>
+              <option value="Thứ 2">Thứ 2</option>
+              <option value="Thứ 3">Thứ 3</option>
+              <option value="Thứ 4">Thứ 4</option>
+              <option value="Thứ 5">Thứ 5</option>
+              <option value="Thứ 6">Thứ 6</option>
+            </select>
+          </div>
+          <button class="btn btn-outline btn-block" id="btn-clear-filter">
+            <i class="fa-solid fa-rotate-left"></i> Xóa bộ lọc
+          </button>
+
+          <div class="cart-panel">
+            <h4><i class="fa-solid fa-cart-shopping"></i> Giỏ đăng ký <span id="cart-count">(0)</span></h4>
+            <ul id="cart-list" class="cart-list">
+              <li class="cart-empty">Chưa chọn môn nào</li>
+            </ul>
+          </div>
+        </aside>
+
+        <!-- Course cards -->
+        <section class="course-catalog">
+          <div class="catalog-header">
+            <h3>Danh sách môn học gợi ý <span id="catalog-count" class="badge-count">0</span></h3>
+            <div class="sort-wrap">
+              <label>Sắp xếp:</label>
+              <select id="sort-courses">
+                <option value="name">Tên A→Z</option>
+                <option value="credits-asc">TC tăng dần</option>
+                <option value="credits-desc">TC giảm dần</option>
+                <option value="slots">Còn chỗ</option>
+              </select>
+            </div>
+          </div>
+          <div class="course-grid" id="course-grid">
+            <!-- injected by JS -->
+          </div>
+        </section>
+      </div>
+    </div>
+  </main>
+
+  <!-- Modal: chọn lớp -->
+  <div class="modal-overlay hidden" id="class-modal">
+    <div class="modal">
+      <div class="modal-header">
+        <h3 id="modal-course-name">Chọn lớp học</h3>
+        <button class="modal-close" id="modal-close"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <div class="modal-body">
+        <p class="modal-subtitle" id="modal-course-info"></p>
+        <table class="class-table">
+          <thead>
+            <tr>
+              <th>Mã lớp</th>
+              <th>Giảng viên</th>
+              <th>Thứ</th>
+              <th>Tiết</th>
+              <th>Phòng</th>
+              <th>Sĩ số</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody id="class-table-body"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div class="toast hidden" id="toast">
+    <i class="fa-solid fa-circle-check"></i>
+    <span id="toast-msg"></span>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+
+</html>
