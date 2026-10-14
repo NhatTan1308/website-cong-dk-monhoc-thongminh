@@ -1467,11 +1467,55 @@ function initForgotPasswordPage() {
     setTimeout(() => { window.location.href = 'index.html'; }, 2000);
   });
 }
+/* =========================================
+   DARK / LIGHT MODE
+   ========================================= */
+function getTheme() {
+  return localStorage.getItem('sc_theme') || 'light';
+}
 
+function applyTheme(theme) {
+  document.documentElement.setAttribute('data-theme', theme);
+  const btn = document.getElementById('theme-btn');
+  if (btn) {
+    btn.innerHTML = theme === 'dark'
+      ? '<i class="fa-solid fa-sun"></i>'
+      : '<i class="fa-solid fa-moon"></i>';
+    btn.title = theme === 'dark' ? 'Chuyển sang chế độ sáng' : 'Chuyển sang chế độ tối';
+  }
+}
+
+function initTheme() {
+  /* Nếu trang chưa có nút thì tự chèn vào topbar (trước nút chuông) */
+  if (!document.getElementById('theme-btn')) {
+    const right = document.querySelector('.topbar-right');
+    if (right) {
+      const b = document.createElement('button');
+      b.className = 'theme-btn';
+      b.id = 'theme-btn';
+      b.type = 'button';
+      b.setAttribute('aria-label', 'Đổi giao diện sáng/tối');
+      right.insertBefore(b, right.querySelector('.notif-wrapper') || right.firstChild);
+    }
+  }
+
+  applyTheme(getTheme());
+
+  const btn = document.getElementById('theme-btn');
+  if (btn) {
+    btn.addEventListener('click', () => {
+      const next = getTheme() === 'dark' ? 'light' : 'dark';
+      try { localStorage.setItem('sc_theme', next); } catch (e) {}
+      applyTheme(next);
+      showToast(next === 'dark' ? '🌙 Đã bật chế độ tối' : '☀️ Đã bật chế độ sáng');
+    });
+  }
+}
 /* =========================================
    ROUTER – detect page and init
    ========================================= */
 document.addEventListener('DOMContentLoaded', () => {
+   initTheme();
   const path = window.location.pathname;
   const page = path.split('/').pop() || 'index.html';
 
