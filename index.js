@@ -132,7 +132,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const classes = COURSES.reduce((s, c) => s + c.classes.length, 0);
     $('#banner').innerHTML = banner('Chào mừng đến với SmartCourse LHU 👋',
       'Cổng đăng ký môn học thông minh: chọn môn, xếp lịch học và theo dõi học phí chỉ trong vài bước.',
-      '<a class="bn-btn w" href="index.html"><i class="fa-solid fa-right-to-bracket"></i> Đăng nhập</a><a class="bn-btn g" href="register.html"><i class="fa-solid fa-user-plus"></i> Tạo tài khoản</a>');
+      '<a class="bn-btn w" href="login.html"><i class="fa-solid fa-right-to-bracket"></i> Đăng nhập</a><a class="bn-btn g" href="register.html"><i class="fa-solid fa-user-plus"></i> Tạo tài khoản</a>');
     $('#stats').innerHTML = stat('courses.html', '#0d9488', 'fa-book-open', COURSES.length, 'Môn học đang mở') +
       stat('courses.html', '#22c55e', 'fa-people-group', classes, 'Lớp học phần') +
       stat('home.html', '#0ea5e9', 'fa-layer-group', MAX, 'Tín chỉ tối đa mỗi học kỳ') +
@@ -144,7 +144,7 @@ document.addEventListener('DOMContentLoaded', () => {
       return `<li><span class="dot" style="background:${c.color}"></span><div><b>${c.name}</b><small>${c.code} · ${c.classes.length} lớp · còn ${left} chỗ</small></div><span class="tc">${c.credits} TC</span></li>`;
     }).join('');
     $('#two').innerHTML = card('route', 'Đăng ký chỉ với 4 bước', '', `<ol class="steps">${how.map((s, i) => `<li><span class="n">${i + 1}</span><div><b>${s[0]}</b><small>${s[1]}</small></div></li>`).join('')}</ol>`) +
-      card('fire', 'Môn học đang mở', '<a href="index.html">Đăng nhập để đăng ký →</a>', `<ul class="list">${open}</ul>`);
+      card('fire', 'Môn học đang mở', '<a href="login.html">Đăng nhập để đăng ký →</a>', `<ul class="list">${open}</ul>`);
     $('#extra').innerHTML = '';
   }
 
