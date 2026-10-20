@@ -13,7 +13,7 @@ document.addEventListener('DOMContentLoaded', () => {
   setMode(document.documentElement.dataset.theme || 'light');
   $('#mode-btn').addEventListener('click', () => {
     const t = document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark';
-    try { localStorage.setItem('sc_theme', t); } catch (e) {}
+    try { localStorage.setItem('sc_theme', t); } catch (e) { }
     setMode(t);
   });
 
@@ -36,7 +36,7 @@ document.addEventListener('DOMContentLoaded', () => {
     { id: 4, title: 'Học bổng khuyến học đợt 2 mở nộp đơn', desc: 'Sinh viên có GPA ≥ 3.2 có thể nộp hồ sơ xét học bổng khuyến học đến 20/10/2026.', time: '2 ngày trước', type: 'success', icon: 'fa-award', unread: true, link: 'home.html' }
   ];
   const getNews = () => read(localStorage, 'sc_notifications', null) || DEFAULT_NEWS.map(x => ({ ...x }));
-  const setNews = (l) => { try { localStorage.setItem('sc_notifications', JSON.stringify(l)); } catch (e) {} };
+  const setNews = (l) => { try { localStorage.setItem('sc_notifications', JSON.stringify(l)); } catch (e) { } };
   const toast = (m) => { if (typeof showToast === 'function') showToast(m); };
   const getU = () => read(sessionStorage, 'sc_user', null);
   const getReg = () => read(localStorage, 'sc_registered', []);
@@ -138,7 +138,7 @@ document.addEventListener('DOMContentLoaded', () => {
       stat('home.html', '#0ea5e9', 'fa-layer-group', MAX, 'Tín chỉ tối đa mỗi học kỳ') +
       stat('tuition.html', '#ff9f1c', 'fa-coins', vnd(PRICE), 'Học phí mỗi tín chỉ');
     const how = [['Đăng nhập', 'Dùng mã số sinh viên hoặc tài khoản giảng viên'], ['Chọn môn & lớp', 'Hệ thống tự kiểm tra trùng lịch và giới hạn tín chỉ'],
-      ['Xem thời khóa biểu', 'Lịch tuần hiển thị trực quan, có phòng học'], ['Đóng học phí', 'Theo dõi số tiền và hạn nộp']];
+    ['Xem thời khóa biểu', 'Lịch tuần hiển thị trực quan, có phòng học'], ['Đóng học phí', 'Theo dõi số tiền và hạn nộp']];
     const open = COURSES.slice(0, 6).map(c => {
       const left = c.classes.reduce((s, x) => s + x.max - x.enrolled, 0);
       return `<li><span class="dot" style="background:${c.color}"></span><div><b>${c.name}</b><small>${c.code} · ${c.classes.length} lớp · còn ${left} chỗ</small></div><span class="tc">${c.credits} TC</span></li>`;
@@ -183,6 +183,8 @@ document.addEventListener('DOMContentLoaded', () => {
     if (n && !paid) sg.push(['#ff9f1c', 'fa-wallet', 'Học phí chưa thanh toán', `Cần đóng ${vnd(fee)} trước hạn 15/10/2026.`, 'tuition.html']);
     if (n && paid) sg.push(['#22c55e', 'fa-circle-check', 'Mọi thứ đã sẵn sàng', 'Bạn đã đăng ký và đóng học phí. Chúc học kỳ thành công!', 'schedule.html']);
     $('#extra').innerHTML = card('lightbulb', 'Gợi ý thông minh cho bạn', '', `<div class="sugg">${sg.map(s => `<a class="sg" href="${s[4]}" style="--c:${s[0]}"><i class="fa-solid ${s[1]}"></i><div><b>${s[2]}</b><span>${s[3]}</span></div></a>`).join('')}</div>`);
+    $('#extra').innerHTML += renderTuitionSyncBox(reg);
+    handleSyncTuyenData(reg);
   }
 
   /* ---------- Giảng viên ---------- */
@@ -215,3 +217,79 @@ document.addEventListener('DOMContentLoaded', () => {
   renderNews();
   render();
 });
+
+function renderTuitionSyncBox(reg) {
+  const PRICE = 500000;
+  const FEE0 = 150000;
+  let totalCourseFee = 0;
+
+  const courseRows = reg.map(r => {
+    const itemFee = r.c.credits * PRICE;
+    totalCourseFee += itemFee;
+    return `
+      <li style="display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px solid var(--line);">
+        <div>
+          <b style="display: block; font-size: .9rem;">${r.c.name}</b>
+          <small style="color: var(--mute); font-size: .78rem;">${r.c.code} | ${r.c.credits} Tín chỉ</small>
+        </div>
+        <span style="font-weight: 600; color: var(--pri);">${itemFee.toLocaleString('vi-VN')} ₫</span>
+      </li>
+    `;
+  }).join('');
+
+  const totalDisplay = `
+    <div style="display: flex; justify-content: space-between; padding-top: 14px; margin-top: 4px; font-weight: 700; font-size: 1.05rem;">
+      <span>Tổng phí môn học</span>
+      <span style="color: var(--org);">${totalCourseFee.toLocaleString('vi-VN')} ₫</span>
+    </div>
+    <div style="display: flex; justify-content: space-between; padding-top: 8px; font-size: .9rem; color: var(--mute);">
+      <span>Phụ phí cơ sở (FEE0)</span>
+      <span>${FEE0.toLocaleString('vi-VN')} ₫</span>
+    </div>
+    <button id="btn-sync-tuyen" class="btn-sm solid" style="width: 100%; margin-top: 16px; display: flex; justify-content: center; align-items: center; gap: 8px;">
+      <i class="fa-solid fa-arrows-rotate"></i> Đồng bộ dữ liệu với Tuyền
+    </button>
+  `;
+
+  return `
+    <section class="card" id="tuyen-sync-card">
+      <div class="card-h">
+        <h3><i class="fa-solid fa-file-invoice-dollar"></i> Đồng bộ phí khóa học</h3>
+        <span class="count">${reg.length} môn</span>
+      </div>
+      <div class="card-b">
+        <ul style="list-style: none; padding: 0; margin: 0;">
+          ${courseRows || '<p class="empty">Chưa có dữ liệu môn học để đồng bộ.</p>'}
+        </ul>
+        ${reg.length ? totalDisplay : ''}
+      </div>
+    </section>
+  `;
+}
+
+function handleSyncTuyenData(regData) {
+  const btn = document.querySelector('#btn-sync-tuyen');
+  if (!btn) return;
+
+  btn.addEventListener('click', async () => {
+    btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Đang đồng bộ...';
+    btn.style.opacity = '0.7';
+
+    try {
+      await new Promise(resolve => setTimeout(resolve, 1500));
+      const toastMsg = document.getElementById('toast-msg');
+      if (toastMsg) {
+        toastMsg.textContent = '✅ Đã đồng bộ chi tiết phí khóa học thành công!';
+        document.getElementById('toast').classList.remove('hidden');
+        setTimeout(() => document.getElementById('toast').classList.add('hidden'), 3000);
+      } else {
+        alert('Đã đồng bộ thành công!');
+      }
+    } catch (error) {
+      alert('Lỗi đồng bộ dữ liệu: ' + error.message);
+    } finally {
+      btn.innerHTML = '<i class="fa-solid fa-arrows-rotate"></i> Đồng bộ dữ liệu với Tuyền';
+      btn.style.opacity = '1';
+    }
+  });
+}
