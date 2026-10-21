@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Đăng ký môn học - Smart Course LHU</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+    />
+    <link rel="stylesheet" href="index.css" />
+    <link rel="stylesheet" href="courses.css" />
+  </head>
+  <body>
+    <div style="max-width: 1200px; margin: 0 auto; width: 100%">
+      <div class="main" style="padding: 24px; min-height: 100vh">
+        <h2 style="margin-bottom: 20px; font-weight: 700; color: var(--ink)">
+          Danh sách môn học
+        </h2>
+
+        <div class="toolbar">
+          <div class="search-box">
+            <i class="fa-solid fa-magnifying-glass"></i>
+            <input
+              type="text"
+              id="searchInput"
+              placeholder="Nhập mã môn hoặc tên môn học..."
+            />
+          </div>
+          <select id="filterSelect" class="filter-box">
+            <option value="all">Tất cả loại môn</option>
+            <option value="Bắt buộc">Môn bắt buộc</option>
+            <option value="Tự chọn">Môn tự chọn</option>
+          </select>
+        </div>
+
+        <div class="course-grid" id="courseGrid">
+          <!-- JS sẽ render thẻ môn học vào đây -->
+        </div>
+      </div>
+    </div>
+
+    <script src="data.js"></script>
+  </body>
+</html>

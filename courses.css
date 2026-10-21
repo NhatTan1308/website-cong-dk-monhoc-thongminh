@@ -1,0 +1,136 @@
+/* courses.css - File định dạng riêng của tính năng Danh sách môn học */
+.toolbar {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 24px;
+  flex-wrap: wrap;
+}
+.search-box {
+  position: relative;
+  flex: 1;
+  min-width: 250px;
+}
+.search-box i {
+  position: absolute;
+  left: 16px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--mute);
+}
+#searchInput {
+  width: 100%;
+  padding: 12px 16px 12px 42px;
+  border: 1.5px solid var(--line);
+  border-radius: 10px;
+  font: inherit;
+  background: var(--card);
+  color: var(--ink);
+  transition: 0.2s;
+}
+#searchInput:focus {
+  border-color: var(--pri);
+  outline: none;
+}
+.filter-box {
+  width: 200px;
+  padding: 12px 16px;
+  border: 1.5px solid var(--line);
+  border-radius: 10px;
+  font: inherit;
+  background: var(--card);
+  color: var(--ink);
+  cursor: pointer;
+}
+
+.course-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 16px;
+}
+
+.course-card {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+  transition: 0.2s;
+}
+.course-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--sh);
+  border-color: var(--pri);
+}
+
+.course-badge {
+  align-self: flex-start;
+  padding: 4px 12px;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+.badge-bb {
+  background: rgba(13, 148, 136, 0.12);
+  color: var(--pri);
+}
+.badge-tc {
+  background: rgba(255, 159, 28, 0.12);
+  color: var(--org);
+}
+
+.course-title {
+  font-size: 1.1rem;
+  font-weight: 700;
+  line-height: 1.4;
+  color: var(--ink);
+}
+.course-info {
+  display: grid;
+  gap: 8px;
+  font-size: 0.86rem;
+  color: var(--mute);
+  margin-bottom: 8px;
+}
+.course-info span {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.course-info i {
+  width: 16px;
+  text-align: center;
+  color: var(--pri);
+  font-size: 0.9rem;
+}
+
+.btn-act {
+  margin-top: auto;
+  padding: 12px;
+  border-radius: 10px;
+  font-size: 0.9rem;
+  font-weight: 700;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  transition: 0.2s;
+  border: none;
+  cursor: pointer;
+}
+.btn-available {
+  background: var(--btn);
+  color: #fff;
+  box-shadow: 0 4px 14px rgba(13, 148, 136, 0.25);
+}
+.btn-available:hover {
+  filter: brightness(1.1);
+  transform: translateY(-1px);
+}
+.btn-full {
+  background: var(--line);
+  color: var(--mute);
+  cursor: not-allowed;
+}
