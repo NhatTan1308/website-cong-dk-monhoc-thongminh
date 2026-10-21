@@ -131,6 +131,7 @@ document.addEventListener('DOMContentLoaded', () => {
   if (registerForm) {
     const fullName = document.querySelector('#full-name');
     const studentId = document.querySelector('#student-id');
+    const major = document.querySelector('#major');
 
     const updatePasswordValidity = () => {
       const rules = {
@@ -156,7 +157,7 @@ document.addEventListener('DOMContentLoaded', () => {
       event.preventDefault();
       updatePasswordValidity();
       updateConfirmPasswordValidity();
-      const inputs = Array.from(registerForm.querySelectorAll('input'));
+      const inputs = Array.from(registerForm.querySelectorAll('input, select'));
       if (!setInputValidity(inputs) || !registerForm.reportValidity()) return;
 
       const submitButton = registerForm.querySelector('.auth-submit');
@@ -179,6 +180,7 @@ document.addEventListener('DOMContentLoaded', () => {
         accounts.push({
           studentId: studentId.value.trim(),
           name: fullName.value.trim(),
+          major: major.value,
           salt,
           passwordHash,
           iterations: hashIterations
@@ -221,7 +223,8 @@ document.addEventListener('DOMContentLoaded', () => {
         try {
           sessionStorage.setItem('sc_user', JSON.stringify({
             name: account.name,
-            mssv: account.studentId
+            mssv: account.studentId,
+            major: account.major
           }));
         } catch (error) {
           throw new Error('Đăng nhập thành công nhưng không thể lưu phiên đăng nhập trong trình duyệt.');
@@ -245,5 +248,11 @@ document.addEventListener('DOMContentLoaded', () => {
     if (registerForm && event.target === password) {
       updateConfirmPasswordValidity();
     }
+  });
+
+  form.addEventListener('change', (event) => {
+    status.classList.remove('is-visible', 'is-error');
+    status.textContent = '';
+    if (event.target.matches('select')) event.target.removeAttribute('aria-invalid');
   });
 });

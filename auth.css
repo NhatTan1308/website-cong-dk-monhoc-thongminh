@@ -37,7 +37,7 @@ body.auth-page {
 }
 
 .auth-page a { color: inherit; text-decoration: none; }
-.auth-page button, .auth-page input { font: inherit; }
+.auth-page button, .auth-page input, .auth-page select { font: inherit; }
 .auth-page button { color: inherit; }
 
 .auth-layout { display: grid; grid-template-columns: minmax(320px, .9fr) minmax(480px, 1.1fr); min-height: 100vh; }
@@ -80,11 +80,15 @@ body.auth-page {
 .auth-input-wrap { position: relative; display: flex; align-items: center; }
 .auth-input-wrap > i { position: absolute; left: 14px; color: var(--auth-mute); font-size: .9rem; pointer-events: none; }
 .auth-input-wrap input { width: 100%; height: 48px; padding: 0 45px 0 42px; border: 1px solid var(--auth-line); border-radius: 11px; outline: 0; background: var(--auth-card); color: var(--auth-ink); font-size: .86rem; transition: border-color .2s, box-shadow .2s; }
+.auth-input-wrap select { width: 100%; height: 48px; padding: 0 12px 0 42px; border: 1px solid var(--auth-line); border-radius: 11px; outline: 0; background: var(--auth-card); color: var(--auth-ink); font-size: .86rem; transition: border-color .2s, box-shadow .2s; }
+.auth-input-wrap select:invalid { color: var(--auth-mute); }
+.auth-input-wrap select:focus { border-color: var(--auth-pri); box-shadow: 0 0 0 3px color-mix(in srgb, var(--auth-pri) 15%, transparent); }
 .auth-input-wrap input#student-id { padding-right: 116px; }
 .auth-input-suffix { position: absolute; right: 13px; color: var(--auth-mute); font-size: .8rem; pointer-events: none; }
 .auth-input-wrap input::placeholder { color: var(--auth-mute); opacity: .75; }
 .auth-input-wrap input:focus { border-color: var(--auth-pri); box-shadow: 0 0 0 3px color-mix(in srgb, var(--auth-pri) 15%, transparent); }
 .auth-input-wrap input[aria-invalid="true"] { border-color: #ef4444; }
+.auth-input-wrap select[aria-invalid="true"] { border-color: #ef4444; }
 .auth-password-toggle { position: absolute; right: 7px; display: grid; width: 36px; height: 36px; place-items: center; border: 0; border-radius: 8px; background: transparent; color: var(--auth-mute); cursor: pointer; }
 .auth-password-toggle:hover { background: var(--auth-bg); color: var(--auth-pri); }
 .auth-hint { display: block; margin: 6px 0 0; color: var(--auth-mute); font-size: .74rem; }
