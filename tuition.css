@@ -1,0 +1,1051 @@
+/* SmartCourse LHU - Giao dien hoc phi */
+
+.tuition-content {
+    display: flex;
+    flex-direction: column;
+    gap: 22px;
+    align-content: stretch;
+    min-width: 0;
+}
+
+.tuition-content * {
+    min-width: 0;
+}
+
+.tuition-hero {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+    min-height: 245px;
+    padding: 32px 36px;
+    overflow: hidden;
+    border: 1px solid var(--line);
+    border-radius: 22px;
+    background: linear-gradient(120deg, #e0f8f1 0%, #f0fbf8 58%, #e0f2fe 100%);
+}
+
+[data-theme="dark"] .tuition-hero {
+    background: linear-gradient(120deg, #123b36 0%, #142d31 58%, #15394b 100%);
+}
+
+.hero-text {
+    position: relative;
+    z-index: 1;
+    max-width: 680px;
+}
+
+.eyebrow,
+.panel-kicker {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    color: var(--pri);
+    font-size: .73rem;
+    font-weight: 800;
+    letter-spacing: .7px;
+}
+
+.tuition-hero h1 {
+    margin: 12px 0 10px;
+    color: var(--ink);
+    font-size: clamp(1.7rem, 3vw, 2.35rem);
+    font-weight: 800;
+    letter-spacing: -.8px;
+    line-height: 1.25;
+}
+
+.tuition-hero p {
+    max-width: 570px;
+    margin: 0;
+    color: var(--mute);
+    font-size: .92rem;
+    line-height: 1.8;
+}
+
+.hero-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 22px;
+}
+
+.tuition-content .btn-primary,
+.tuition-content .btn-secondary {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    min-height: 42px;
+    padding: 10px 16px;
+    border-radius: 11px;
+    font-size: .83rem;
+    font-weight: 700;
+    text-decoration: none;
+    white-space: normal;
+    transition: transform .2s, box-shadow .2s;
+}
+
+.tuition-content .btn-primary {
+    color: #fff;
+    background: var(--pri);
+    box-shadow: 0 5px 14px #0d948826;
+}
+
+.tuition-content .btn-secondary {
+    color: var(--ink);
+    border: 1px solid var(--line);
+    background: var(--card);
+}
+
+.tuition-content .btn-primary:hover,
+.tuition-content .btn-secondary:hover {
+    transform: translateY(-2px);
+}
+
+.hero-illustration {
+    position: relative;
+    display: flex;
+    flex: 0 0 190px;
+    align-items: center;
+    justify-content: center;
+    width: 190px;
+    height: 170px;
+    margin-right: 15px;
+}
+
+.hero-icon {
+    display: grid;
+    width: 125px;
+    height: 125px;
+    place-items: center;
+    border: 1px solid #ffffff9c;
+    border-radius: 35px;
+    color: var(--pri);
+    background: #ffffffa6;
+    box-shadow: 0 16px 40px #0d94881b;
+    font-size: 4rem;
+    transform: rotate(-7deg);
+}
+
+[data-theme="dark"] .hero-icon {
+    background: #ffffff12;
+    border-color: #ffffff1f;
+}
+
+.floating-icon,
+.floating-check {
+    position: absolute;
+    display: grid;
+    width: 43px;
+    height: 43px;
+    place-items: center;
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    background: var(--card);
+    box-shadow: 0 7px 20px #0000000c;
+}
+
+.floating-icon {
+    top: 7px;
+    right: 2px;
+    color: #f59e0b;
+    font-size: 1.2rem;
+}
+
+.floating-check {
+    bottom: 5px;
+    left: 0;
+    color: #16a34a;
+    font-size: 1.2rem;
+}
+
+.tuition-welcome {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding: 19px 22px;
+    border: 1px solid var(--line);
+    border-radius: 16px;
+    background: var(--card);
+}
+
+.welcome-icon {
+    display: grid;
+    flex: 0 0 48px;
+    width: 48px;
+    height: 48px;
+    place-items: center;
+    border-radius: 15px;
+    color: var(--pri);
+    background: var(--pri-s);
+    font-size: 1.25rem;
+}
+
+.tuition-welcome h2 {
+    margin: 0 0 5px;
+    color: var(--ink);
+    font-size: 1rem;
+}
+
+.tuition-welcome p {
+    margin: 0;
+    color: var(--mute);
+    font-size: .83rem;
+    line-height: 1.6;
+}
+
+.tuition-stats {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 15px;
+}
+
+.tuition-stat {
+    display: flex;
+    align-items: flex-start;
+    gap: 13px;
+    min-width: 0;
+    padding: 19px 17px;
+    border: 1px solid var(--line);
+    border-radius: 16px;
+    background: var(--card);
+    box-shadow: var(--sh);
+}
+
+.stat-icon {
+    display: grid;
+    flex: 0 0 43px;
+    width: 43px;
+    height: 43px;
+    place-items: center;
+    border-radius: 13px;
+    font-size: 1.1rem;
+}
+
+.stat-icon.teal {
+    color: #0d9488;
+    background: #d8f6ef;
+}
+
+.stat-icon.blue {
+    color: #0284c7;
+    background: #e0f2fe;
+}
+
+.stat-icon.orange {
+    color: #d97706;
+    background: #fff1d6;
+}
+
+.stat-icon.green {
+    color: #16a34a;
+    background: #dcfce7;
+}
+
+.tuition-stat>div:last-child {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    gap: 5px;
+}
+
+.tuition-stat span {
+    color: var(--mute);
+    font-size: .76rem;
+}
+
+.tuition-stat b {
+    overflow-wrap: anywhere;
+    color: var(--ink);
+    font-size: clamp(.92rem, 1.2vw, 1.2rem);
+    font-weight: 800;
+    line-height: 1.4;
+}
+
+.tuition-stat small {
+    color: var(--mute);
+    font-size: .7rem;
+    line-height: 1.5;
+}
+
+.tuition-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1.65fr) minmax(280px, .85fr);
+    align-items: start;
+    gap: 20px;
+}
+
+.tuition-panel {
+    min-width: 0;
+    overflow: hidden;
+    border: 1px solid var(--line);
+    border-radius: 17px;
+    background: var(--card);
+    box-shadow: var(--sh);
+}
+
+.panel-heading {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 22px 22px 18px;
+}
+
+.panel-heading h2,
+.deadline-panel h2 {
+    margin: 8px 0 0;
+    color: var(--ink);
+    font-size: 1.05rem;
+    font-weight: 800;
+    line-height: 1.4;
+}
+
+.panel-heading h2 i {
+    margin-right: 6px;
+    color: var(--pri);
+}
+
+.count-pill {
+    flex-shrink: 0;
+    padding: 6px 10px;
+    border-radius: 9px;
+    color: var(--pri);
+    background: var(--pri-s);
+    font-size: .75rem;
+    font-weight: 700;
+}
+
+.table-wrap {
+    width: 100%;
+    overflow-x: auto;
+}
+
+.tuition-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: .8rem;
+}
+
+.tuition-table th {
+    padding: 13px 15px;
+    color: var(--mute);
+    background: var(--bg);
+    font-size: .72rem;
+    font-weight: 700;
+    text-align: left;
+    white-space: nowrap;
+}
+
+.tuition-table td {
+    padding: 16px 15px;
+    border-bottom: 1px solid var(--line);
+    color: var(--ink);
+    vertical-align: middle;
+}
+
+.tuition-table tbody tr:last-child td {
+    border-bottom: 0;
+}
+
+.tuition-table tbody tr:hover {
+    background: var(--bg);
+}
+
+.tuition-table .course-name {
+    min-width: 170px;
+    font-weight: 700;
+}
+
+.tuition-table .course-code {
+    display: block;
+    margin-top: 5px;
+    color: var(--mute);
+    font-size: .7rem;
+    font-weight: 400;
+}
+
+.tuition-table .text-right {
+    text-align: right;
+}
+
+.tuition-table .amount {
+    color: var(--pri);
+    font-weight: 800;
+    white-space: nowrap;
+}
+
+.empty-cell {
+    padding: 32px 15px !important;
+    color: var(--mute) !important;
+    text-align: center;
+    line-height: 1.8;
+}
+
+.fee-summary {
+    padding: 18px 22px 22px;
+    border-top: 1px solid var(--line);
+    background: var(--bg);
+}
+
+.fee-summary>div {
+    display: flex;
+    justify-content: space-between;
+    gap: 15px;
+    padding: 9px 0;
+    color: var(--mute);
+    font-size: .83rem;
+}
+
+.fee-summary b {
+    color: var(--ink);
+    text-align: right;
+    white-space: nowrap;
+}
+
+.fee-summary .fee-grand-total {
+    margin-top: 8px;
+    padding-top: 16px;
+    border-top: 1px dashed var(--line);
+    color: var(--ink);
+    font-size: .92rem;
+    font-weight: 800;
+}
+
+.fee-summary .fee-grand-total b {
+    color: var(--pri);
+    font-size: 1.2rem;
+}
+
+.tuition-side {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.deadline-panel {
+    padding: 22px;
+}
+
+.side-panel-icon {
+    display: grid;
+    width: 44px;
+    height: 44px;
+    margin-bottom: 17px;
+    place-items: center;
+    border-radius: 13px;
+    color: var(--pri);
+    background: var(--pri-s);
+    font-size: 1.2rem;
+}
+
+.deadline-date {
+    margin-top: 15px;
+    color: var(--pri);
+    font-size: 1.7rem;
+    font-weight: 800;
+    letter-spacing: -.5px;
+}
+
+.deadline-panel p {
+    margin: 10px 0 15px;
+    color: var(--mute);
+    font-size: .81rem;
+    line-height: 1.7;
+}
+
+.deadline-status {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 12px;
+    border-radius: 10px;
+    color: #b45309;
+    background: #fef3c7;
+    font-size: .76rem;
+    font-weight: 700;
+    line-height: 1.5;
+}
+
+.deadline-status.past {
+    color: #b91c1c;
+    background: #fee2e2;
+}
+
+.deadline-status.ok {
+    color: #15803d;
+    background: #dcfce7;
+}
+
+.payment-panel .panel-heading {
+    padding-bottom: 10px;
+}
+
+.guide-item {
+    display: flex;
+    gap: 12px;
+    padding: 13px 20px;
+}
+
+.guide-item>span {
+    display: grid;
+    flex: 0 0 29px;
+    width: 29px;
+    height: 29px;
+    place-items: center;
+    border-radius: 9px;
+    color: var(--pri);
+    background: var(--pri-s);
+    font-size: .8rem;
+    font-weight: 800;
+}
+
+.guide-item b {
+    color: var(--ink);
+    font-size: .82rem;
+}
+
+.guide-item p {
+    margin: 5px 0 0;
+    color: var(--mute);
+    font-size: .76rem;
+    line-height: 1.65;
+}
+
+.demo-note {
+    display: flex;
+    gap: 9px;
+    margin: 13px 20px 20px;
+    padding: 12px;
+    border-radius: 10px;
+    color: var(--mute);
+    background: var(--bg);
+    font-size: .72rem;
+    line-height: 1.7;
+}
+
+.demo-note i {
+    flex-shrink: 0;
+    margin-top: 3px;
+    color: var(--pri);
+}
+
+.tuition-note {
+    display: flex;
+    align-items: flex-start;
+    gap: 13px;
+    padding: 18px 20px;
+    border: 1px solid var(--line);
+    border-radius: 15px;
+    background: var(--card);
+}
+
+.tuition-note>i {
+    margin-top: 3px;
+    color: #d97706;
+    font-size: 1.1rem;
+}
+
+.tuition-note b {
+    color: var(--ink);
+    font-size: .85rem;
+}
+
+.tuition-note p {
+    margin: 6px 0 0;
+    color: var(--mute);
+    font-size: .78rem;
+    line-height: 1.8;
+}
+
+.footer-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+}
+
+.footer-links a {
+    color: inherit;
+    text-decoration: none;
+}
+
+.footer-links a:hover {
+    color: var(--pri);
+}
+
+/* Đồng bộ các tên class khung trang với index.css */
+.sidebar {
+    min-width: 0;
+}
+
+.topbar {
+    min-width: 0;
+}
+
+.topbar-title {
+    flex: 1;
+    min-width: 0;
+}
+
+.topbar-actions {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.topbar-auth {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-left: 6px;
+}
+
+.topbar-auth a {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.topbar .menu {
+    display: grid;
+    place-items: center;
+}
+
+.topbar .topbar-title {
+    font-size: 1.02rem;
+    font-weight: 700;
+}
+
+.popover {
+    position: absolute;
+    right: 0;
+    top: calc(100% + 10px);
+    z-index: 60;
+    width: 380px;
+    max-width: calc(100vw - 24px);
+    overflow: hidden;
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    background: var(--card);
+    box-shadow: 0 16px 40px #0003;
+}
+
+.popover-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    padding: 14px 16px;
+    border-bottom: 1px solid var(--line);
+    background: var(--bg);
+}
+
+.notif-n {
+    position: absolute;
+    top: -4px;
+    right: -4px;
+    display: grid;
+    min-width: 18px;
+    height: 18px;
+    place-items: center;
+    padding: 0 4px;
+    border: 2px solid var(--card);
+    border-radius: 9px;
+    background: var(--red);
+    color: #fff;
+    font-size: .68rem;
+}
+
+.user-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 4px 10px 4px 4px;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+}
+
+.avatar {
+    display: grid;
+    flex: none;
+    width: 34px;
+    height: 34px;
+    place-items: center;
+    border-radius: 50%;
+    background: var(--pri-s);
+    color: var(--pri);
+    font-weight: 800;
+}
+
+.side-user .avatar {
+    width: 38px;
+    height: 38px;
+}
+
+.side-logout {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 0 16px 16px;
+    padding: 10px 14px;
+    border-radius: 10px;
+    color: var(--red);
+    background: #ff5a4f1a;
+}
+
+.footer {
+    margin-top: 10px;
+    background: #0c2a2e;
+    color: #94a3b8;
+    font-size: .86rem;
+}
+
+.footer-links {
+    padding: 20px 24px;
+}
+
+@media (max-width: 1100px) {
+    .tuition-stats {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .tuition-grid {
+        grid-template-columns: minmax(0, 1fr);
+    }
+
+    .tuition-side {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 800px) {
+    .tuition-hero {
+        padding: 26px;
+    }
+
+    .hero-illustration {
+        flex-basis: 130px;
+        width: 130px;
+        height: 135px;
+        margin-right: 0;
+    }
+
+    .hero-icon {
+        width: 95px;
+        height: 95px;
+        border-radius: 27px;
+        font-size: 3rem;
+    }
+
+    .floating-icon,
+    .floating-check {
+        width: 35px;
+        height: 35px;
+        border-radius: 11px;
+    }
+
+    .tuition-side {
+        grid-template-columns: minmax(0, 1fr);
+    }
+
+    .topbar {
+        display: flex;
+    }
+
+    .topbar-actions {
+        margin-left: auto;
+    }
+
+    .topbar-auth {
+        gap: 6px;
+    }
+}
+
+@media (max-width: 520px) {
+    .tuition-content {
+        gap: 15px;
+    }
+
+    .tuition-hero {
+        min-height: auto;
+        padding: 23px 19px;
+        border-radius: 17px;
+    }
+
+    .hero-illustration {
+        display: none;
+    }
+
+    .tuition-hero h1 {
+        font-size: 1.65rem;
+    }
+
+    .tuition-hero p {
+        font-size: .82rem;
+    }
+
+    .hero-actions {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .tuition-content .btn-primary,
+    .tuition-content .btn-secondary {
+        width: 100%;
+    }
+
+    .tuition-welcome {
+        align-items: flex-start;
+        padding: 15px;
+    }
+
+    .tuition-stats {
+        gap: 10px;
+    }
+
+    .tuition-stat {
+        flex-direction: column;
+        gap: 10px;
+        padding: 14px 12px;
+    }
+
+    .tuition-stat b {
+        font-size: .94rem;
+    }
+
+    .panel-heading {
+        padding: 18px 15px;
+    }
+
+    .tuition-table {
+        min-width: 590px;
+    }
+
+    .fee-summary {
+        padding: 15px;
+    }
+
+    .fee-summary>div {
+        font-size: .77rem;
+    }
+
+    .fee-summary .fee-grand-total b {
+        font-size: 1rem;
+    }
+
+    .deadline-panel {
+        padding: 18px;
+    }
+
+    .footer-links {
+        gap: 10px;
+    }
+
+    .topbar-title {
+        display: block;
+        font-size: .9rem;
+    }
+
+    .topbar-actions {
+        gap: 6px;
+    }
+
+    .topbar-auth a {
+        padding: 8px 10px;
+        font-size: .75rem;
+    }
+}
+
+/* Nút QR cạnh tổng cộng */
+.fee-total-actions {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 12px;
+}
+
+.qr-pay-btn {
+    width: 40px;
+    height: 40px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    background: var(--pri-s);
+    color: var(--pri);
+    cursor: pointer;
+    transition: 0.2s ease;
+}
+
+.qr-pay-btn svg {
+    width: 23px;
+    height: 23px;
+}
+
+.qr-pay-btn:hover {
+    background: var(--pri);
+    color: #fff;
+    transform: translateY(-2px);
+}
+
+/* Lớp phủ toàn màn hình */
+.qr-modal {
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transition: opacity 0.25s ease, visibility 0.25s ease;
+}
+
+.qr-modal.show {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+}
+
+.qr-modal-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(5, 20, 25, 0.7);
+    backdrop-filter: blur(5px);
+}
+
+.qr-modal-content {
+    position: relative;
+    z-index: 1;
+    width: min(100%, 420px);
+    max-height: 90vh;
+    overflow-y: auto;
+    padding: 30px 26px;
+    border: 1px solid var(--line);
+    border-radius: 22px;
+    background: var(--card);
+    color: var(--ink);
+    text-align: center;
+    box-shadow: 0 24px 80px rgba(0, 0, 0, 0.25);
+    transform: translateY(18px) scale(0.97);
+    transition: transform 0.25s ease;
+}
+
+.qr-modal.show .qr-modal-content {
+    transform: translateY(0) scale(1);
+}
+
+.qr-close-btn {
+    position: absolute;
+    top: 12px;
+    right: 15px;
+    width: 36px;
+    height: 36px;
+    border: none;
+    border-radius: 50%;
+    background: var(--bg);
+    color: var(--ink);
+    font-size: 28px;
+    line-height: 1;
+    cursor: pointer;
+}
+
+.qr-close-btn:hover {
+    background: var(--pri-s);
+    color: var(--pri);
+}
+
+.qr-modal-icon {
+    width: 52px;
+    height: 52px;
+    display: grid;
+    place-items: center;
+    margin: 0 auto 14px;
+    border-radius: 16px;
+    background: var(--pri-s);
+    color: var(--pri);
+    font-size: 32px;
+}
+
+.qr-modal-content h2 {
+    margin: 0 0 8px;
+    font-size: 22px;
+}
+
+.qr-modal-desc,
+.qr-modal-note {
+    color: var(--mute);
+    font-size: 14px;
+    line-height: 1.6;
+}
+
+.qr-modal-desc {
+    margin: 0 0 20px;
+}
+
+.qr-image-box {
+    width: min(100%, 270px);
+    aspect-ratio: 1;
+    display: grid;
+    place-items: center;
+    margin: 0 auto 20px;
+    padding: 10px;
+    overflow: hidden;
+    border: 1px solid var(--line);
+    border-radius: 16px;
+    background: #fff;
+}
+
+.qr-image-box img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+.qr-payment-total {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 15px;
+    border-radius: 12px;
+    background: var(--bg);
+    text-align: left;
+}
+
+.qr-payment-total span {
+    color: var(--mute);
+    font-size: 14px;
+}
+
+.qr-payment-total b {
+    color: var(--pri);
+    font-size: 19px;
+}
+
+.qr-modal-note {
+    margin: 16px 0 0;
+}
+
+@media (max-width: 480px) {
+    .qr-modal-content {
+        padding: 28px 18px 22px;
+    }
+
+    .fee-total-actions {
+        gap: 8px;
+    }
+
+    .qr-pay-btn {
+        width: 36px;
+        height: 36px;
+    }
+}
