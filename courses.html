@@ -3,7 +3,11 @@
 
 <head>
   <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Đăng ký môn học - Smart Course LHU</title>
+  <script>
+    try { document.documentElement.dataset.theme = localStorage.getItem('sc_theme') || 'light'; } catch (e) { }
+  </script>
   <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&display=swap"
     rel="stylesheet" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
@@ -12,26 +16,102 @@
 </head>
 
 <body>
-  <div style="max-width: 1200px; margin: 0 auto; width: 100%">
-    <div class="main" style="padding: 24px; min-height: 100vh">
-      <h2 style="margin-bottom: 20px; font-weight: 700; color: var(--ink)">
-        Danh sách môn học
-      </h2>
+  <div class="courses-wrapper">
+    <div class="main courses-main">
+      <div class="courses-header">
+        <div class="title-wrap">
+          <a href="index.html" class="back-btn" title="Quay về trang chủ" aria-label="Quay về trang chủ">
+            <i class="fa-solid fa-arrow-left"></i>
+          </a>
+          <h2 class="courses-page-title">
+            <i class="fa-solid fa-graduation-cap"></i>
+            <span>Danh sách môn học</span>
+          </h2>
+        </div>
+
+        <div class="reg-summary-pill" id="regSummary">
+          <i class="fa-solid fa-circle-check"></i>
+          <span>Đã đăng ký: <b id="regCount">0</b> môn (<b id="regCredits">0</b> tín chỉ)</span>
+        </div>
+      </div>
 
       <div class="toolbar">
         <div class="search-box">
           <i class="fa-solid fa-magnifying-glass"></i>
-          <input type="text" id="searchInput" placeholder="Nhập mã môn hoặc tên môn học..." />
+          <input type="text" id="searchInput" placeholder="Nhập mã môn hoặc tên môn học..." autocomplete="off" />
         </div>
-        <select id="filterSelect" class="filter-box">
+
+        <select id="majorSelect" class="filter-box" aria-label="Lọc theo ngành học">
+          <option value="all">Tất cả ngành học</option>
+          <option value="Công Nghệ Thông Tin">Công Nghệ Thông Tin</option>
+          <option value="Trí Tuệ Nhân Tạo">Trí Tuệ Nhân Tạo</option>
+          <option value="Thương Mại Điện Tử">Thương Mại Điện Tử</option>
+          <option value="Truyền Thông Đa Phương Tiện">Truyền Thông Đa Phương Tiện</option>
+        </select>
+
+        <select id="filterSelect" class="filter-box" aria-label="Lọc theo loại môn">
           <option value="all">Tất cả loại môn</option>
           <option value="Bắt buộc">Môn bắt buộc</option>
           <option value="Tự chọn">Môn tự chọn</option>
         </select>
       </div>
 
-      <div class="course-grid" id="courseGrid">
+      <div id="courseContainer">
         <!-- JS sẽ render thẻ môn học vào đây -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Thanh nổi theo dõi tín chỉ khi cuộn trang (Sticky/Floating Credit Bar) -->
+  <aside class="floating-credit-bar" id="floatingCreditBar" aria-label="Thanh theo dõi tín chỉ đăng ký">
+    <div class="fc-container">
+      <div class="fc-left">
+        <div class="fc-badge-icon">
+          <i class="fa-solid fa-graduation-cap"></i>
+        </div>
+        <div class="fc-info">
+          <span class="fc-label">Tiến độ tín chỉ đăng ký</span>
+          <div class="fc-stats">
+            <span>Đã chọn: <b id="fcCount">0</b> môn</span>
+            <span class="fc-dot">•</span>
+            <span>Tổng số: <b id="fcCredits">0</b> tín chỉ</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="fc-right">
+        <span class="fc-status-pill status-neutral" id="fcStatus">Chưa chọn môn</span>
+        <button type="button" class="fc-view-btn" id="fcViewBtn" onclick="toggleSelectedModal()">
+          <i class="fa-solid fa-list-check"></i>
+          <span>Xem môn đã chọn</span>
+        </button>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Modal xem nhanh danh sách môn học đã đăng ký -->
+  <div class="selected-modal hidden" id="selectedModal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+    <div class="modal-backdrop" onclick="toggleSelectedModal()"></div>
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3 id="modalTitle">
+          <i class="fa-solid fa-clipboard-check"></i>
+          <span>Môn học đã đăng ký</span>
+        </h3>
+        <button type="button" class="modal-close" onclick="toggleSelectedModal()" aria-label="Đóng popup">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+
+      <div class="modal-body" id="selectedModalBody">
+        <!-- Danh sách môn đã đăng ký do JS render -->
+      </div>
+
+      <div class="modal-footer">
+        <div class="modal-summary">
+          <span>Tổng số: <b id="modalCredits">0</b> tín chỉ</span>
+        </div>
+        <button type="button" class="btn-sm solid" onclick="toggleSelectedModal()">Xong</button>
       </div>
     </div>
   </div>
