@@ -50,6 +50,11 @@ document.addEventListener('DOMContentLoaded', () => {
     status.classList.add('is-visible');
   };
 
+  if (loginForm && new URLSearchParams(window.location.search).get('registered') === '1') {
+    showStatus('Đăng ký tài khoản thành công. Hãy đăng nhập bằng MSSV và mật khẩu vừa tạo.');
+    window.history.replaceState({}, '', window.location.pathname);
+  }
+
   const getAccounts = () => {
     let stored;
     try {
@@ -191,9 +196,7 @@ document.addEventListener('DOMContentLoaded', () => {
           iterations: hashIterations
         });
         saveAccounts(accounts);
-        registerForm.reset();
-        updatePasswordValidity();
-        showStatus('Tạo tài khoản thành công. Bạn có thể đăng nhập bằng MSSV và mật khẩu vừa tạo.');
+        window.location.href = 'login.html?registered=1';
       } catch (error) {
         showStatus(error.message || 'Không thể tạo tài khoản. Vui lòng thử lại.', true);
       } finally {
