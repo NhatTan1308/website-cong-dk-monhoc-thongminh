@@ -93,7 +93,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Notifications
     const defaultNews = [
-        { id: 1, title: 'Hạn đăng ký môn học: 15/10/2026', desc: 'Vui lòng kiểm tra thông tin đăng ký môn học.', time: 'Thông báo', type: 'warning', icon: 'fa-triangle-exclamation', unread: true, link: 'register.html' },
+        { id: 1, title: 'Hạn đăng ký môn học: 15/10/2026', desc: 'Vui lòng kiểm tra thông tin đăng ký môn học.', time: 'Thông báo', type: 'warning', icon: 'fa-triangle-exclamation', unread: true, link: 'courses.html' },
         { id: 2, title: 'Nhắc nhở học phí học kỳ', desc: 'Kiểm tra chi tiết học phí và thời hạn thanh toán.', time: 'Thông báo', type: 'info', icon: 'fa-receipt', unread: true, link: 'tuition.html' }
     ];
     const getNews = () => read(localStorage, 'sc_notifications', null) || defaultNews.map((item) => ({ ...item }));
@@ -160,7 +160,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 <td class="text-right amount">${money(fee)}</td></tr>`).join('')
         : `<tr><td colspan="4" class="empty-cell"><i class="fa-solid fa-receipt"></i><br>
             ${user ? 'Chưa có môn học được ghi nhận. Hãy đăng ký môn học trước.' : 'Đăng nhập để xem dữ liệu học phí theo tài khoản.'}<br>
-            <a href="${user ? 'register.html' : 'login.html'}">${user ? 'Đăng ký môn học' : 'Đăng nhập ngay'} →</a></td></tr>`;
+            <a href="${user ? 'courses.html' : 'login.html'}">${user ? 'Đăng ký môn học' : 'Đăng nhập ngay'} →</a></td></tr>`;
     $('#summary-course-fee').textContent = money(courseFee);
     $('#summary-extra-fee').textContent = money(extraFee);
     $('#summary-total-fee').textContent = money(totalFee);
