@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Hồ sơ cá nhân – Smart Course LHU</title>
+  <script>try { document.documentElement.dataset.theme = localStorage.getItem('sc_theme') || 'light'; } catch (error) { }</script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <link rel="stylesheet" href="settings.css" />
+</head>
+<body>
+  <main class="profile-page">
+    <header class="profile-topbar">
+      <a class="brand" href="index.html"><i class="fa-solid fa-graduation-cap"></i> Smart Course LHU</a>
+      <div class="top-actions">
+        <a class="back-link" href="index.html"><i class="fa-solid fa-arrow-left"></i> Trang chủ</a>
+        <button class="theme-button" id="theme-toggle" type="button" aria-label="Chuyển giao diện"></button>
+      </div>
+    </header>
+
+    <section class="profile-content">
+      <div class="page-heading">
+        <div class="heading-icon"><i class="fa-solid fa-user-gear"></i></div>
+        <div>
+          <h1>Hồ sơ cá nhân</h1>
+          <p>Cập nhật thông tin liên hệ và thông tin cá nhân của bạn.</p>
+        </div>
+      </div>
+
+      <form id="profile-form" novalidate>
+        <section class="profile-card identity-card">
+          <div class="avatar-area">
+            <div class="avatar-preview" id="avatar-preview" aria-label="Ảnh đại diện"></div>
+            <div class="avatar-controls">
+              <strong>Ảnh đại diện</strong>
+              <p>Chọn ảnh JPG, PNG hoặc WebP (tối đa 5 MB).</p>
+              <label class="upload-button" for="avatar-file"><i class="fa-solid fa-camera"></i> Chọn ảnh</label>
+              <input id="avatar-file" type="file" accept="image/jpeg,image/png,image/webp" />
+              <button class="remove-avatar" id="remove-avatar" type="button">Xóa ảnh</button>
+            </div>
+          </div>
+          <div class="locked-grid">
+            <div class="field">
+              <label for="full-name">Họ và tên <span class="lock-label"><i class="fa-solid fa-lock"></i> Không thể thay đổi</span></label>
+              <input id="full-name" type="text" disabled />
+            </div>
+            <div class="field">
+              <label for="major">Ngành học <span class="lock-label"><i class="fa-solid fa-lock"></i> Không thể thay đổi</span></label>
+              <input id="major" type="text" disabled />
+            </div>
+            <div class="field">
+              <label for="student-id">Mã số sinh viên <span class="lock-label"><i class="fa-solid fa-lock"></i> Không thể thay đổi</span></label>
+              <input id="student-id" type="text" disabled />
+            </div>
+          </div>
+          <p class="lock-note"><i class="fa-solid fa-circle-info"></i> Họ tên và ngành học được giữ nguyên theo thông tin lúc tạo tài khoản; ngành học quyết định danh sách môn bạn có thể đăng ký.</p>
+        </section>
+
+        <section class="profile-card">
+          <div class="section-heading">
+            <span><i class="fa-regular fa-address-card"></i></span>
+            <div><h2>Thông tin cá nhân</h2><p>Các thông tin dưới đây có thể chỉnh sửa bất cứ lúc nào.</p></div>
+          </div>
+          <div class="editable-grid">
+            <div class="field">
+              <label for="birth-date">Ngày sinh</label>
+              <input id="birth-date" name="birthDate" type="date" />
+            </div>
+            <div class="field">
+              <label for="phone">Số điện thoại</label>
+              <input id="phone" name="phone" type="tel" autocomplete="tel" inputmode="tel" pattern="[0-9+\(\) .\-]{8,20}" placeholder="Ví dụ: 0901 234 567" />
+            </div>
+            <div class="field">
+              <label for="personal-email">Email cá nhân</label>
+              <input id="personal-email" name="personalEmail" type="email" autocomplete="email" maxlength="254" placeholder="ten@email.com" />
+            </div>
+            <div class="field field-wide">
+              <label for="address">Địa chỉ</label>
+              <textarea id="address" name="address" rows="3" maxlength="300" autocomplete="street-address" placeholder="Nhập địa chỉ hiện tại"></textarea>
+            </div>
+          </div>
+          <p class="form-status" id="form-status" role="status" aria-live="polite"></p>
+          <div class="form-actions">
+            <a class="cancel-button" href="index.html">Hủy</a>
+            <button class="save-button" id="save-button" type="submit"><i class="fa-solid fa-floppy-disk"></i> Lưu thay đổi</button>
+          </div>
+        </section>
+      </form>
+    </section>
+    <footer>© 2026 Smart Course LHU · Đại học Lạc Hồng</footer>
+  </main>
+  <script src="settings.js" defer></script>
+</body>
+</html>

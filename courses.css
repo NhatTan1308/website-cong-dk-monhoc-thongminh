@@ -138,6 +138,17 @@
   transition: border-color 0.2s, box-shadow 0.2s;
 }
 
+.major-lock {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  align-self: center;
+  color: var(--mute);
+  font-size: .78rem;
+}
+
+.major-lock:not(.hidden) { display: inline-flex; }
+
 /* Nhóm theo ngành */
 .major-title {
   font-size: 1.3rem;

@@ -181,6 +181,11 @@ document.addEventListener('DOMContentLoaded', () => {
           studentId: studentId.value.trim(),
           name: fullName.value.trim(),
           major: major.value,
+          birthDate: '',
+          address: '',
+          phone: '',
+          personalEmail: '',
+          avatar: '',
           salt,
           passwordHash,
           iterations: hashIterations
@@ -224,7 +229,13 @@ document.addEventListener('DOMContentLoaded', () => {
           sessionStorage.setItem('sc_user', JSON.stringify({
             name: account.name,
             mssv: account.studentId,
-            major: account.major
+            major: account.major,
+            majorName: account.major,
+            birthDate: account.birthDate || '',
+            address: account.address || '',
+            phone: account.phone || '',
+            personalEmail: account.personalEmail || '',
+            avatar: account.avatar || ''
           }));
         } catch (error) {
           throw new Error('Đăng nhập thành công nhưng không thể lưu phiên đăng nhập trong trình duyệt.');

@@ -42,6 +42,13 @@ const registeredCourseIds = new Set(
     }
   })()
 );
+const courseUser = (() => {
+  try {
+    return JSON.parse(sessionStorage.getItem('sc_user') || 'null');
+  } catch {
+    return null;
+  }
+})();
 
 function saveRegisteredState() {
   try {
@@ -86,6 +93,11 @@ function showToast(message, type = 'success') {
 function registerCourse(courseId) {
   const course = MOCK_DATA.find(c => c.id === courseId);
   if (!course) return;
+
+  if (courseUser && course.major !== courseUser.major) {
+    showToast('Bạn chỉ có thể đăng ký môn học thuộc ngành của mình.', 'error');
+    return;
+  }
 
   // Trường hợp 1: Môn này ĐÃ ĐƯỢC sinh viên đăng ký trước đó -> Nhấn vào sẽ HỦY ĐĂNG KÝ
   if (registeredCourseIds.has(courseId)) {
@@ -296,6 +308,13 @@ function initCoursePage() {
   const searchInput = document.getElementById('searchInput');
   const filterSelect = document.getElementById('filterSelect');
   const majorSelect = document.getElementById('majorSelect');
+  const majorLock = document.getElementById('major-lock');
+
+  if (courseUser && courseUser.major && majorSelect) {
+    majorSelect.value = courseUser.major;
+    majorSelect.disabled = true;
+    if (majorLock) majorLock.classList.remove('hidden');
+  }
   
   function filterData() {
     const text = (searchInput ? searchInput.value : '').trim().toLowerCase();

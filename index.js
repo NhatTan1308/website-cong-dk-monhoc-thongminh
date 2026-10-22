@@ -57,7 +57,19 @@ document.addEventListener('DOMContentLoaded', () => {
     const ini = (p.length > 1 ? p[0][0] + p[p.length - 1][0] : user.name.slice(0, 2)).toUpperCase();
     $('#guest').classList.add('hidden'); $('#user').classList.remove('hidden');
     $('#side-user').classList.remove('hidden'); $('#side-logout').classList.remove('hidden');
-    ['#me-av', '#side-av'].forEach(s => $(s).textContent = ini);
+    ['#me-av', '#side-av'].forEach(s => {
+      const avatar = $(s);
+      avatar.textContent = '';
+      if (typeof user.avatar === 'string' && user.avatar.startsWith('data:image/')) {
+        const image = document.createElement('img');
+        image.src = user.avatar;
+        image.alt = '';
+        image.className = 'avatar-image';
+        avatar.appendChild(image);
+      } else {
+        avatar.textContent = ini;
+      }
+    });
     $('#me-short').textContent = p[p.length - 1];
     ['#me-name', '#side-name'].forEach(s => $(s).textContent = user.name);
     ['#me-id', '#side-id'].forEach(s => $(s).textContent = user.mssv);
