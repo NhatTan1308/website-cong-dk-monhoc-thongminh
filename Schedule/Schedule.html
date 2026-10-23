@@ -1,28 +1,33 @@
 <!DOCTYPE html>
 <html lang="vi">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="theme-color" content="#f1faf7" />
   <title>Thời khóa biểu - Smart Course LHU</title>
-  <script>try { document.documentElement.dataset.theme = localStorage.getItem('sc_theme') || 'light'; } catch (e) {}</script>
+  <script>try { document.documentElement.dataset.theme = localStorage.getItem('sc_theme') || 'light'; } catch (e) { }</script>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&display=swap"
+    rel="stylesheet" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
   <link rel="stylesheet" href="../index.css" />
   <link rel="stylesheet" href="Schedule.css" />
 </head>
+
 <body>
   <div class="shell">
     <aside class="side" id="side">
       <a class="logo" href="../index.html"><i class="fa-solid fa-graduation-cap"></i><span>Smart Course LHU</span></a>
       <nav class="nav" aria-label="Điều hướng chính">
         <a href="../index.html"><i class="fa-solid fa-house"></i><span>Trang chủ</span></a>
-        <a href="../courses.html"><i class="fa-solid fa-book"></i><span>Đăng ký môn học</span></a>
-        <a class="on" href="Schedule.html" aria-current="page"><i class="fa-solid fa-calendar-week"></i><span>Thời khóa biểu</span></a>
+        <a href="../Courses/courses.html"><i class="fa-solid fa-book"></i><span>Đăng ký môn học</span></a>
+        <a class="on" href="Schedule.html" aria-current="page"><i class="fa-solid fa-calendar-week"></i><span>Thời khóa
+            biểu</span></a>
       </nav>
-      <a class="schedule-login" href="../login.html"><i class="fa-solid fa-right-to-bracket"></i> Đăng nhập</a>
+      <a class="schedule-login" href="../Login/Register/login.html"><i class="fa-solid fa-right-to-bracket"></i> Đăng
+        nhập</a>
     </aside>
     <div class="overlay" id="overlay"></div>
 
@@ -42,7 +47,8 @@
             <h2>Thời khóa biểu của bạn</h2>
             <p class="schedule-intro">Theo dõi lịch học trong tuần và chuẩn bị cho buổi học tiếp theo.</p>
           </div>
-          <button class="print-button" id="print-schedule" type="button"><i class="fa-solid fa-print"></i> In thời khóa biểu</button>
+          <button class="print-button" id="print-schedule" type="button"><i class="fa-solid fa-print"></i> In thời khóa
+            biểu</button>
         </section>
 
         <section class="schedule-stats" aria-label="Tổng quan lịch học">
@@ -72,11 +78,14 @@
             </div>
             <div class="week-controls" aria-label="Điều khiển tuần">
               <button class="today-button" id="today-button" type="button">Hôm nay</button>
-              <button class="week-arrow" id="previous-week" type="button" aria-label="Tuần trước"><i class="fa-solid fa-chevron-left"></i></button>
-              <button class="week-arrow" id="next-week" type="button" aria-label="Tuần sau"><i class="fa-solid fa-chevron-right"></i></button>
+              <button class="week-arrow" id="previous-week" type="button" aria-label="Tuần trước"><i
+                  class="fa-solid fa-chevron-left"></i></button>
+              <button class="week-arrow" id="next-week" type="button" aria-label="Tuần sau"><i
+                  class="fa-solid fa-chevron-right"></i></button>
             </div>
           </div>
-          <p class="demo-note"><i class="fa-solid fa-circle-info"></i> Đây là lịch minh họa; dữ liệu sẽ được nối với các môn đã đăng ký sau.</p>
+          <p class="demo-note"><i class="fa-solid fa-circle-info"></i> Đây là lịch minh họa; dữ liệu sẽ được nối với các
+            môn đã đăng ký sau.</p>
           <div class="schedule-scroll" tabindex="0" aria-label="Bảng thời khóa biểu, có thể cuộn ngang">
             <div class="schedule-board" id="schedule-board"></div>
           </div>
@@ -97,4 +106,5 @@
 
   <script src="Schedule.js"></script>
 </body>
+
 </html>

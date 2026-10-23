@@ -147,7 +147,9 @@
   font-size: .78rem;
 }
 
-.major-lock:not(.hidden) { display: inline-flex; }
+.major-lock:not(.hidden) {
+  display: inline-flex;
+}
 
 /* Nhóm theo ngành */
 .major-title {
@@ -168,10 +170,10 @@
 }
 
 /* Grid danh sách môn học - Responsive tự động thích ứng màn hình */
-.course-grid { 
-  display: grid; 
-  grid-template-columns: repeat(auto-fill, minmax(290px, 1fr)); 
-  gap: 20px; 
+.course-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
+  gap: 20px;
 }
 
 /* Card môn học */
@@ -602,13 +604,25 @@
 }
 
 @keyframes modalSlideUp {
-  from { opacity: 0; transform: translateY(20px) scale(0.97); }
-  to { opacity: 1; transform: translateY(0) scale(1); }
+  from {
+    opacity: 0;
+    transform: translateY(20px) scale(0.97);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
 }
 
 @keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
 }
 
 .modal-header {
@@ -741,30 +755,37 @@
   .courses-main {
     padding: 16px 16px 120px;
   }
+
   .toolbar {
     flex-direction: column;
     gap: 12px;
   }
+
   .filter-box {
     width: 100%;
   }
+
   .course-grid {
     grid-template-columns: 1fr;
   }
+
   .floating-credit-bar {
     bottom: 12px;
     width: calc(100% - 20px);
     border-radius: 14px;
   }
+
   .fc-container {
     padding: 10px 14px;
     flex-wrap: wrap;
     gap: 10px;
   }
+
   .fc-right {
     width: 100%;
     justify-content: space-between;
   }
+
   .fc-view-btn {
     padding: 8px 12px;
     font-size: 0.82rem;

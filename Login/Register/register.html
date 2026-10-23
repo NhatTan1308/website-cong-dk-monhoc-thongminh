@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="vi">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -10,14 +11,16 @@
   </script>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&display=swap"
+    rel="stylesheet" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
   <link rel="stylesheet" href="auth.css" />
 </head>
+
 <body class="auth-page">
   <main class="auth-layout">
     <section class="auth-intro" aria-label="Giới thiệu Smart Course LHU">
-      <a class="auth-brand" href="index.html">
+      <a class="auth-brand" href="../../index.html">
         <span class="auth-brand-icon"><i class="fa-solid fa-graduation-cap"></i></span>
         <span>Smart Course <b>LHU</b></span>
       </a>
@@ -26,13 +29,15 @@
         <h1>Học tập thông minh,<br />bắt đầu từ hôm nay.</h1>
         <p>Tạo tài khoản sinh viên để quản lý môn học, thời khóa biểu và học phí thuận tiện hơn.</p>
       </div>
-      <div class="auth-intro-footer"><i class="fa-solid fa-shield-halved"></i> Dành riêng cho cộng đồng sinh viên LHU</div>
+      <div class="auth-intro-footer"><i class="fa-solid fa-shield-halved"></i> Dành riêng cho cộng đồng sinh viên LHU
+      </div>
     </section>
 
     <section class="auth-panel">
       <div class="auth-panel-top">
-        <a class="auth-back" href="index.html"><i class="fa-solid fa-arrow-left"></i><span>Về trang chủ</span></a>
-        <button class="auth-theme" id="theme-toggle" type="button" aria-label="Chuyển sang giao diện tối" title="Chuyển giao diện"></button>
+        <a class="auth-back" href="../../index.html"><i class="fa-solid fa-arrow-left"></i><span>Về trang chủ</span></a>
+        <button class="auth-theme" id="theme-toggle" type="button" aria-label="Chuyển sang giao diện tối"
+          title="Chuyển giao diện"></button>
       </div>
 
       <div class="auth-card">
@@ -49,7 +54,8 @@
             <label for="full-name">Họ và tên</label>
             <div class="auth-input-wrap">
               <i class="fa-regular fa-user" aria-hidden="true"></i>
-              <input id="full-name" name="fullName" type="text" autocomplete="name" placeholder="Nguyễn Văn An" required maxlength="100" />
+              <input id="full-name" name="fullName" type="text" autocomplete="name" placeholder="Nguyễn Văn An" required
+                maxlength="100" />
             </div>
           </div>
 
@@ -57,7 +63,8 @@
             <label for="student-id">Mã số sinh viên</label>
             <div class="auth-input-wrap">
               <i class="fa-regular fa-id-card" aria-hidden="true"></i>
-              <input id="student-id" name="studentId" type="text" autocomplete="username" placeholder="Nhập MSSV" required maxlength="30" aria-describedby="student-id-hint" />
+              <input id="student-id" name="studentId" type="text" autocomplete="username" placeholder="Nhập MSSV"
+                required maxlength="30" aria-describedby="student-id-hint" />
               <span class="auth-input-suffix" aria-hidden="true">@lhu.edu.vn</span>
             </div>
             <small class="auth-hint" id="student-id-hint">Email đăng nhập: MSSV<b>@lhu.edu.vn</b></small>
@@ -81,13 +88,18 @@
             <label for="password">Mật khẩu</label>
             <div class="auth-input-wrap">
               <i class="fa-solid fa-lock" aria-hidden="true"></i>
-              <input id="password" name="password" type="password" autocomplete="new-password" placeholder="Tạo mật khẩu mạnh" required aria-describedby="password-rules" />
-              <button class="auth-password-toggle" type="button" data-password-toggle="password" aria-label="Hiện mật khẩu" aria-pressed="false"><i class="fa-regular fa-eye" aria-hidden="true"></i></button>
+              <input id="password" name="password" type="password" autocomplete="new-password"
+                placeholder="Tạo mật khẩu mạnh" required aria-describedby="password-rules" />
+              <button class="auth-password-toggle" type="button" data-password-toggle="password"
+                aria-label="Hiện mật khẩu" aria-pressed="false"><i class="fa-regular fa-eye"
+                  aria-hidden="true"></i></button>
             </div>
             <ul class="auth-rules" id="password-rules" aria-label="Yêu cầu mật khẩu">
               <li data-rule="length"><i class="fa-solid fa-circle-check" aria-hidden="true"></i> Ít nhất 9 ký tự</li>
-              <li data-rule="uppercase"><i class="fa-solid fa-circle-check" aria-hidden="true"></i> Có ít nhất 1 chữ viết hoa</li>
-              <li data-rule="special"><i class="fa-solid fa-circle-check" aria-hidden="true"></i> Có ít nhất 1 ký tự đặc biệt (!@#$%^&amp;*)</li>
+              <li data-rule="uppercase"><i class="fa-solid fa-circle-check" aria-hidden="true"></i> Có ít nhất 1 chữ
+                viết hoa</li>
+              <li data-rule="special"><i class="fa-solid fa-circle-check" aria-hidden="true"></i> Có ít nhất 1 ký tự đặc
+                biệt (!@#$%^&amp;*)</li>
             </ul>
           </div>
 
@@ -95,8 +107,11 @@
             <label for="confirm-password">Xác nhận mật khẩu</label>
             <div class="auth-input-wrap">
               <i class="fa-solid fa-lock" aria-hidden="true"></i>
-              <input id="confirm-password" name="confirmPassword" type="password" autocomplete="new-password" placeholder="Nhập lại mật khẩu" required />
-              <button class="auth-password-toggle" type="button" data-password-toggle="confirm-password" aria-label="Hiện mật khẩu" aria-pressed="false"><i class="fa-regular fa-eye" aria-hidden="true"></i></button>
+              <input id="confirm-password" name="confirmPassword" type="password" autocomplete="new-password"
+                placeholder="Nhập lại mật khẩu" required />
+              <button class="auth-password-toggle" type="button" data-password-toggle="confirm-password"
+                aria-label="Hiện mật khẩu" aria-pressed="false"><i class="fa-regular fa-eye"
+                  aria-hidden="true"></i></button>
             </div>
           </div>
 
@@ -111,4 +126,5 @@
   </main>
   <script src="auth.js" defer></script>
 </body>
+
 </html>

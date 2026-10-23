@@ -227,7 +227,7 @@ function renderCourses(courses) {
     `;
     return;
   }
-  
+
   const groupedCourses = courses.reduce((acc, course) => {
     if (!acc[course.major]) acc[course.major] = [];
     acc[course.major].push(course);
@@ -235,21 +235,21 @@ function renderCourses(courses) {
   }, {});
 
   let html = '';
-  
+
   for (const major in groupedCourses) {
     html += `
       <h3 class="major-title">
         <i class="fa-solid fa-layer-group"></i> Ngành ${major}
       </h3>
     `;
-    
+
     html += '<div class="course-grid">';
     html += groupedCourses[major].map(c => {
       const isRegistered = registeredCourseIds.has(c.id);
       const isClassFull = c.enrolled >= c.slots;
       const pct = Math.min(100, Math.round((c.enrolled / c.slots) * 100));
       const badgeClass = c.type === 'Bắt buộc' ? 'badge-bb' : 'badge-tc';
-      
+
       let btnClass = 'btn-available';
       let btnContent = '<i class="fa-solid fa-plus"></i> Đăng ký';
       let btnDisabled = '';
@@ -300,7 +300,7 @@ function renderCourses(courses) {
     }).join('');
     html += '</div>';
   }
-  
+
   container.innerHTML = html;
 }
 
@@ -315,26 +315,26 @@ function initCoursePage() {
     majorSelect.disabled = true;
     if (majorLock) majorLock.classList.remove('hidden');
   }
-  
+
   function filterData() {
     const text = (searchInput ? searchInput.value : '').trim().toLowerCase();
     const type = filterSelect ? filterSelect.value : 'all';
     const major = majorSelect ? majorSelect.value : 'all';
-    
+
     const filtered = MOCK_DATA.filter(c => {
       const matchText = c.name.toLowerCase().includes(text) || c.code.toLowerCase().includes(text);
       const matchType = type === 'all' || c.type === type;
       const matchMajor = major === 'all' || c.major === major;
       return matchText && matchType && matchMajor;
     });
-    
+
     renderCourses(filtered);
     updateRegistrationSummary();
   }
 
   // Gán ra window để registerCourse gọi lại cập nhật UI
   window.applyCourseFilter = filterData;
-  
+
   if (searchInput) searchInput.addEventListener('input', filterData);
   if (filterSelect) filterSelect.addEventListener('change', filterData);
   if (majorSelect) majorSelect.addEventListener('change', filterData);

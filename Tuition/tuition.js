@@ -13,6 +13,21 @@ document.addEventListener('DOMContentLoaded', () => {
     const escapeHTML = (value) => String(value ?? '').replace(/[&<>"']/g, (char) => ({
         '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
     }[char]));
+    const resolvePageLink = (link) => ({
+        'courses.html': '../Courses/courses.html',
+        'Courses/courses.html': '../Courses/courses.html',
+        'Schedule/Schedule.html': '../Schedule/Schedule.html',
+        'login.html': '../Login/Register/login.html',
+        'Login/Register/login.html': '../Login/Register/login.html',
+        'register.html': '../Login/Register/register.html',
+        'Login/Register/register.html': '../Login/Register/register.html',
+        'settings.html': '../Settings/settings.html',
+        'Settings/settings.html': '../Settings/settings.html',
+        'tuition.html': 'tuition.html',
+        'Tuition/tuition.html': 'tuition.html',
+        'home.html': '../index.html',
+        'index.html': '../index.html'
+    }[link] || link);
 
     const price = typeof CREDIT_PRICE === 'number' ? CREDIT_PRICE : 500000;
     const extraFeeRate = 150000;
@@ -68,7 +83,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const logout = () => {
         sessionStorage.removeItem('sc_user');
-        window.location.href = 'index.html';
+        window.location.href = '../index.html';
     };
     $('#logout-btn')?.addEventListener('click', logout);
     $('#side-logout')?.addEventListener('click', logout);
@@ -93,7 +108,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Notifications
     const defaultNews = [
-        { id: 1, title: 'Hạn đăng ký môn học: 15/10/2026', desc: 'Vui lòng kiểm tra thông tin đăng ký môn học.', time: 'Thông báo', type: 'warning', icon: 'fa-triangle-exclamation', unread: true, link: 'courses.html' },
+        { id: 1, title: 'Hạn đăng ký môn học: 15/10/2026', desc: 'Vui lòng kiểm tra thông tin đăng ký môn học.', time: 'Thông báo', type: 'warning', icon: 'fa-triangle-exclamation', unread: true, link: '../Courses/courses.html' },
         { id: 2, title: 'Nhắc nhở học phí học kỳ', desc: 'Kiểm tra chi tiết học phí và thời hạn thanh toán.', time: 'Thông báo', type: 'info', icon: 'fa-receipt', unread: true, link: 'tuition.html' }
     ];
     const getNews = () => read(localStorage, 'sc_notifications', null) || defaultNews.map((item) => ({ ...item }));
@@ -111,7 +126,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const list = $('#notif-list');
         if (list) {
             list.innerHTML = news.map((item) => `
-                <a class="nitem ${item.unread ? 'unread' : ''}" href="${escapeHTML(item.link || '#')}" data-id="${escapeHTML(item.id)}">
+                <a class="nitem ${item.unread ? 'unread' : ''}" href="${escapeHTML(resolvePageLink(item.link || '#'))}" data-id="${escapeHTML(item.id)}">
                     <span class="ni ${escapeHTML(item.type || 'info')}"><i class="fa-solid ${escapeHTML(item.icon || 'fa-bell')}"></i></span>
                     <span><b>${escapeHTML(item.title)}</b><small>${escapeHTML(item.desc)}</small><em>${escapeHTML(item.time)}</em></span>
                 </a>`).join('');
@@ -160,7 +175,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 <td class="text-right amount">${money(fee)}</td></tr>`).join('')
         : `<tr><td colspan="4" class="empty-cell"><i class="fa-solid fa-receipt"></i><br>
             ${user ? 'Chưa có môn học được ghi nhận. Hãy đăng ký môn học trước.' : 'Đăng nhập để xem dữ liệu học phí theo tài khoản.'}<br>
-            <a href="${user ? 'courses.html' : 'login.html'}">${user ? 'Đăng ký môn học' : 'Đăng nhập ngay'} →</a></td></tr>`;
+            <a href="${user ? '../Courses/courses.html' : '../Login/Register/login.html'}">${user ? 'Đăng ký môn học' : 'Đăng nhập ngay'} →</a></td></tr>`;
     $('#summary-course-fee').textContent = money(courseFee);
     $('#summary-extra-fee').textContent = money(extraFee);
     $('#summary-total-fee').textContent = money(totalFee);

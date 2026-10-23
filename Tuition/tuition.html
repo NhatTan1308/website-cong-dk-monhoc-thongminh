@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="vi" data-theme="dark">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SmartCourse LHU – Học phí</title>
+
+    <link rel="stylesheet" href="../index.css">
+    <link rel="stylesheet" href="tuition.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+    <script>
+        (() => {
+            try {
+                const theme = localStorage.getItem('sc_theme') || 'dark';
+                document.documentElement.setAttribute('data-theme', theme);
+            } catch (e) { }
+        })();
+    </script>
+    <script src="tuition.js" defer></script>
+</head>
+
+<body>
+
+    <div class="shell">
+
+        <aside class="side" id="side">
+            <a href="../index.html" class="logo">
+                <i class="fa-solid fa-graduation-cap"></i>
+                <span>Smart Course LHU</span>
+            </a>
+
+            <nav class="nav">
+                <a href="../index.html">
+                    <i class="fa-solid fa-house"></i>
+                    <span>Trang chủ</span>
+                </a>
+                <a href="../Courses/courses.html">
+                    <i class="fa-solid fa-book-open"></i>
+                    <span>Đăng ký môn học</span>
+                </a>
+                <a href="../Schedule/Schedule.html">
+                    <i class="fa-solid fa-calendar-days"></i>
+                    <span>Thời khóa biểu</span>
+                </a>
+                <a href="tuition.html" class="on" aria-current="page">
+                    <i class="fa-solid fa-wallet"></i>
+                    <span>Học phí</span>
+                </a>
+                <a href="../Settings/settings.html">
+                    <i class="fa-solid fa-gear"></i>
+                    <span>Hồ sơ cá nhân</span>
+                </a>
+            </nav>
+
+            <div class="side-user">
+                <div class="av" id="side-avatar">SV</div>
+                <div>
+                    <b id="side-name">Nguyen Hoang Anh</b>
+                    <small id="side-role">15555</small>
+                </div>
+            </div>
+
+            <button class="logout" id="side-logout" type="button">
+                <i class="fa-solid fa-right-from-bracket"></i>
+                <span>Đăng xuất</span>
+            </button>
+        </aside>
+
+        <div class="overlay" id="overlay"></div>
+
+        <main class="main">
+
+            <header class="top">
+                <button class="icon-btn menu" id="menu" type="button" aria-label="Mở menu">
+                    <i class="fa-solid fa-bars"></i>
+                </button>
+
+                <div class="top-title">Học phí</div>
+
+                <div class="tb-right">
+                    <button class="icon-btn" id="theme-btn" type="button" aria-label="Đổi giao diện">
+                        <i class="fa-solid fa-sun"></i>
+                    </button>
+
+                    <div class="pop-wrap">
+                        <button class="icon-btn" id="notif-btn" type="button" aria-label="Thông báo">
+                            <i class="fa-solid fa-bell"></i>
+                            <span class="dot-n" id="notif-n">3</span>
+                        </button>
+
+                        <div class="pop hidden" id="notif-pop">
+                            <div class="pop-h">
+                                <b><i class="fa-solid fa-bell"></i> Thông báo</b>
+                                <button type="button" id="mark-read">Đánh dấu đã đọc</button>
+                            </div>
+                            <div class="pop-list" id="notif-list">
+                                <div class="nitem">
+                                    <span class="ni warning"><i class="fa-solid fa-wallet"></i></span>
+                                    <div>
+                                        <b>Thông tin học phí</b>
+                                        <small>Đăng nhập để xem học phí theo tài khoản sinh viên.</small>
+                                    </div>
+                                </div>
+                                <div class="nitem">
+                                    <span class="ni info"><i class="fa-solid fa-book"></i></span>
+                                    <div>
+                                        <b>Đăng ký môn học</b>
+                                        <small>Kiểm tra học phần trước khi đăng ký.</small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="auth" id="guest-actions">
+                        <a class="btn-sm ghost" href="../Login/Register/login.html">Đăng nhập</a>
+                        <a class="btn-sm solid" href="../Login/Register/register.html">Đăng ký tài khoản</a>
+                    </div>
+
+                    <div class="pop-wrap hidden" id="user">
+                        <button class="me" id="user-btn" type="button">
+                            <span class="av" id="user-avatar">SV</span>
+                            <span id="user-name">Sinh viên</span>
+                            <i class="fa-solid fa-chevron-down"></i>
+                        </button>
+
+                        <div class="pop pop-sm hidden" id="user-pop">
+                            <div class="me-info">
+                                <b id="user-fullname">Sinh viên</b>
+                                <small id="user-email">Tài khoản sinh viên</small>
+                            </div>
+                            <a href="../Settings/settings.html">
+                                <i class="fa-solid fa-user-gear"></i> Hồ sơ cá nhân
+                            </a>
+                            <button type="button" id="logout-btn">
+                                <i class="fa-solid fa-right-from-bracket"></i> Đăng xuất
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <section class="content tuition-content" id="content">
+
+                <section class="tuition-hero">
+                    <div class="hero-text">
+                        <span class="eyebrow">
+                            <i class="fa-solid fa-wallet"></i>
+                            QUẢN LÝ TÀI CHÍNH
+                        </span>
+
+                        <h1>Học phí của bạn</h1>
+
+                        <p>
+                            Theo dõi học phí học kỳ, chi tiết từng môn học và tình trạng
+                            thanh toán ngay tại đây nhé.
+                        </p>
+
+                        <div class="hero-actions">
+                            <a href="#tuition-details" class="btn-primary">
+                                <i class="fa-solid fa-file-invoice-dollar"></i>
+                                Xem chi tiết học phí
+                            </a>
+                            <a href="#payment-guide" class="btn-secondary">
+                                <i class="fa-regular fa-circle-question"></i>
+                                Hướng dẫn thanh toán
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="hero-illustration" aria-hidden="true">
+                        <div class="hero-icon">
+                            <i class="fa-solid fa-file-invoice-dollar"></i>
+                        </div>
+                        <div class="floating-icon">
+                            <i class="fa-solid fa-coins"></i>
+                        </div>
+                        <div class="floating-check">
+                            <i class="fa-solid fa-check"></i>
+                        </div>
+                    </div>
+                </section>
+                <section class="tuition-stats">
+                    <article class="tuition-stat">
+                        <div class="stat-icon teal">
+                            <i class="fa-solid fa-wallet"></i>
+                        </div>
+                        <div>
+                            <span>Tổng học phí</span>
+                            <b id="total-fee">0 ₫</b>
+                            <small id="total-fee-desc">0 môn học đã ghi nhận</small>
+                        </div>
+                    </article>
+
+                    <article class="tuition-stat">
+                        <div class="stat-icon blue">
+                            <i class="fa-solid fa-book-open"></i>
+                        </div>
+                        <div>
+                            <span>Học phí môn học</span>
+                            <b id="course-fee">0 ₫</b>
+                            <small id="course-fee-desc">0 tín chỉ</small>
+                        </div>
+                    </article>
+
+                    <article class="tuition-stat">
+                        <div class="stat-icon orange">
+                            <i class="fa-solid fa-receipt"></i>
+                        </div>
+                        <div>
+                            <span>Phụ phí</span>
+                            <b id="extra-fee">0 ₫</b>
+                            <small>Phụ phí cơ sở minh họa</small>
+                        </div>
+                    </article>
+
+                    <article class="tuition-stat">
+                        <div class="stat-icon green">
+                            <i class="fa-solid fa-circle-check"></i>
+                        </div>
+                        <div>
+                            <span>Trạng thái</span>
+                            <b id="payment-status">Chưa thanh toán</b>
+                            <small id="payment-status-desc">Chưa có xác nhận thanh toán</small>
+                        </div>
+                    </article>
+                </section>
+
+                <section class="tuition-grid">
+
+                    <article class="tuition-panel" id="tuition-details">
+                        <div class="panel-heading">
+                            <div>
+                                <span class="panel-kicker">BẢNG KÊ CHI TIẾT</span>
+                                <h2><i class="fa-solid fa-file-invoice-dollar"></i> Chi tiết học phí</h2>
+                            </div>
+                            <span class="count-pill" id="course-count">0 môn</span>
+                        </div>
+
+                        <div class="table-wrap">
+                            <table class="tuition-table">
+                                <thead>
+                                    <tr>
+                                        <th>Môn học</th>
+                                        <th>Tín chỉ</th>
+                                        <th class="text-right">Đơn giá / TC</th>
+                                        <th class="text-right">Thành tiền</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tuition-table-body">
+                                    <tr>
+                                        <td colspan="4" class="empty-cell">
+                                            <i class="fa-solid fa-receipt"></i>
+                                            <br>
+                                            Đăng nhập để xem dữ liệu học phí theo tài khoản.
+                                            <br>
+                                            <a href="../Login/Register/login.html">Đăng nhập ngay →</a>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+
+                        <div class="fee-summary">
+                            <div>
+                                <span>Học phí môn học</span>
+                                <b id="summary-course-fee">0 ₫</b>
+                            </div>
+
+                            <div>
+                                <span>Phụ phí</span>
+                                <b id="summary-extra-fee">0 ₫</b>
+                            </div>
+
+                            <div class="fee-grand-total">
+                                <span>Tổng cộng</span>
+
+                                <div class="fee-total-actions">
+                                    <b id="summary-total-fee">0 ₫</b>
+
+                                    <button type="button" class="qr-pay-btn" id="open-qr-btn"
+                                        aria-label="Mở mã QR thanh toán" title="Thanh toán bằng QR">
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                            stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                            <rect x="3" y="3" width="7" height="7" rx="1" />
+                                            <rect x="14" y="3" width="7" height="7" rx="1" />
+                                            <rect x="3" y="14" width="7" height="7" rx="1" />
+                                            <path d="M14 14h3v3h-3zM20 14v2M14 20h2M20 19v2M18 21h3" />
+                                        </svg>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Cửa sổ QR thanh toán -->
+                        <div class="qr-modal" id="qr-modal" aria-hidden="true">
+                            <div class="qr-modal-overlay" id="qr-overlay"></div>
+
+                            <div class="qr-modal-content" role="dialog" aria-modal="true"
+                                aria-labelledby="qr-modal-title">
+
+                                <button type="button" class="qr-close-btn" id="close-qr-btn"
+                                    aria-label="Đóng cửa sổ">&times;</button>
+
+                                <div class="qr-modal-icon">⌗</div>
+
+                                <h2 id="qr-modal-title">Thanh toán học phí</h2>
+                                <p class="qr-modal-desc">Quét mã QR bên dưới để thanh toán</p>
+
+                                <div class="qr-image-box">
+                                    <img src="../imgs/qr.jpg" alt="Mã QR thanh toán học phí" id="payment-qr-image">
+                                </div>
+
+                                <div class="qr-payment-total">
+                                    <span>Tổng học phí</span>
+                                    <b id="qr-total-fee">0 ₫</b>
+                                </div>
+
+                                <p class="qr-modal-note">
+                                    Vui lòng kiểm tra thông tin trước khi thanh toán.
+                                </p>
+                            </div>
+                        </div>
+
+                    </article>
+
+                    </article>
+
+
+
+                    <div class="tuition-side">
+
+                        <article class="tuition-panel deadline-panel">
+                            <div class="side-panel-icon">
+                                <i class="fa-solid fa-calendar-check"></i>
+                            </div>
+                            <span class="panel-kicker">THỜI HẠN THANH TOÁN</span>
+                            <h2>Hạn đóng học phí</h2>
+                            <div class="deadline-date" id="deadline-date">Đang cập nhật</div>
+                            <p id="deadline-desc">
+                                Vui lòng đăng nhập hoặc kiểm tra thông báo chính thức của nhà trường
+                                để biết thời hạn thanh toán.
+                            </p>
+                            <div class="deadline-status" id="deadline-status">
+                                <i class="fa-solid fa-circle-info"></i>
+                                Chưa có thông tin thời hạn
+                            </div>
+                        </article>
+
+                        <article class="tuition-panel payment-panel" id="payment-guide">
+                            <div class="panel-heading">
+                                <div>
+                                    <span class="panel-kicker">HỖ TRỢ SINH VIÊN</span>
+                                    <h2><i class="fa-solid fa-circle-question"></i> Hướng dẫn thanh toán</h2>
+                                </div>
+                            </div>
+
+                            <div class="guide-item">
+                                <span>1</span>
+                                <div>
+                                    <b>Đăng nhập tài khoản</b>
+                                    <p>Sử dụng tài khoản sinh viên để kiểm tra thông tin học phí.</p>
+                                </div>
+                            </div>
+
+                            <div class="guide-item">
+                                <span>2</span>
+                                <div>
+                                    <b>Kiểm tra số tiền</b>
+                                    <p>Đối chiếu số tín chỉ, học phí và các khoản phụ phí hiển thị.</p>
+                                </div>
+                            </div>
+
+                            <div class="guide-item">
+                                <span>3</span>
+                                <div>
+                                    <b>Thực hiện thanh toán</b>
+                                    <p>Làm theo hướng dẫn chính thức của nhà trường.</p>
+                                </div>
+                            </div>
+
+                            <div class="guide-item">
+                                <span>4</span>
+                                <div>
+                                    <b>Kiểm tra trạng thái</b>
+                                    <p>Xác nhận trạng thái thanh toán sau khi hoàn tất giao dịch.</p>
+                                </div>
+                            </div>
+
+                            <div class="demo-note">
+                                <i class="fa-solid fa-circle-info"></i>
+                                <span>
+                                    Hãy chú đến quá trình đóng học phí tránh sai sót!
+                                    Đây là trang chính thức của nhà
+                                </span>
+                            </div>
+                        </article>
+
+                    </div>
+                </section>
+
+                <section class="tuition-note">
+                    <i class="fa-solid fa-triangle-exclamation"></i>
+                    <div>
+                        <b>Lưu ý về học phí</b>
+                        <p>
+                            Số liệu trên giao diện mẫu có thể chưa phải số liệu chính thức.
+                            Sinh viên cần kiểm tra thông báo từ nhà trường trước khi thanh toán.
+                        </p>
+                    </div>
+                </section>
+
+            </section>
+
+            <footer class="foot">
+                <div class="foot-grid">
+                    <div>
+                        <div class="foot-logo">
+                            <i class="fa-solid fa-graduation-cap"></i>
+                            SmartCourse LHU
+                        </div>
+                        <p>Hệ thống hỗ trợ đăng ký môn học và theo dõi thông tin học tập.</p>
+                    </div>
+
+                    <div>
+                        <h4>Liên kết nhanh</h4>
+                        <ul>
+                            <li><i class="fa-solid fa-house"></i><a href="../index.html">Trang chủ</a></li>
+                            <li><i class="fa-solid fa-book-open"></i><a href="../Courses/courses.html">Đăng ký môn
+                                    học</a>
+                            </li>
+                            <li><i class="fa-solid fa-calendar-days"></i><a href="../Schedule/Schedule.html">Thời khóa
+                                    biểu</a></li>
+                        </ul>
+                    </div>
+
+                    <div>
+                        <h4>Thông tin</h4>
+                        <ul>
+                            <li><i class="fa-solid fa-wallet"></i><a href="tuition.html">Học phí</a></li>
+                            <li><i class="fa-solid fa-user-gear"></i><a href="../Settings/settings.html">Hồ sơ cá
+                                    nhân</a></li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="foot-end">
+                    © 2026 SmartCourse LHU. Giao diện phục vụ mục đích học tập.
+                </div>
+            </footer>
+
+        </main>
+    </div>
+
+    <div class="toast hidden" id="toast">
+        <span id="toast-msg"></span>
+    </div>
+
+</body>
+
+</html>

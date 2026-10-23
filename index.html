@@ -1,113 +1,202 @@
 <!DOCTYPE html>
 <html lang="vi">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Smart Course LHU – Trang chủ</title>
-  <script>try { document.documentElement.dataset.theme = localStorage.getItem('sc_theme') || 'light'; } catch (e) {}</script>
+  <script>
+    try {
+      document.documentElement.dataset.theme = localStorage.getItem("sc_theme") || "light";
+    } catch (error) { }
+  </script>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&display=swap"
+    rel="stylesheet" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
   <link rel="stylesheet" href="index.css" />
 </head>
+
 <body>
-<div class="shell">
-
-  <!-- SIDEBAR -->
-  <aside class="side" id="side">
-    <a class="logo" href="index.html"><i class="fa-solid fa-graduation-cap"></i><span>Smart Course LHU</span></a>
-    <nav class="nav">
-      <a class="on" href="index.html"><i class="fa-solid fa-house"></i><span>Trang chủ</span></a>
-      <a href="courses.html"><i class="fa-solid fa-book"></i><span>Đăng ký môn học</span></a>
-      <a href="schedule.html"><i class="fa-solid fa-calendar-week"></i><span>Thời khóa biểu</span></a>
-      <a href="tuition.html"><i class="fa-solid fa-file-invoice-dollar"></i><span>Học phí</span></a>
-      <a href="settings.html"><i class="fa-solid fa-user-gear"></i><span>Hồ sơ cá nhân</span></a>
-    </nav>
-    <div class="side-user hidden" id="side-user"><span class="av" id="side-av"></span><div><b id="side-name"></b><small id="side-id"></small></div></div>
-    <button class="logout js-logout hidden" id="side-logout" type="button"><i class="fa-solid fa-right-from-bracket"></i> Đăng xuất</button>
-  </aside>
-  <div class="overlay" id="overlay"></div>
-
-  <div class="main">
-    <!-- TOPBAR -->
-    <header class="top">
-      <button class="menu" id="menu" type="button" aria-label="Mở menu"><i class="fa-solid fa-bars"></i></button>
-      <h2 class="top-title">Trang chủ</h2>
-      <div class="tb-right">
-        <button id="mode-btn" class="icon-btn" type="button" aria-label="Chế độ sáng/tối"></button>
-        <div class="pop-wrap">
-          <button id="notif-btn" class="icon-btn" type="button" aria-label="Thông báo"><i class="fa-solid fa-bell"></i><b id="notif-n" class="dot-n"></b></button>
-          <div id="notif-pop" class="pop hidden">
-            <div class="pop-h"><strong><i class="fa-solid fa-bell"></i> Thông báo</strong><button id="notif-all" type="button">Đã đọc tất cả</button></div>
-            <div class="pop-list" id="notif-list"></div>
-            <a class="pop-f" href="#bulletin"><i class="fa-solid fa-bullhorn"></i> Xem tất cả trong bảng tin</a>
-          </div>
-        </div>
-        <div class="auth" id="guest">
-          <a class="btn-sm ghost" href="login.html">Đăng nhập</a>
-          <a class="btn-sm solid" href="register.html">Đăng ký</a>
-        </div>
-        <div class="pop-wrap hidden" id="user">
-          <button id="me-btn" class="me" type="button"><span class="av" id="me-av"></span><span id="me-short"></span><i class="fa-solid fa-chevron-down"></i></button>
-          <div id="me-pop" class="pop pop-sm hidden">
-            <div class="me-info"><b id="me-name"></b><small id="me-id"></small></div>
-            <a href="settings.html"><i class="fa-solid fa-user-gear"></i> Hồ sơ cá nhân</a>
-            <button class="js-logout" type="button"><i class="fa-solid fa-right-from-bracket"></i> Đăng xuất</button>
-          </div>
+  <div class="shell">
+    <aside class="side" id="side">
+      <a class="logo" href="index.html">
+        <i class="fa-solid fa-graduation-cap"></i>
+        <span>Smart Course LHU</span>
+      </a>
+      <nav class="nav" aria-label="Điều hướng chính">
+        <a class="on" href="index.html" aria-current="page">
+          <i class="fa-solid fa-house"></i>
+          <span>Trang chủ</span>
+        </a>
+        <a href="Courses/courses.html">
+          <i class="fa-solid fa-book"></i>
+          <span>Đăng ký môn học</span>
+        </a>
+        <a href="Schedule/Schedule.html">
+          <i class="fa-solid fa-calendar-week"></i>
+          <span>Thời khóa biểu</span>
+        </a>
+        <a href="Tuition/tuition.html">
+          <i class="fa-solid fa-file-invoice-dollar"></i>
+          <span>Học phí</span>
+        </a>
+        <a href="Settings/settings.html">
+          <i class="fa-solid fa-user-gear"></i>
+          <span>Hồ sơ cá nhân</span>
+        </a>
+      </nav>
+      <div class="side-user hidden" id="side-user">
+        <span class="av" id="side-av"></span>
+        <div>
+          <b id="side-name"></b>
+          <small id="side-id"></small>
         </div>
       </div>
-    </header>
+      <button class="logout js-logout hidden" id="side-logout" type="button">
+        <i class="fa-solid fa-right-from-bracket"></i>
+        Đăng xuất
+      </button>
+    </aside>
+    <div class="overlay" id="overlay"></div>
 
-    <!-- NỘI DUNG -->
-    <div class="content" id="content">
-      <div id="banner"></div>
-      <div class="stats" id="stats"></div>
-      <div class="two" id="two"></div>
-      <div id="extra"></div>
-      <section class="card" id="bulletin">
-        <div class="card-h"><h3><i class="fa-solid fa-bullhorn"></i> Bảng tin & thông báo</h3><span class="count" id="bulletin-n"></span></div>
-        <div class="card-b"><div class="anns" id="bulletin-list"></div></div>
-      </section>
-    </div>
-
-    <!-- CHÂN TRANG -->
-    <footer class="foot">
-      <div class="foot-grid">
-        <div>
-          <div class="foot-logo"><i class="fa-solid fa-graduation-cap"></i>Cổng đăng kí môn học thông minh LHU</div>
-          <p>Cổng đăng ký môn học thông minh dành cho sinh viên và giảng viên Đại học Lạc Hồng: chọn môn, xếp lịch và theo dõi học phí trong một nơi.</p>
-          <div class="social">
-            <a href="https://www.facebook.com/lhuniversity/" target="_blank" rel="noopener" aria-label="Facebook"><i class="fa-brands fa-facebook-f"></i></a>
-            <a href="https://lhu.edu.vn" target="_blank" rel="noopener" aria-label="Website"><i class="fa-solid fa-globe"></i></a>
-            <a href="tel:02513952778" aria-label="Gọi điện"><i class="fa-solid fa-phone"></i></a>
+    <main class="main">
+      <header class="top">
+        <button class="menu" id="menu" type="button" aria-label="Mở menu">
+          <i class="fa-solid fa-bars"></i>
+        </button>
+        <h2 class="top-title">Trang chủ</h2>
+        <div class="tb-right">
+          <button id="mode-btn" class="icon-btn" type="button" aria-label="Chế độ sáng/tối"></button>
+          <div class="pop-wrap">
+            <button id="notif-btn" class="icon-btn" type="button" aria-label="Thông báo">
+              <i class="fa-solid fa-bell"></i>
+              <b id="notif-n" class="dot-n"></b>
+            </button>
+            <div id="notif-pop" class="pop hidden">
+              <div class="pop-h">
+                <strong><i class="fa-solid fa-bell"></i> Thông báo</strong>
+                <button id="notif-all" type="button">Đã đọc tất cả</button>
+              </div>
+              <div class="pop-list" id="notif-list"></div>
+              <a class="pop-f" href="#bulletin">
+                <i class="fa-solid fa-bullhorn"></i>
+                Xem tất cả trong bảng tin
+              </a>
+            </div>
+          </div>
+          <div class="auth" id="guest">
+            <a class="btn-sm ghost" href="Login/Register/login.html">Đăng nhập</a>
+            <a class="btn-sm solid" href="Login/Register/register.html">Đăng ký</a>
+          </div>
+          <div class="pop-wrap hidden" id="user">
+            <button id="me-btn" class="me" type="button">
+              <span class="av" id="me-av"></span>
+              <span id="me-short"></span>
+              <i class="fa-solid fa-chevron-down"></i>
+            </button>
+            <div id="me-pop" class="pop pop-sm hidden">
+              <div class="me-info">
+                <b id="me-name"></b>
+                <small id="me-id"></small>
+              </div>
+              <a href="Settings/settings.html">
+                <i class="fa-solid fa-user-gear"></i>
+                Hồ sơ cá nhân
+              </a>
+              <button class="js-logout" type="button">
+                <i class="fa-solid fa-right-from-bracket"></i>
+                Đăng xuất
+              </button>
+            </div>
           </div>
         </div>
-        <div>
-          <h4>Liên hệ</h4>
-          <ul>
-            <li><i class="fa-solid fa-location-dot"></i> Số 10 Huỳnh Văn Nghệ, phường Trấn Biên, tỉnh Đồng Nai</li>
-            <li><i class="fa-solid fa-phone"></i> <a href="tel:02513952778">0251 3952 778</a></li>
-            <li><i class="fa-brands fa-facebook"></i> <a href="https://www.facebook.com/lhuniversity/" target="_blank" rel="noopener">facebook.com/lhuniversity</a></li>
-            <li><i class="fa-solid fa-globe"></i> <a href="https://lhu.edu.vn" target="_blank" rel="noopener">lhu.edu.vn</a></li>
-          </ul>
-        </div>
-        <div>
-          <h4>Truy cập nhanh</h4>
-          <ul>
-            <li><a href="courses.html">Đăng ký môn học</a></li>
-            <li><a href="schedule.html">Thời khóa biểu</a></li>
-            <li><a href="tuition.html">Học phí</a></li>
-            <li><a href="settings.html">Cài đặt tài khoản</a></li>
-          </ul>
-        </div>
+      </header>
+
+      <div class="content" id="content">
+        <div id="banner"></div>
+        <div class="stats" id="stats"></div>
+        <div class="two" id="two"></div>
+        <div id="extra"></div>
+        <section class="card" id="bulletin">
+          <div class="card-h">
+            <h3><i class="fa-solid fa-bullhorn"></i> Bảng tin &amp; thông báo</h3>
+            <span class="count" id="bulletin-n"></span>
+          </div>
+          <div class="card-b">
+            <div class="anns" id="bulletin-list"></div>
+          </div>
+        </section>
       </div>
-      <div class="foot-end">© 2026 Cổng đăng kí môn học thông minh LHU · Đại học Lạc Hồng</div>
-    </footer>
+
+      <footer class="foot">
+        <div class="foot-grid">
+          <div>
+            <div class="foot-logo">
+              <i class="fa-solid fa-graduation-cap"></i>
+              Cổng đăng kí môn học thông minh LHU
+            </div>
+            <p>
+              Cổng đăng ký môn học thông minh dành cho sinh viên và giảng viên
+              Đại học Lạc Hồng: chọn môn, xếp lịch và theo dõi học phí trong
+              một nơi.
+            </p>
+            <div class="social">
+              <a href="https://www.facebook.com/lhuniversity/" target="_blank" rel="noopener" aria-label="Facebook">
+                <i class="fa-brands fa-facebook-f"></i>
+              </a>
+              <a href="https://lhu.edu.vn" target="_blank" rel="noopener" aria-label="Website">
+                <i class="fa-solid fa-globe"></i>
+              </a>
+              <a href="tel:02513952778" aria-label="Gọi điện">
+                <i class="fa-solid fa-phone"></i>
+              </a>
+            </div>
+          </div>
+          <div>
+            <h4>Liên hệ</h4>
+            <ul>
+              <li>
+                <i class="fa-solid fa-location-dot"></i>
+                Số 10 Huỳnh Văn Nghệ, phường Trấn Biên, tỉnh Đồng Nai
+              </li>
+              <li>
+                <i class="fa-solid fa-phone"></i>
+                <a href="tel:02513952778">0251 3952 778</a>
+              </li>
+              <li>
+                <i class="fa-brands fa-facebook"></i>
+                <a href="https://www.facebook.com/lhuniversity/" target="_blank"
+                  rel="noopener">facebook.com/lhuniversity</a>
+              </li>
+              <li>
+                <i class="fa-solid fa-globe"></i>
+                <a href="https://lhu.edu.vn" target="_blank" rel="noopener">lhu.edu.vn</a>
+              </li>
+            </ul>
+          </div>
+          <div>
+            <h4>Truy cập nhanh</h4>
+            <ul>
+              <li><a href="Courses/courses.html">Đăng ký môn học</a></li>
+              <li><a href="Schedule/Schedule.html">Thời khóa biểu</a></li>
+              <li><a href="Tuition/tuition.html">Học phí</a></li>
+              <li><a href="Settings/settings.html">Cài đặt tài khoản</a></li>
+            </ul>
+          </div>
+        </div>
+        <div class="foot-end">
+          © 2026 Cổng đăng kí môn học thông minh LHU · Đại học Lạc Hồng
+        </div>
+      </footer>
+    </main>
   </div>
-</div>
 
-<div class="toast hidden" id="toast"><span id="toast-msg"></span></div>
-<script src="index.js"></script>
+  <div class="toast hidden" id="toast">
+    <span id="toast-msg"></span>
+  </div>
+  <script src="index.js"></script>
 </body>
+
 </html>

@@ -30,12 +30,21 @@ document.addEventListener('DOMContentLoaded', () => {
   const PRICE = typeof CREDIT_PRICE !== 'undefined' ? CREDIT_PRICE : 500000;
   const read = (store, key, def) => { try { const r = store.getItem(key); return r ? JSON.parse(r) : def; } catch (e) { return def; } };
   const DEFAULT_NEWS = [
-    { id: 1, title: 'Hạn đăng ký môn học: 15/10/2026', desc: 'Hệ thống đăng ký môn HK1 sẽ đóng vào 23:59 ngày 15/10. Vui lòng hoàn tất đăng ký.', time: '10 phút trước', type: 'urgent', icon: 'fa-triangle-exclamation', unread: true, link: 'courses.html' },
-    { id: 2, title: 'Nhắc nhở học phí HK1 – 2025/2026', desc: 'Hạn nộp học phí trước ngày 15/10/2026. Kiểm tra chi tiết trong mục Học phí.', time: '2 giờ trước', type: 'warning', icon: 'fa-receipt', unread: true, link: 'tuition.html' },
-    { id: 3, title: 'Lịch thi giữa kỳ đã cập nhật', desc: 'Đã có lịch thi các môn chuyên ngành trên cổng thời khóa biểu.', time: '1 ngày trước', type: 'info', icon: 'fa-calendar-days', unread: true, link: 'schedule.html' },
-    { id: 4, title: 'Học bổng khuyến học đợt 2 mở nộp đơn', desc: 'Sinh viên có GPA ≥ 3.2 có thể nộp hồ sơ xét học bổng khuyến học đến 20/10/2026.', time: '2 ngày trước', type: 'success', icon: 'fa-award', unread: true, link: 'home.html' }
+    { id: 1, title: 'Hạn đăng ký môn học: 15/10/2026', desc: 'Hệ thống đăng ký môn HK1 sẽ đóng vào 23:59 ngày 15/10. Vui lòng hoàn tất đăng ký.', time: '10 phút trước', type: 'urgent', icon: 'fa-triangle-exclamation', unread: true, link: 'Courses/courses.html' },
+    { id: 2, title: 'Nhắc nhở học phí HK1 – 2025/2026', desc: 'Hạn nộp học phí trước ngày 15/10/2026. Kiểm tra chi tiết trong mục Học phí.', time: '2 giờ trước', type: 'warning', icon: 'fa-receipt', unread: true, link: 'Tuition/tuition.html' },
+    { id: 3, title: 'Lịch thi giữa kỳ đã cập nhật', desc: 'Đã có lịch thi các môn chuyên ngành trên cổng thời khóa biểu.', time: '1 ngày trước', type: 'info', icon: 'fa-calendar-days', unread: true, link: 'Schedule/Schedule.html' },
+    { id: 4, title: 'Học bổng khuyến học đợt 2 mở nộp đơn', desc: 'Sinh viên có GPA ≥ 3.2 có thể nộp hồ sơ xét học bổng khuyến học đến 20/10/2026.', time: '2 ngày trước', type: 'success', icon: 'fa-award', unread: true, link: 'index.html' }
   ];
-  const getNews = () => read(localStorage, 'sc_notifications', null) || DEFAULT_NEWS.map(x => ({ ...x }));
+  const resolveNewsLink = (link) => ({
+    'courses.html': 'Courses/courses.html',
+    'login.html': 'Login/Register/login.html',
+    'register.html': 'Login/Register/register.html',
+    'settings.html': 'Settings/settings.html',
+    'tuition.html': 'Tuition/tuition.html',
+    'home.html': 'index.html'
+  }[link] || link);
+  const getNews = () => (read(localStorage, 'sc_notifications', null) || DEFAULT_NEWS.map(x => ({ ...x })))
+    .map(item => ({ ...item, link: resolveNewsLink(item.link) }));
   const setNews = (l) => { try { localStorage.setItem('sc_notifications', JSON.stringify(l)); } catch (e) { } };
   const toast = (m) => { if (typeof showToast === 'function') showToast(m); };
   const getU = () => read(sessionStorage, 'sc_user', null);
@@ -144,11 +153,11 @@ document.addEventListener('DOMContentLoaded', () => {
     const classes = COURSES.reduce((s, c) => s + c.classes.length, 0);
     $('#banner').innerHTML = banner('Chào mừng đến với SmartCourse LHU 👋',
       'Cổng đăng ký môn học thông minh: chọn môn, xếp lịch học và theo dõi học phí chỉ trong vài bước.',
-      '<a class="bn-btn w" href="login.html"><i class="fa-solid fa-right-to-bracket"></i> Đăng nhập</a><a class="bn-btn g" href="register.html"><i class="fa-solid fa-user-plus"></i> Tạo tài khoản</a>');
-    $('#stats').innerHTML = stat('courses.html', '#0d9488', 'fa-book-open', COURSES.length, 'Môn học đang mở') +
-      stat('courses.html', '#22c55e', 'fa-people-group', classes, 'Lớp học phần') +
-      stat('home.html', '#0ea5e9', 'fa-layer-group', MAX, 'Tín chỉ tối đa mỗi học kỳ') +
-      stat('tuition.html', '#ff9f1c', 'fa-coins', vnd(PRICE), 'Học phí mỗi tín chỉ');
+      '<a class="bn-btn w" href="Login/Register/login.html"><i class="fa-solid fa-right-to-bracket"></i> Đăng nhập</a><a class="bn-btn g" href="Login/Register/register.html"><i class="fa-solid fa-user-plus"></i> Tạo tài khoản</a>');
+    $('#stats').innerHTML = stat('Courses/courses.html', '#0d9488', 'fa-book-open', COURSES.length, 'Môn học đang mở') +
+      stat('Courses/courses.html', '#22c55e', 'fa-people-group', classes, 'Lớp học phần') +
+      stat('index.html', '#0ea5e9', 'fa-layer-group', MAX, 'Tín chỉ tối đa mỗi học kỳ') +
+      stat('Tuition/tuition.html', '#ff9f1c', 'fa-coins', vnd(PRICE), 'Học phí mỗi tín chỉ');
     const how = [['Đăng nhập', 'Dùng mã số sinh viên hoặc tài khoản giảng viên'], ['Chọn môn & lớp', 'Hệ thống tự kiểm tra trùng lịch và giới hạn tín chỉ'],
     ['Xem thời khóa biểu', 'Lịch tuần hiển thị trực quan, có phòng học'], ['Đóng học phí', 'Theo dõi số tiền và hạn nộp']];
     const open = COURSES.slice(0, 6).map(c => {
@@ -156,7 +165,7 @@ document.addEventListener('DOMContentLoaded', () => {
       return `<li><span class="dot" style="background:${c.color}"></span><div><b>${c.name}</b><small>${c.code} · ${c.classes.length} lớp · còn ${left} chỗ</small></div><span class="tc">${c.credits} TC</span></li>`;
     }).join('');
     $('#two').innerHTML = card('route', 'Đăng ký chỉ với 4 bước', '', `<ol class="steps">${how.map((s, i) => `<li><span class="n">${i + 1}</span><div><b>${s[0]}</b><small>${s[1]}</small></div></li>`).join('')}</ol>`) +
-      card('fire', 'Môn học đang mở', '<a href="login.html">Đăng nhập để đăng ký →</a>', `<ul class="list">${open}</ul>`);
+      card('fire', 'Môn học đang mở', '<a href="Login/Register/login.html">Đăng nhập để đăng ký →</a>', `<ul class="list">${open}</ul>`);
     $('#extra').innerHTML = '';
   }
 
@@ -174,26 +183,26 @@ document.addEventListener('DOMContentLoaded', () => {
       ? `<span class="pill"><i class="fa-solid fa-hourglass-half"></i> Còn ${Math.ceil(diff / 864e5)} ngày đến hạn đăng ký (15/10/2026)</span>`
       : '<span class="pill late"><i class="fa-solid fa-triangle-exclamation"></i> Đã qua hạn đăng ký 15/10/2026 – liên hệ phòng Đào tạo nếu cần hỗ trợ</span>';
     $('#banner').innerHTML = banner(`${greeting()}, ${lastName()}!`, `${esc(user.majorName)} · Năm ${user.year} · Học kỳ 1 – 2025/2026`,
-      '<a class="bn-btn w" href="courses.html"><i class="fa-solid fa-wand-magic-sparkles"></i> Đăng ký môn học</a><a class="bn-btn g" href="schedule.html"><i class="fa-solid fa-calendar-week"></i> Thời khóa biểu</a>', pill, nextCard(items));
+      '<a class="bn-btn w" href="Courses/courses.html"><i class="fa-solid fa-wand-magic-sparkles"></i> Đăng ký môn học</a><a class="bn-btn g" href="Schedule/Schedule.html"><i class="fa-solid fa-calendar-week"></i> Thời khóa biểu</a>', pill, nextCard(items));
 
     const total = user.totalCredits + tc, pct = Math.min(100, Math.round(total / GRAD * 100));
-    $('#stats').innerHTML = stat('courses.html', '#0d9488', 'fa-book-open', n, 'Môn đã đăng ký') + stat('courses.html', '#22c55e', 'fa-circle-check', tc, 'Tín chỉ học kỳ này') +
-      stat('home.html', '#0ea5e9', 'fa-chart-line', total, 'Tổng tín chỉ tích lũy') + stat('tuition.html', '#ff9f1c', 'fa-coins', vnd(fee), paid ? 'Học phí · đã thanh toán' : 'Học phí học kỳ');
+    $('#stats').innerHTML = stat('Courses/courses.html', '#0d9488', 'fa-book-open', n, 'Môn đã đăng ký') + stat('Courses/courses.html', '#22c55e', 'fa-circle-check', tc, 'Tín chỉ học kỳ này') +
+      stat('index.html', '#0ea5e9', 'fa-chart-line', total, 'Tổng tín chỉ tích lũy') + stat('Tuition/tuition.html', '#ff9f1c', 'fa-coins', vnd(fee), paid ? 'Học phí · đã thanh toán' : 'Học phí học kỳ');
 
     const ring = `<div class="prog"><div class="ring-wrap"><svg class="ring" viewBox="0 0 100 100"><circle class="bg" cx="50" cy="50" r="42"/><circle class="fg" cx="50" cy="50" r="42" pathLength="100" stroke-dasharray="${pct} 100"/></svg>
       <div class="ring-lb"><b>${pct}%</b><small>hoàn thành</small></div></div>
       <div class="prog-d"><div><span>Đã tích lũy</span><b>${total} / ${GRAD} TC</b></div><div class="bar"><i style="width:${pct}%"></i></div><div><span>Cần thêm</span><b>${Math.max(0, GRAD - total)} TC</b></div></div></div>`;
     const courses = n ? `<ul class="list">${items.map(i => `<li><span class="dot" style="background:${i.color}"></span><div><b>${i.name}</b><small>${i.day} · ${i.s} – ${i.e} · ${i.room}</small></div><span class="tc">${i.credits} TC</span></li>`).join('')}</ul>`
-      : '<p class="empty">Chưa đăng ký môn nào. <a href="courses.html">Đăng ký ngay →</a></p>';
-    $('#two').innerHTML = card('chart-pie', 'Tiến độ tốt nghiệp', '', ring) + card('list-check', 'Môn học kỳ này', '<a href="courses.html">Xem thêm →</a>', courses);
+      : '<p class="empty">Chưa đăng ký môn nào. <a href="Courses/courses.html">Đăng ký ngay →</a></p>';
+    $('#two').innerHTML = card('chart-pie', 'Tiến độ tốt nghiệp', '', ring) + card('list-check', 'Môn học kỳ này', '<a href="Courses/courses.html">Xem thêm →</a>', courses);
 
     const ids = getReg().map(r => r.courseId), sg = [];
-    if (!n) sg.push(['#0d9488', 'fa-rocket', 'Bắt đầu với môn bắt buộc', 'Còn chỗ: ' + COURSES.filter(c => c.type === 'Bắt buộc' && c.classes.some(x => x.enrolled < x.max)).slice(0, 3).map(c => c.name).join(', ') + '.', 'courses.html']);
-    else if (tc < MAX) sg.push(['#0d9488', 'fa-circle-plus', `Còn ${MAX - tc} TC có thể đăng ký`, 'Thêm môn tự chọn để đủ tải học tập.', 'courses.html']);
+    if (!n) sg.push(['#0d9488', 'fa-rocket', 'Bắt đầu với môn bắt buộc', 'Còn chỗ: ' + COURSES.filter(c => c.type === 'Bắt buộc' && c.classes.some(x => x.enrolled < x.max)).slice(0, 3).map(c => c.name).join(', ') + '.', 'Courses/courses.html']);
+    else if (tc < MAX) sg.push(['#0d9488', 'fa-circle-plus', `Còn ${MAX - tc} TC có thể đăng ký`, 'Thêm môn tự chọn để đủ tải học tập.', 'Courses/courses.html']);
     const hot = COURSES.filter(c => !ids.includes(c.id)).filter(c => { const l = Math.max(...c.classes.map(x => x.max - x.enrolled)); return l > 0 && l <= 5; }).map(c => c.name);
-    if (hot.length) sg.push(['#ff5a4f', 'fa-fire', 'Sắp hết chỗ!', hot.join(', ') + ' chỉ còn vài suất.', 'courses.html']);
-    if (n && !paid) sg.push(['#ff9f1c', 'fa-wallet', 'Học phí chưa thanh toán', `Cần đóng ${vnd(fee)} trước hạn 15/10/2026.`, 'tuition.html']);
-    if (n && paid) sg.push(['#22c55e', 'fa-circle-check', 'Mọi thứ đã sẵn sàng', 'Bạn đã đăng ký và đóng học phí. Chúc học kỳ thành công!', 'schedule.html']);
+    if (hot.length) sg.push(['#ff5a4f', 'fa-fire', 'Sắp hết chỗ!', hot.join(', ') + ' chỉ còn vài suất.', 'Courses/courses.html']);
+    if (n && !paid) sg.push(['#ff9f1c', 'fa-wallet', 'Học phí chưa thanh toán', `Cần đóng ${vnd(fee)} trước hạn 15/10/2026.`, 'Tuition/tuition.html']);
+    if (n && paid) sg.push(['#22c55e', 'fa-circle-check', 'Mọi thứ đã sẵn sàng', 'Bạn đã đăng ký và đóng học phí. Chúc học kỳ thành công!', 'Schedule/Schedule.html']);
     $('#extra').innerHTML = card('lightbulb', 'Gợi ý thông minh cho bạn', '', `<div class="sugg">${sg.map(s => `<a class="sg" href="${s[4]}" style="--c:${s[0]}"><i class="fa-solid ${s[1]}"></i><div><b>${s[2]}</b><span>${s[3]}</span></div></a>`).join('')}</div>`);
     $('#extra').innerHTML += renderTuitionSyncBox(reg);
     handleSyncTuyenData(reg);
@@ -208,11 +217,11 @@ document.addEventListener('DOMContentLoaded', () => {
     const mine = all.filter(x => x.cl.teacher === sel);
     const items = mine.map(({ c, cl }) => ({ day: cl.day, name: `${c.name} · ${cl.id}`, color: c.color, room: cl.room, ...slot(cl) }));
     $('#banner').innerHTML = banner('Xin chào quý thầy cô! 👩‍🏫', 'Theo dõi lớp phụ trách, sĩ số và lịch giảng dạy của bạn trong một màn hình.',
-      '<a class="bn-btn w" href="schedule.html"><i class="fa-solid fa-calendar-week"></i> Lịch giảng dạy</a><a class="bn-btn g" href="settings.html"><i class="fa-solid fa-user-gear"></i> Hồ sơ</a>', '', nextCard(items));
-    $('#stats').innerHTML = stat('schedule.html', '#0d9488', 'fa-people-group', mine.length, 'Lớp phụ trách') + stat('schedule.html', '#22c55e', 'fa-user-graduate', mine.reduce((s, x) => s + x.cl.enrolled, 0), 'Tổng sinh viên') +
-      stat('schedule.html', '#0ea5e9', 'fa-clock', mine.reduce((s, x) => s + x.cl.periods.length, 0), 'Tiết dạy mỗi tuần') + stat('courses.html', '#ff9f1c', 'fa-book', new Set(mine.map(x => x.c.id)).size, 'Môn giảng dạy');
+      '<a class="bn-btn w" href="Schedule/Schedule.html"><i class="fa-solid fa-calendar-week"></i> Lịch giảng dạy</a><a class="bn-btn g" href="Settings/settings.html"><i class="fa-solid fa-user-gear"></i> Hồ sơ</a>', '', nextCard(items));
+    $('#stats').innerHTML = stat('Schedule/Schedule.html', '#0d9488', 'fa-people-group', mine.length, 'Lớp phụ trách') + stat('Schedule/Schedule.html', '#22c55e', 'fa-user-graduate', mine.reduce((s, x) => s + x.cl.enrolled, 0), 'Tổng sinh viên') +
+      stat('Schedule/Schedule.html', '#0ea5e9', 'fa-clock', mine.reduce((s, x) => s + x.cl.periods.length, 0), 'Tiết dạy mỗi tuần') + stat('Courses/courses.html', '#ff9f1c', 'fa-book', new Set(mine.map(x => x.c.id)).size, 'Môn giảng dạy');
     $('#two').innerHTML = card('chalkboard-user', 'Giảng viên', '', `<select id="t-sel">${names.map(x => `<option ${x === sel ? 'selected' : ''}>${x}</option>`).join('')}</select><p class="empty">Dữ liệu minh họa lấy từ danh mục môn học. Chọn giảng viên để xem lớp phụ trách.</p>`) +
-      card('list-check', 'Lớp phụ trách', '<a href="courses.html">Danh mục môn →</a>', `<ul class="list">${mine.map(({ c, cl }) => {
+      card('list-check', 'Lớp phụ trách', '<a href="Courses/courses.html">Danh mục môn →</a>', `<ul class="list">${mine.map(({ c, cl }) => {
         const p = Math.round(cl.enrolled / cl.max * 100);
         return `<li><span class="dot" style="background:${c.color}"></span><div><b>${c.name} · ${cl.id}</b><small>${cl.day} · ${slot(cl).s} – ${slot(cl).e} · ${cl.room}</small><div class="bar" style="margin-top:6px"><i style="width:${p}%"></i></div></div><span class="tc">${cl.enrolled}/${cl.max}</span></li>`;
       }).join('')}</ul>`);

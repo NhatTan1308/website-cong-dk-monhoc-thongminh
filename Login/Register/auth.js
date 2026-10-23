@@ -243,7 +243,7 @@ document.addEventListener('DOMContentLoaded', () => {
         } catch (error) {
           throw new Error('Đăng nhập thành công nhưng không thể lưu phiên đăng nhập trong trình duyệt.');
         }
-        window.location.href = 'index.html';
+        window.location.href = '../../index.html';
       } catch (error) {
         showStatus(error.message || 'Không thể đăng nhập. Vui lòng thử lại.', true);
       } finally {
