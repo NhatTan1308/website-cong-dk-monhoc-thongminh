@@ -740,6 +740,12 @@
   background: var(--bg);
 }
 
+.modal-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
 .modal-summary {
   font-size: 0.95rem;
   color: var(--ink);
@@ -754,6 +760,16 @@
 @media (max-width: 600px) {
   .courses-main {
     padding: 16px 16px 120px;
+  }
+
+  .modal-footer {
+    align-items: stretch;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .modal-actions {
+    flex-wrap: wrap;
   }
 
   .toolbar {

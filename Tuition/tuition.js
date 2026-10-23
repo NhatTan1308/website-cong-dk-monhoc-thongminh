@@ -150,6 +150,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const totalFee = courseFee + extraFee;
     let paid = String(read(localStorage, 'sc_paid', '0')) === '1';
 
+    const confirmedCourseIds = new Set(getConfirmedCourses().map((course) => course.id));
     $('#total-fee').textContent = money(totalFee);
     $('#course-fee').textContent = money(courseFee);
     $('#extra-fee').textContent = money(extraFee);
@@ -159,10 +160,17 @@ document.addEventListener('DOMContentLoaded', () => {
     $('#payment-status-desc').textContent = paid ? 'Đã xác nhận thanh toán mô phỏng' : 'Chưa có xác nhận thanh toán';
     $('#course-count').textContent = `${items.length} môn`;
     $('#tuition-table-body').innerHTML = items.length
-        ? items.map(({ course, fee }) => `
-            <tr><td class="course-name">${escapeHTML(course.name)}<span class="course-code">${escapeHTML(course.code || '')}</span></td>
+        ? items.map(({ course, fee }) => {
+            const isConfirmed = confirmedCourseIds.has(course.id);
+            return `
+            <tr><td class="course-name">${escapeHTML(course.name)}<span class="course-code">${escapeHTML(course.code || '')}</span>
+                <label class="course-confirm-option${isConfirmed ? ' is-confirmed' : ''}">
+                    <input class="course-confirm-checkbox" type="checkbox" data-course-id="${course.id}"${isConfirmed ? ' checked disabled' : ' checked'}>
+                    <span>${isConfirmed ? 'Đã xác nhận, đã thêm vào thời khóa biểu' : 'Chọn để xác nhận môn học'}</span>
+                </label></td>
                 <td>${Number(course.credits || 0)}</td><td class="text-right">${money(price)}</td>
-                <td class="text-right amount">${money(fee)}</td></tr>`).join('')
+                <td class="text-right amount">${money(fee)}</td></tr>`;
+        }).join('')
         : `<tr><td colspan="4" class="empty-cell"><i class="fa-solid fa-receipt"></i><br>
             ${user ? 'Chưa có môn học được ghi nhận. Hãy đăng ký môn học trước.' : 'Đăng nhập để xem dữ liệu học phí theo tài khoản.'}<br>
             <a href="${user ? '../Courses/courses.html' : '../Login_Register/login.html'}">${user ? 'Đăng ký môn học' : 'Đăng nhập ngay'} →</a></td></tr>`;
@@ -171,6 +179,41 @@ document.addEventListener('DOMContentLoaded', () => {
     $('#summary-total-fee').textContent = money(totalFee);
     const paymentButton = $('#confirm-payment');
     const qrButton = $('#open-qr-btn');
+    const courseConfirmationStatus = $('#course-confirmation-status');
+    const confirmCoursesButton = $('#confirm-courses');
+    const updateCourseConfirmation = (message) => {
+        const confirmedIds = new Set(getConfirmedCourses().map((course) => course.id));
+        const pendingCourses = items.filter(({ course }) => !confirmedIds.has(course.id));
+        document.querySelectorAll('.course-confirm-checkbox').forEach((checkbox) => {
+            const isConfirmed = confirmedIds.has(Number(checkbox.dataset.courseId));
+            checkbox.checked = isConfirmed || checkbox.checked;
+            checkbox.disabled = isConfirmed;
+            checkbox.parentElement.classList.toggle('is-confirmed', isConfirmed);
+            checkbox.nextElementSibling.textContent = isConfirmed
+                ? 'Đã xác nhận, đã thêm vào thời khóa biểu'
+                : 'Chọn để xác nhận môn học';
+        });
+        confirmCoursesButton.disabled = pendingCourses.length === 0;
+        courseConfirmationStatus.textContent = message || (items.length === 0
+            ? 'Bạn chưa đăng ký môn học nào.'
+            : pendingCourses.length === 0
+                ? 'Tất cả môn đã đăng ký đã được xác nhận và thêm vào thời khóa biểu.'
+                : `${pendingCourses.length} môn đang chờ xác nhận. Các môn đã xác nhận mới xuất hiện trong thời khóa biểu.`);
+    };
+    updateCourseConfirmation();
+    confirmCoursesButton.addEventListener('click', () => {
+        const selectedIds = [...document.querySelectorAll('.course-confirm-checkbox:checked:not(:disabled)')]
+            .map((checkbox) => Number(checkbox.dataset.courseId));
+        if (selectedIds.length === 0) {
+            updateCourseConfirmation('Hãy chọn ít nhất một môn trước khi xác nhận.');
+            return;
+        }
+        if (!confirmRegisteredCourses(selectedIds)) {
+            updateCourseConfirmation('Không thể xác nhận môn học. Vui lòng thử lại.');
+            return;
+        }
+        updateCourseConfirmation(`Đã xác nhận ${selectedIds.length} môn. Thời khóa biểu đã được cập nhật.`);
+    });
     const updatePaymentControls = () => {
         paymentButton.disabled = !user || totalFee === 0 || paid;
         paymentButton.textContent = paid ? 'Đã thanh toán' : 'Xác nhận đã thanh toán';

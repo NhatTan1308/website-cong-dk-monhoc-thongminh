@@ -359,6 +359,53 @@
     font-weight: 700;
 }
 
+.course-confirmation {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 16px 22px;
+    border-top: 1px solid var(--line);
+    border-bottom: 1px solid var(--line);
+    background: var(--bg);
+}
+
+.course-confirmation b {
+    color: var(--ink);
+    font-size: .88rem;
+}
+
+.course-confirmation p {
+    margin-top: 4px;
+    color: var(--mute);
+    font-size: .78rem;
+}
+
+.course-confirmation .payment-confirm-btn {
+    flex: none;
+    margin-top: 0;
+}
+
+.course-confirm-option {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    margin-top: 7px;
+    color: var(--mute);
+    font-size: .72rem;
+    font-weight: 500;
+}
+
+.course-confirm-option input {
+    width: 15px;
+    height: 15px;
+    accent-color: var(--pri);
+}
+
+.course-confirm-option.is-confirmed {
+    color: var(--pri);
+}
+
 .tuition-table .course-code {
     display: block;
     margin-top: 5px;

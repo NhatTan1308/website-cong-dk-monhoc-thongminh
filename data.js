@@ -81,20 +81,70 @@ registeredCourseIds.forEach(id => {
 });
 
 function saveRegisteredState() {
+  let previousRegistrations;
+  let previousConfirmations;
   try {
+    previousRegistrations = localStorage.getItem('sc_registered');
+    previousConfirmations = localStorage.getItem('sc_confirmed_courses');
+    const confirmedIds = JSON.parse(previousConfirmations || '[]');
+    if (!Array.isArray(confirmedIds)) throw new Error('Danh sách môn đã xác nhận không hợp lệ.');
     localStorage.setItem('sc_registered', JSON.stringify(
       [...registeredCourseIds].map(courseId => ({ courseId, classId: null }))
+    ));
+    localStorage.setItem('sc_confirmed_courses', JSON.stringify(
+      confirmedIds.map(Number).filter(courseId => registeredCourseIds.has(courseId))
     ));
     localStorage.removeItem('sc_paid');
     return true;
   } catch (error) {
     console.error('Không thể lưu trạng thái đăng ký:', error);
+    try {
+      if (previousRegistrations === null) localStorage.removeItem('sc_registered');
+      else if (previousRegistrations !== undefined) localStorage.setItem('sc_registered', previousRegistrations);
+      if (previousConfirmations === null) localStorage.removeItem('sc_confirmed_courses');
+      else if (previousConfirmations !== undefined) localStorage.setItem('sc_confirmed_courses', previousConfirmations);
+    } catch (rollbackError) {
+      console.error('Không thể khôi phục dữ liệu đăng ký sau lỗi lưu.', rollbackError);
+    }
     return false;
   }
 }
 
 function getRegisteredCourses() {
   return MOCK_DATA.filter(course => registeredCourseIds.has(course.id));
+}
+
+function getConfirmedCourses() {
+  try {
+    const savedIds = JSON.parse(localStorage.getItem('sc_confirmed_courses') || '[]');
+    if (!Array.isArray(savedIds)) throw new Error('Danh sách môn đã xác nhận không hợp lệ.');
+    const confirmedIds = new Set(savedIds.map(Number).filter(Number.isFinite));
+    return getRegisteredCourses().filter(course => confirmedIds.has(course.id));
+  } catch (error) {
+    console.error('Không thể đọc danh sách môn đã xác nhận:', error);
+    return [];
+  }
+}
+
+function confirmRegisteredCourses(courseIds) {
+  if (!Array.isArray(courseIds)) return false;
+
+  const selectedIds = new Set(courseIds.map(Number).filter(Number.isFinite));
+  const registeredIds = new Set(getRegisteredCourses().map(course => course.id));
+  const validSelectedIds = [...selectedIds].filter(courseId => registeredIds.has(courseId));
+  if (!validSelectedIds.length) return false;
+
+  try {
+    const existingIds = JSON.parse(localStorage.getItem('sc_confirmed_courses') || '[]');
+    if (!Array.isArray(existingIds)) throw new Error('Danh sách môn đã xác nhận không hợp lệ.');
+    const confirmedIds = new Set(existingIds.map(Number).filter(courseId => registeredIds.has(courseId)));
+    validSelectedIds.forEach(courseId => confirmedIds.add(courseId));
+    localStorage.setItem('sc_confirmed_courses', JSON.stringify([...confirmedIds]));
+    return true;
+  } catch (error) {
+    console.error('Không thể xác nhận môn học:', error);
+    return false;
+  }
 }
 
 function getCourseSchedule(course) {

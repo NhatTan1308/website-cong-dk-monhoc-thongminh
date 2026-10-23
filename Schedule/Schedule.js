@@ -34,10 +34,6 @@ document.addEventListener('DOMContentLoaded', () => {
     ['13:00', '13:50'], ['13:50', '14:40'], ['14:40', '15:30'],
     ['15:50', '16:40'], ['16:40', '17:30'], ['17:30', '18:20']
   ];
-  const COURSES = getRegisteredCourses().map((course) => ({
-    ...course,
-    ...getCourseSchedule(course)
-  }));
   const COLORS = ['#0d9488', '#0ea5e9', '#8b5cf6', '#f59e0b', '#ef6472', '#22c55e'];
   const dateAtMidnight = (date) => new Date(date.getFullYear(), date.getMonth(), date.getDate());
   const mondayOf = (date) => {
@@ -74,8 +70,8 @@ document.addEventListener('DOMContentLoaded', () => {
     console.warn('Không thể đọc chế độ xếp lịch.', error);
   }
 
-  function loadRegisteredCourses() {
-    return getRegisteredCourses();
+  function loadConfirmedCourses() {
+    return getConfirmedCourses();
   }
 
   function loadSavedPlan(courses) {
@@ -244,7 +240,7 @@ document.addEventListener('DOMContentLoaded', () => {
       .sort((first, second) => first.start - second.start);
 
     if (!lessons.length) {
-      $('#today-list').innerHTML = `<p class="empty-day"><i class="fa-regular fa-calendar"></i> ${COURSES.length ? 'Hôm nay bạn không có tiết học.' : 'Bạn chưa đăng ký môn học nào.'}</p>`;
+      $('#today-list').innerHTML = `<p class="empty-day"><i class="fa-regular fa-calendar"></i> ${registeredCourses.length ? 'Hôm nay bạn không có tiết học.' : 'Chưa có môn học nào được xác nhận.'}</p>`;
       return;
     }
 
@@ -259,7 +255,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   function renderSchedule(recomputeAI = false) {
-    registeredCourses = loadRegisteredCourses();
+    registeredCourses = loadConfirmedCourses();
     plan = loadSavedPlan(registeredCourses);
     if (aiMode) {
       if (recomputeAI) {
@@ -317,7 +313,7 @@ document.addEventListener('DOMContentLoaded', () => {
       renderSchedule();
       return;
     }
-    const recommendation = recommendSchedule(loadRegisteredCourses());
+    const recommendation = recommendSchedule(loadConfirmedCourses());
     if (!recommendation) {
       scheduleMessage = 'Không tìm được phương án minh họa không trùng lịch cho toàn bộ môn đã đăng ký.';
       $('#schedule-note').textContent = scheduleMessage;
@@ -355,7 +351,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (event.key === 'sc_schedule_mode') {
       aiMode = event.newValue === 'ai';
       renderSchedule();
-    } else if (event.key === null || event.key === 'sc_registered_courses' || event.key === 'sc_schedule_plan') {
+    } else if (event.key === null || event.key === 'sc_registered' || event.key === 'sc_confirmed_courses' || event.key === 'sc_schedule_plan') {
       renderSchedule(aiMode && (event.key === null || event.key === 'sc_registered_courses'));
     }
   });
