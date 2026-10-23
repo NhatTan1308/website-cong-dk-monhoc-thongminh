@@ -148,7 +148,12 @@ document.addEventListener('DOMContentLoaded', () => {
     const courseFee = items.reduce((sum, item) => sum + item.fee, 0);
     const extraFee = items.length ? extraFeeRate : 0;
     const totalFee = courseFee + extraFee;
-    let paid = String(read(localStorage, 'sc_paid', '0')) === '1';
+    let paid = false;
+    try {
+        paid = String(getStudentStorageItem('sc_paid') || '0') === '1';
+    } catch (error) {
+        console.error('Không thể đọc trạng thái học phí.', error);
+    }
 
     const confirmedCourseIds = new Set(getConfirmedCourses().map((course) => course.id));
     $('#total-fee').textContent = money(totalFee);
@@ -181,6 +186,11 @@ document.addEventListener('DOMContentLoaded', () => {
     const qrButton = $('#open-qr-btn');
     const courseConfirmationStatus = $('#course-confirmation-status');
     const confirmCoursesButton = $('#confirm-courses');
+    const confirmModal = $('#course-confirm-modal');
+    const confirmModalOverlay = $('#course-confirm-overlay');
+    const confirmNoButton = $('#course-confirm-no');
+    const confirmYesButton = $('#course-confirm-yes');
+    let selectedCourseIdsToConfirm = [];
     const updateCourseConfirmation = (message) => {
         const confirmedIds = new Set(getConfirmedCourses().map((course) => course.id));
         const pendingCourses = items.filter(({ course }) => !confirmedIds.has(course.id));
@@ -201,18 +211,40 @@ document.addEventListener('DOMContentLoaded', () => {
                 : `${pendingCourses.length} môn đang chờ xác nhận. Các môn đã xác nhận mới xuất hiện trong thời khóa biểu.`);
     };
     updateCourseConfirmation();
+    const closeCourseConfirmation = () => {
+        confirmModal.classList.remove('show');
+        confirmModal.setAttribute('aria-hidden', 'true');
+        document.body.style.overflow = '';
+        confirmCoursesButton.focus();
+    };
     confirmCoursesButton.addEventListener('click', () => {
-        const selectedIds = [...document.querySelectorAll('.course-confirm-checkbox:checked:not(:disabled)')]
+        selectedCourseIdsToConfirm = [...document.querySelectorAll('.course-confirm-checkbox:checked:not(:disabled)')]
             .map((checkbox) => Number(checkbox.dataset.courseId));
-        if (selectedIds.length === 0) {
+        if (selectedCourseIdsToConfirm.length === 0) {
             updateCourseConfirmation('Hãy chọn ít nhất một môn trước khi xác nhận.');
             return;
         }
-        if (!confirmRegisteredCourses(selectedIds)) {
+        confirmModal.classList.add('show');
+        confirmModal.setAttribute('aria-hidden', 'false');
+        document.body.style.overflow = 'hidden';
+        confirmNoButton.focus();
+    });
+    confirmNoButton.addEventListener('click', closeCourseConfirmation);
+    confirmModalOverlay.addEventListener('click', closeCourseConfirmation);
+    confirmYesButton.addEventListener('click', () => {
+        if (!confirmRegisteredCourses(selectedCourseIdsToConfirm)) {
+            closeCourseConfirmation();
             updateCourseConfirmation('Không thể xác nhận môn học. Vui lòng thử lại.');
             return;
         }
-        updateCourseConfirmation(`Đã xác nhận ${selectedIds.length} môn. Thời khóa biểu đã được cập nhật.`);
+        closeCourseConfirmation();
+        updateCourseConfirmation(`Đã xác nhận ${selectedCourseIdsToConfirm.length} môn. Thời khóa biểu đã được cập nhật.`);
+        selectedCourseIdsToConfirm = [];
+    });
+    document.addEventListener('keydown', (event) => {
+        if (event.key === 'Escape' && confirmModal.classList.contains('show')) {
+            closeCourseConfirmation();
+        }
     });
     const updatePaymentControls = () => {
         paymentButton.disabled = !user || totalFee === 0 || paid;
@@ -234,7 +266,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         if (totalFee === 0 || paid) return;
         try {
-            localStorage.setItem('sc_paid', '1');
+            setStudentStorageItem('sc_paid', '1');
             paid = true;
             $('#payment-status').textContent = 'Đã thanh toán';
             $('#payment-status-desc').textContent = 'Đã xác nhận thanh toán mô phỏng';

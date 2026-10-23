@@ -70,20 +70,29 @@ document.addEventListener('DOMContentLoaded', () => {
   const toast = (m) => { if (typeof showToast === 'function') showToast(m); };
   const getU = () => read(sessionStorage, 'sc_user', null);
   const getReg = () => {
-    const registrations = read(localStorage, 'sc_registered', null);
+    const registrations = readStudentData('sc_registered', null);
     if (Array.isArray(registrations)) {
       return registrations
         .map((registration) => Number(typeof registration === 'object' ? registration.courseId : registration))
         .filter(Number.isFinite);
     }
-    const legacyIds = read(localStorage, 'sc_registered_courses', []);
+    const legacyIds = readStudentData('sc_registered_courses', []);
     return Array.isArray(legacyIds) ? legacyIds.map(Number).filter(Number.isFinite) : [];
   };
   const getConfirmedIds = () => {
-    const confirmedIds = read(localStorage, 'sc_confirmed_courses', []);
+    const confirmedIds = readStudentData('sc_confirmed_courses', []);
     return Array.isArray(confirmedIds)
       ? new Set(confirmedIds.map(Number).filter(Number.isFinite))
       : new Set();
+  };
+  const readStudentData = (key, fallback) => {
+    try {
+      const value = getStudentStorageItem(key);
+      return value === null ? fallback : JSON.parse(value);
+    } catch (error) {
+      console.error(`Không thể đọc dữ liệu sinh viên "${key}".`, error);
+      return fallback;
+    }
   };
 
   /* ---------- Hằng số & dữ liệu ---------- */
@@ -213,7 +222,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const tc = registered.reduce((sum, { c }) => sum + Number(c.credits || 0), 0);
     const confirmedCredits = confirmed.reduce((sum, { c }) => sum + Number(c.credits || 0), 0);
     const totalFee = n ? tc * PRICE + FEE0 : 0;
-    const paid = String(read(localStorage, 'sc_paid', '0')) === '1';
+    const paid = String(readStudentData('sc_paid', '0')) === '1';
     const outstandingFee = paid ? 0 : totalFee;
     const items = confirmed.map(({ c, cl }) => ({
       day: cl.day,
@@ -258,7 +267,10 @@ document.addEventListener('DOMContentLoaded', () => {
   /* ---------- Khởi chạy ---------- */
   function render() { !user ? guest() : student(); }
   window.addEventListener('storage', (event) => {
-    if (event.key === null || ['sc_registered', 'sc_registered_courses', 'sc_confirmed_courses', 'sc_paid'].includes(event.key)) {
+    if (!user) return;
+    const scopedKeys = ['sc_registered', 'sc_registered_courses', 'sc_confirmed_courses', 'sc_paid']
+      .map((key) => getStudentStorageKey(key));
+    if (event.key === null || scopedKeys.includes(event.key)) {
       render();
     }
   });

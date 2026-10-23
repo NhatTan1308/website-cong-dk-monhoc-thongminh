@@ -1026,6 +1026,111 @@
     transform: translateY(0) scale(1);
 }
 
+.course-confirm-modal {
+    position: fixed;
+    inset: 0;
+    z-index: 10000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transition: opacity 0.2s ease, visibility 0.2s ease;
+}
+
+.course-confirm-modal.show {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+}
+
+.course-confirm-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(5, 20, 25, 0.7);
+    backdrop-filter: blur(4px);
+}
+
+.course-confirm-dialog {
+    position: relative;
+    z-index: 1;
+    width: min(100%, 420px);
+    padding: 28px;
+    border: 1px solid var(--line);
+    border-radius: 20px;
+    background: var(--card);
+    color: var(--ink);
+    text-align: center;
+    box-shadow: 0 24px 80px rgba(0, 0, 0, 0.25);
+    transform: translateY(12px) scale(0.98);
+    transition: transform 0.2s ease;
+}
+
+.course-confirm-modal.show .course-confirm-dialog {
+    transform: translateY(0) scale(1);
+}
+
+.course-confirm-icon {
+    display: grid;
+    width: 52px;
+    height: 52px;
+    place-items: center;
+    margin: 0 auto 14px;
+    border-radius: 16px;
+    background: rgba(255, 159, 28, 0.14);
+    color: #f59e0b;
+    font-size: 23px;
+}
+
+.course-confirm-dialog h2 {
+    margin: 0 0 9px;
+    font-size: 20px;
+}
+
+.course-confirm-dialog p {
+    margin: 0;
+    color: var(--mute);
+    font-size: 14px;
+    line-height: 1.6;
+}
+
+.course-confirm-actions {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 22px;
+}
+
+.course-confirm-actions button {
+    min-width: 120px;
+    padding: 11px 18px;
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    font: inherit;
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: filter 0.2s ease, transform 0.2s ease;
+}
+
+.course-confirm-actions button:hover {
+    filter: brightness(1.08);
+    transform: translateY(-1px);
+}
+
+.course-confirm-no {
+    background: var(--bg);
+    color: var(--ink);
+}
+
+.course-confirm-yes {
+    border-color: var(--pri) !important;
+    background: var(--pri);
+    color: #fff;
+}
+
 .qr-close-btn {
     position: absolute;
     top: 12px;

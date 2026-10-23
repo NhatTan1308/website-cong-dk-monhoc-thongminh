@@ -49,15 +49,6 @@ document.addEventListener('DOMContentLoaded', () => {
     start: PERIODS[section.start - 1][0],
     end: PERIODS[section.end - 1][1]
   });
-  const readJSON = (key, fallback) => {
-    try {
-      const value = localStorage.getItem(key);
-      return value ? JSON.parse(value) : fallback;
-    } catch (error) {
-      console.warn(`Không thể đọc dữ liệu ${key}.`, error);
-      return fallback;
-    }
-  };
   const today = dateAtMidnight(new Date());
   let weekStart = mondayOf(today);
   let registeredCourses = [];
@@ -65,7 +56,7 @@ document.addEventListener('DOMContentLoaded', () => {
   let aiMode = false;
   let scheduleMessage = '';
   try {
-    aiMode = localStorage.getItem('sc_schedule_mode') === 'ai';
+    aiMode = getStudentStorageItem('sc_schedule_mode') === 'ai';
   } catch (error) {
     console.warn('Không thể đọc chế độ xếp lịch.', error);
   }
@@ -75,7 +66,15 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   function loadSavedPlan(courses) {
-    const savedPlan = readJSON('sc_schedule_plan', {});
+    const savedPlan = (() => {
+      try {
+        const value = getStudentStorageItem('sc_schedule_plan');
+        return value ? JSON.parse(value) : {};
+      } catch (error) {
+        console.warn('Không thể đọc thời khóa biểu đã lưu.', error);
+        return {};
+      }
+    })();
     const result = new Map();
     courses.forEach((course) => {
       const options = DEMO_CLASS_OPTIONS.get(course.id) || [];
@@ -88,7 +87,7 @@ document.addEventListener('DOMContentLoaded', () => {
   function savePlan(nextPlan) {
     const serializable = Object.fromEntries(nextPlan);
     try {
-      localStorage.setItem('sc_schedule_plan', JSON.stringify(serializable));
+      setStudentStorageItem('sc_schedule_plan', JSON.stringify(serializable));
       plan = nextPlan;
     } catch (error) {
       console.error('Không thể lưu thời khóa biểu.', error);
@@ -98,7 +97,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function saveMode() {
     try {
-      localStorage.setItem('sc_schedule_mode', aiMode ? 'ai' : 'manual');
+      setStudentStorageItem('sc_schedule_mode', aiMode ? 'ai' : 'manual');
     } catch (error) {
       console.warn('Không thể lưu chế độ xếp lịch.', error);
     }
@@ -348,11 +347,16 @@ document.addEventListener('DOMContentLoaded', () => {
   $('#menu').addEventListener('click', () => toggleSide(!side.classList.contains('open')));
   overlay.addEventListener('click', () => toggleSide(false));
   window.addEventListener('storage', (event) => {
-    if (event.key === 'sc_schedule_mode') {
+    if (event.key === getStudentStorageKey('sc_schedule_mode')) {
       aiMode = event.newValue === 'ai';
       renderSchedule();
-    } else if (event.key === null || event.key === 'sc_registered' || event.key === 'sc_confirmed_courses' || event.key === 'sc_schedule_plan') {
-      renderSchedule(aiMode && (event.key === null || event.key === 'sc_registered_courses'));
+    } else if (event.key === null || [
+      'sc_registered',
+      'sc_registered_courses',
+      'sc_confirmed_courses',
+      'sc_schedule_plan'
+    ].map((key) => getStudentStorageKey(key)).includes(event.key)) {
+      renderSchedule(aiMode && (event.key === null || event.key === getStudentStorageKey('sc_registered_courses')));
     }
   });
 

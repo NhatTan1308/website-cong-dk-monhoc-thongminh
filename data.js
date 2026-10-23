@@ -48,9 +48,66 @@ const DEMO_CLASS_OPTIONS = new Map(MOCK_DATA.map((course, index) => {
   ]];
 }));
 
-const readCourseRegistrations = () => {
+const courseUser = (() => {
   try {
-    const saved = localStorage.getItem('sc_registered');
+    return JSON.parse(sessionStorage.getItem('sc_user') || 'null');
+  } catch {
+    return null;
+  }
+})();
+const studentDataKeys = [
+  'sc_registered',
+  'sc_registered_courses',
+  'sc_confirmed_courses',
+  'sc_paid',
+  'sc_schedule_plan',
+  'sc_schedule_mode'
+];
+const studentStoragePrefix = courseUser && typeof courseUser.mssv === 'string'
+  ? `sc_student_${encodeURIComponent(courseUser.mssv.trim().toLowerCase())}_`
+  : null;
+
+function getStudentStorageKey(key) {
+  if (!studentStoragePrefix || !studentDataKeys.includes(key)) {
+    throw new Error(`Không thể truy cập dữ liệu sinh viên "${key}" khi chưa có phiên đăng nhập hợp lệ.`);
+  }
+  return `${studentStoragePrefix}${key}`;
+}
+
+function getStudentStorageItem(key) {
+  return localStorage.getItem(getStudentStorageKey(key));
+}
+
+function setStudentStorageItem(key, value) {
+  localStorage.setItem(getStudentStorageKey(key), value);
+}
+
+function removeStudentStorageItem(key) {
+  localStorage.removeItem(getStudentStorageKey(key));
+}
+
+if (studentStoragePrefix) {
+  try {
+    const migrationMarker = 'sc_student_data_migrated_v1';
+    if (localStorage.getItem(migrationMarker) === null) {
+      const legacyValues = new Map(studentDataKeys
+        .map(key => [key, localStorage.getItem(key)])
+        .filter(([, value]) => value !== null));
+      legacyValues.forEach((value, key) => {
+        if (getStudentStorageItem(key) === null) setStudentStorageItem(key, value);
+      });
+      localStorage.setItem(migrationMarker, courseUser.mssv.trim().toLowerCase());
+      legacyValues.forEach((_, key) => localStorage.removeItem(key));
+    }
+  } catch (error) {
+    console.error('Không thể tách dữ liệu đăng ký cũ theo tài khoản.', error);
+  }
+}
+
+const readCourseRegistrations = () => {
+  if (!studentStoragePrefix) return [];
+  try {
+    const saved = getStudentStorageItem('sc_registered');
     if (saved !== null) {
       const registrations = JSON.parse(saved);
       if (!Array.isArray(registrations)) throw new Error('Danh sách môn đăng ký không hợp lệ.');
@@ -58,7 +115,7 @@ const readCourseRegistrations = () => {
         .map(registration => Number(typeof registration === 'object' ? registration.courseId : registration))
         .filter(Number.isFinite);
     }
-    const legacyIds = JSON.parse(localStorage.getItem('sc_registered_courses') || '[]');
+    const legacyIds = JSON.parse(getStudentStorageItem('sc_registered_courses') || '[]');
     if (!Array.isArray(legacyIds)) throw new Error('Danh sách môn đăng ký cũ không hợp lệ.');
     return legacyIds.map(Number).filter(Number.isFinite);
   } catch (error) {
@@ -67,13 +124,6 @@ const readCourseRegistrations = () => {
   }
 };
 const registeredCourseIds = new Set(readCourseRegistrations());
-const courseUser = (() => {
-  try {
-    return JSON.parse(sessionStorage.getItem('sc_user') || 'null');
-  } catch {
-    return null;
-  }
-})();
 
 registeredCourseIds.forEach(id => {
   const course = MOCK_DATA.find(item => item.id === id);
@@ -84,25 +134,25 @@ function saveRegisteredState() {
   let previousRegistrations;
   let previousConfirmations;
   try {
-    previousRegistrations = localStorage.getItem('sc_registered');
-    previousConfirmations = localStorage.getItem('sc_confirmed_courses');
+    previousRegistrations = getStudentStorageItem('sc_registered');
+    previousConfirmations = getStudentStorageItem('sc_confirmed_courses');
     const confirmedIds = JSON.parse(previousConfirmations || '[]');
     if (!Array.isArray(confirmedIds)) throw new Error('Danh sách môn đã xác nhận không hợp lệ.');
-    localStorage.setItem('sc_registered', JSON.stringify(
+    setStudentStorageItem('sc_registered', JSON.stringify(
       [...registeredCourseIds].map(courseId => ({ courseId, classId: null }))
     ));
-    localStorage.setItem('sc_confirmed_courses', JSON.stringify(
+    setStudentStorageItem('sc_confirmed_courses', JSON.stringify(
       confirmedIds.map(Number).filter(courseId => registeredCourseIds.has(courseId))
     ));
-    localStorage.removeItem('sc_paid');
+    removeStudentStorageItem('sc_paid');
     return true;
   } catch (error) {
     console.error('Không thể lưu trạng thái đăng ký:', error);
     try {
-      if (previousRegistrations === null) localStorage.removeItem('sc_registered');
-      else if (previousRegistrations !== undefined) localStorage.setItem('sc_registered', previousRegistrations);
-      if (previousConfirmations === null) localStorage.removeItem('sc_confirmed_courses');
-      else if (previousConfirmations !== undefined) localStorage.setItem('sc_confirmed_courses', previousConfirmations);
+      if (previousRegistrations === null) removeStudentStorageItem('sc_registered');
+      else if (previousRegistrations !== undefined) setStudentStorageItem('sc_registered', previousRegistrations);
+      if (previousConfirmations === null) removeStudentStorageItem('sc_confirmed_courses');
+      else if (previousConfirmations !== undefined) setStudentStorageItem('sc_confirmed_courses', previousConfirmations);
     } catch (rollbackError) {
       console.error('Không thể khôi phục dữ liệu đăng ký sau lỗi lưu.', rollbackError);
     }
@@ -115,8 +165,9 @@ function getRegisteredCourses() {
 }
 
 function getConfirmedCourseIds() {
+  if (!studentStoragePrefix) return new Set();
   try {
-    const savedIds = JSON.parse(localStorage.getItem('sc_confirmed_courses') || '[]');
+    const savedIds = JSON.parse(getStudentStorageItem('sc_confirmed_courses') || '[]');
     if (!Array.isArray(savedIds)) throw new Error('Danh sách môn đã xác nhận không hợp lệ.');
     return new Set(savedIds.map(Number).filter(Number.isFinite));
   } catch (error) {
@@ -141,11 +192,11 @@ function confirmRegisteredCourses(courseIds) {
   if (!validSelectedIds.length) return false;
 
   try {
-    const existingIds = JSON.parse(localStorage.getItem('sc_confirmed_courses') || '[]');
+    const existingIds = JSON.parse(getStudentStorageItem('sc_confirmed_courses') || '[]');
     if (!Array.isArray(existingIds)) throw new Error('Danh sách môn đã xác nhận không hợp lệ.');
     const confirmedIds = new Set(existingIds.map(Number).filter(courseId => registeredIds.has(courseId)));
     validSelectedIds.forEach(courseId => confirmedIds.add(courseId));
-    localStorage.setItem('sc_confirmed_courses', JSON.stringify([...confirmedIds]));
+    setStudentStorageItem('sc_confirmed_courses', JSON.stringify([...confirmedIds]));
     return true;
   } catch (error) {
     console.error('Không thể xác nhận môn học:', error);
@@ -474,7 +525,7 @@ function initCoursePage() {
   // Gán ra window để registerCourse gọi lại cập nhật UI
   window.applyCourseFilter = filterData;
   window.addEventListener('storage', event => {
-    if (event.key === 'sc_confirmed_courses' || event.key === null) {
+    if (event.key === getStudentStorageKey('sc_confirmed_courses') || event.key === null) {
       filterData();
     }
   });
