@@ -307,7 +307,7 @@ function renderTuitionSyncBox(reg) {
       <span>${FEE0.toLocaleString('vi-VN')} ₫</span>
     </div>
     <button id="btn-sync-tuyen" class="btn-sm solid" style="width: 100%; margin-top: 16px; display: flex; justify-content: center; align-items: center; gap: 8px;">
-      <i class="fa-solid fa-arrows-rotate"></i> Đồng bộ dữ liệu với Tuyền
+      <i class="fa-solid fa-arrows-rotate"></i> Đồng bộ dữ liệu
     </button>
   `;
 
