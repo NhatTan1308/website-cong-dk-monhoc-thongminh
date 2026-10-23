@@ -114,16 +114,22 @@ function getRegisteredCourses() {
   return MOCK_DATA.filter(course => registeredCourseIds.has(course.id));
 }
 
-function getConfirmedCourses() {
+function getConfirmedCourseIds() {
   try {
     const savedIds = JSON.parse(localStorage.getItem('sc_confirmed_courses') || '[]');
     if (!Array.isArray(savedIds)) throw new Error('Danh sách môn đã xác nhận không hợp lệ.');
-    const confirmedIds = new Set(savedIds.map(Number).filter(Number.isFinite));
-    return getRegisteredCourses().filter(course => confirmedIds.has(course.id));
+    return new Set(savedIds.map(Number).filter(Number.isFinite));
   } catch (error) {
     console.error('Không thể đọc danh sách môn đã xác nhận:', error);
-    return [];
+    return null;
   }
+}
+
+function getConfirmedCourses() {
+  const confirmedIds = getConfirmedCourseIds();
+  return confirmedIds
+    ? getRegisteredCourses().filter(course => confirmedIds.has(course.id))
+    : [];
 }
 
 function confirmRegisteredCourses(courseIds) {
@@ -199,6 +205,16 @@ function registerCourse(courseId) {
 
   // Trường hợp 1: Môn này ĐÃ ĐƯỢC sinh viên đăng ký trước đó -> Nhấn vào sẽ HỦY ĐĂNG KÝ
   if (registeredCourseIds.has(courseId)) {
+    const confirmedIds = getConfirmedCourseIds();
+    if (!confirmedIds) {
+      showToast('Không thể kiểm tra trạng thái xác nhận. Vui lòng tải lại trang trước khi thay đổi đăng ký.', 'error');
+      return;
+    }
+    if (confirmedIds.has(courseId)) {
+      showToast('Môn học đã được xác nhận ở trang Học phí và không thể hủy đăng ký.', 'error');
+      return;
+    }
+
     registeredCourseIds.delete(courseId);
     course.enrolled = Math.max(0, course.enrolled - 1);
     if (!saveRegisteredState()) {
@@ -302,6 +318,7 @@ function updateRegistrationSummary() {
   const modalTotalFeeEl = document.getElementById('modalTotalFee');
   if (modalTotalFeeEl) modalTotalFeeEl.textContent = formatCoursePrice(totalFee);
   if (selectedModalBody) {
+    const confirmedIds = getConfirmedCourseIds();
     if (registeredCourses.length === 0) {
       selectedModalBody.innerHTML = `
         <div class="modal-empty">
@@ -310,18 +327,21 @@ function updateRegistrationSummary() {
         </div>
       `;
     } else {
-      selectedModalBody.innerHTML = registeredCourses.map(c => `
-        <div class="modal-course-item">
-          <div class="mci-info">
-            <span class="mci-title">[${c.code}] ${c.name}</span>
-            <span class="mci-sub">GV: ${c.teacher} • <b>${c.credits} tín chỉ</b> • ${formatCoursePrice(c.credits * CREDIT_PRICE)}</span>
+      selectedModalBody.innerHTML = registeredCourses.map(c => {
+        const isLocked = !confirmedIds || confirmedIds.has(c.id);
+        return `
+          <div class="modal-course-item">
+            <div class="mci-info">
+              <span class="mci-title">[${c.code}] ${c.name}</span>
+              <span class="mci-sub">GV: ${c.teacher} • <b>${c.credits} tín chỉ</b> • ${formatCoursePrice(c.credits * CREDIT_PRICE)}</span>
+            </div>
+            <button type="button" class="mci-btn-del${isLocked ? ' mci-btn-locked' : ''}" onclick="registerCourse(${c.id})"${isLocked ? ' disabled title="Môn đã xác nhận hoặc không thể kiểm tra trạng thái xác nhận"' : ' title="Hủy đăng ký môn này"'}>
+              <i class="fa-solid ${isLocked ? 'fa-lock' : 'fa-trash-can'}"></i>
+              <span>${isLocked ? 'Đã xác nhận' : 'Hủy'}</span>
+            </button>
           </div>
-          <button type="button" class="mci-btn-del" onclick="registerCourse(${c.id})" title="Hủy đăng ký môn này">
-            <i class="fa-solid fa-trash-can"></i>
-            <span>Hủy</span>
-          </button>
-        </div>
-      `).join('');
+        `;
+      }).join('');
     }
   }
 }
@@ -340,6 +360,7 @@ function renderCourses(courses) {
     return;
   }
 
+  const confirmedIds = getConfirmedCourseIds();
   const groupedCourses = courses.reduce((acc, course) => {
     if (!acc[course.major]) acc[course.major] = [];
     acc[course.major].push(course);
@@ -358,6 +379,7 @@ function renderCourses(courses) {
     html += '<div class="course-grid">';
     html += groupedCourses[major].map(c => {
       const isRegistered = registeredCourseIds.has(c.id);
+      const isConfirmed = isRegistered && (!confirmedIds || confirmedIds.has(c.id));
       const isClassFull = c.enrolled >= c.slots;
       const pct = Math.min(100, Math.round((c.enrolled / c.slots) * 100));
       const badgeClass = c.type === 'Bắt buộc' ? 'badge-bb' : 'badge-tc';
@@ -366,7 +388,11 @@ function renderCourses(courses) {
       let btnContent = '<i class="fa-solid fa-plus"></i> Đăng ký';
       let btnDisabled = '';
 
-      if (isRegistered) {
+      if (isConfirmed) {
+        btnClass = 'btn-confirmed';
+        btnContent = '<i class="fa-solid fa-lock"></i> Đã xác nhận · Không thể hủy';
+        btnDisabled = 'disabled title="Môn đã xác nhận ở trang Học phí nên không thể hủy đăng ký"';
+      } else if (isRegistered) {
         btnClass = 'btn-registered';
         btnContent = `
           <span class="btn-text-default"><i class="fa-solid fa-circle-check"></i> Đã đăng ký</span>
@@ -447,6 +473,11 @@ function initCoursePage() {
 
   // Gán ra window để registerCourse gọi lại cập nhật UI
   window.applyCourseFilter = filterData;
+  window.addEventListener('storage', event => {
+    if (event.key === 'sc_confirmed_courses' || event.key === null) {
+      filterData();
+    }
+  });
 
   if (searchInput) searchInput.addEventListener('input', filterData);
   if (filterSelect) filterSelect.addEventListener('change', filterData);
