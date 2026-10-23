@@ -33,6 +33,7 @@ const MOCK_DATA = [
 ];
 
 const CREDIT_PRICE = 500000;
+<<<<<<< HEAD
 const formatCoursePrice = (amount) => `${Number(amount).toLocaleString('vi-VN')} ₫`;
 const readCourseRegistrations = () => {
   try {
@@ -43,6 +44,31 @@ const readCourseRegistrations = () => {
       return registrations
         .map(registration => Number(typeof registration === 'object' ? registration.courseId : registration))
         .filter(Number.isFinite);
+=======
+const BASE_FEE = 150000;
+
+// Dữ liệu lịch minh họa để thử chức năng xếp lịch; thay bằng lịch lớp chính thức khi có.
+const DEMO_CLASS_OPTIONS = new Map(MOCK_DATA.map((course, index) => {
+  const duration = course.credits >= 4 ? 3 : 2;
+  const group = Math.floor(index / 6);
+  const firstStart = 1 + ((group * 3 + index) % 8);
+  const secondStart = 1 + ((index * 3 + group) % 8);
+  const firstDay = index % 6;
+  const secondDay = (firstDay + 2 + group % 3) % 6;
+  return [course.id, [
+    { section: 'A', day: firstDay, start: firstStart, end: firstStart + duration - 1, room: `A${201 + course.id}` },
+    { section: 'B', day: secondDay, start: secondStart, end: secondStart + duration - 1, room: `B${101 + course.id}` }
+  ]];
+}));
+
+// Quản lý danh sách các môn đã đăng ký của sinh viên (lưu vào localStorage)
+const registeredCourseIds = new Set(
+  (() => {
+    try {
+      return JSON.parse(localStorage.getItem('sc_registered_courses') || '[]');
+    } catch {
+      return [];
+>>>>>>> 95a76d4441f649e35849dffe26f0d78f5ec78007
     }
     const legacyIds = JSON.parse(localStorage.getItem('sc_registered_courses') || '[]');
     if (!Array.isArray(legacyIds)) throw new Error('Danh sách môn đăng ký cũ không hợp lệ.');
