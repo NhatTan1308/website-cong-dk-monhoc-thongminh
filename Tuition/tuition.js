@@ -17,10 +17,12 @@ document.addEventListener('DOMContentLoaded', () => {
         'courses.html': '../Courses/courses.html',
         'Courses/courses.html': '../Courses/courses.html',
         'Schedule/Schedule.html': '../Schedule/Schedule.html',
-        'login.html': '../Login/Register/login.html',
-        'Login/Register/login.html': '../Login/Register/login.html',
-        'register.html': '../Login/Register/register.html',
-        'Login/Register/register.html': '../Login/Register/register.html',
+        'login.html': '../Login_Register/login.html',
+        'Login/Register/login.html': '../Login_Register/login.html',
+        'Login_Register/login.html': '../Login_Register/login.html',
+        'register.html': '../Login_Register/register.html',
+        'Login/Register/register.html': '../Login_Register/register.html',
+        'Login_Register/register.html': '../Login_Register/register.html',
         'settings.html': '../Settings/settings.html',
         'Settings/settings.html': '../Settings/settings.html',
         'tuition.html': 'tuition.html',
@@ -175,7 +177,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 <td class="text-right amount">${money(fee)}</td></tr>`).join('')
         : `<tr><td colspan="4" class="empty-cell"><i class="fa-solid fa-receipt"></i><br>
             ${user ? 'Chưa có môn học được ghi nhận. Hãy đăng ký môn học trước.' : 'Đăng nhập để xem dữ liệu học phí theo tài khoản.'}<br>
-            <a href="${user ? '../Courses/courses.html' : '../Login/Register/login.html'}">${user ? 'Đăng ký môn học' : 'Đăng nhập ngay'} →</a></td></tr>`;
+            <a href="${user ? '../Courses/courses.html' : '../Login_Register/login.html'}">${user ? 'Đăng ký môn học' : 'Đăng nhập ngay'} →</a></td></tr>`;
     $('#summary-course-fee').textContent = money(courseFee);
     $('#summary-extra-fee').textContent = money(extraFee);
     $('#summary-total-fee').textContent = money(totalFee);

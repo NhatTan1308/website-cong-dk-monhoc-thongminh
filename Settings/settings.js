@@ -21,7 +21,7 @@ document.addEventListener('DOMContentLoaded', () => {
       status.textContent = 'Phiên đăng nhập không hợp lệ. Vui lòng đăng nhập lại.';
       status.classList.add('visible', 'error');
     }
-    window.location.replace('../Login/Register/login.html');
+    window.location.replace('../Login_Register/login.html');
     return;
   }
 

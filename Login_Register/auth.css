@@ -55,7 +55,7 @@ body.auth-page {
 
 .auth-layout {
   display: grid;
-  grid-template-columns: minmax(320px, .9fr) minmax(480px, 1.1fr);
+  grid-template-columns: minmax(0, 1fr) minmax(0, 2fr);
   min-height: 100vh;
 }
 
@@ -68,7 +68,7 @@ body.auth-page {
   padding: 34px clamp(28px, 5vw, 76px);
   overflow: hidden;
   color: #fff;
-  background: linear-gradient(145deg, rgba(4, 48, 55, .96), rgba(8, 116, 107, .82) 60%, rgba(13, 148, 136, .48)), url("imgs/lhu.jpg") center / cover no-repeat;
+  background: linear-gradient(145deg, rgba(4, 48, 55, .78), rgba(8, 116, 107, .58) 60%, rgba(13, 148, 136, .3)), url("../imgs/lhu.jpg") center / cover no-repeat;
 }
 
 .auth-intro::after {
@@ -500,7 +500,7 @@ body.auth-page {
 
 @media (max-width: 900px) {
   .auth-layout {
-    grid-template-columns: minmax(280px, .78fr) minmax(430px, 1.22fr);
+    grid-template-columns: minmax(220px, 1fr) minmax(0, 2fr);
   }
 
   .auth-intro {
