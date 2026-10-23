@@ -498,7 +498,7 @@ body.auth-page {
   font-size: .72rem;
 }
 
-@media (max-width: 1674px) {
+@media (max-width: 1500px) {
   .auth-layout {
     display: block;
   }
