@@ -348,7 +348,7 @@ function handleSyncTuyenData(regData) {
     } catch (error) {
       alert('Lỗi đồng bộ dữ liệu: ' + error.message);
     } finally {
-      btn.innerHTML = '<i class="fa-solid fa-arrows-rotate"></i> Đồng bộ dữ liệu với Tuyền';
+      btn.innerHTML = '<i class="fa-solid fa-arrows-rotate"></i> Đồng bộ dữ liệu';
       btn.style.opacity = '1';
     }
   });
