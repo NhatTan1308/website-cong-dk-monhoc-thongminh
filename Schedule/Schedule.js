@@ -1,5 +1,32 @@
 document.addEventListener('DOMContentLoaded', () => {
   const $ = (selector) => document.querySelector(selector);
+  let user = null;
+  try {
+    user = JSON.parse(sessionStorage.getItem('sc_user') || 'null');
+  } catch (error) {
+    console.error('Không thể đọc phiên đăng nhập:', error);
+  }
+  if (user && typeof user.name === 'string' && user.name.trim()) {
+    const name = user.name.trim();
+    const parts = name.split(/\s+/);
+    const initials = (parts.length > 1
+      ? parts[0][0] + parts[parts.length - 1][0]
+      : name.slice(0, 2)).toUpperCase();
+    $('#schedule-login').classList.add('hidden');
+    $('#side-user').classList.remove('hidden');
+    $('#side-logout').classList.remove('hidden');
+    $('#side-av').textContent = initials;
+    $('#side-name').textContent = name;
+    $('#side-id').textContent = user.mssv || '';
+  }
+  document.querySelectorAll('.js-logout').forEach((button) => {
+    button.addEventListener('click', () => {
+      sessionStorage.removeItem('sc_user');
+      localStorage.removeItem('sc_cart');
+      window.location.href = '../index.html';
+    });
+  });
+
   const DAYS = ['Thứ 2', 'Thứ 3', 'Thứ 4', 'Thứ 5', 'Thứ 6', 'Thứ 7'];
   const PERIODS = [
     ['07:00', '07:50'], ['07:50', '08:40'], ['08:40', '09:30'],
@@ -7,13 +34,10 @@ document.addEventListener('DOMContentLoaded', () => {
     ['13:00', '13:50'], ['13:50', '14:40'], ['14:40', '15:30'],
     ['15:50', '16:40'], ['16:40', '17:30'], ['17:30', '18:20']
   ];
-  const COURSES = [
-    { code: 'OOP201', name: 'Lập trình hướng đối tượng', credits: 4, day: 0, start: 1, end: 3, room: 'Phòng A203', teacher: 'ThS. Phạm Văn I', color: '#0d9488' },
-    { code: 'DB101', name: 'Hệ quản trị cơ sở dữ liệu', credits: 3, day: 1, start: 4, end: 6, room: 'Phòng B105', teacher: 'TS. Nguyễn Thị Như Quỳnh', color: '#0ea5e9' },
-    { code: 'DS102', name: 'Cấu trúc dữ liệu nâng cao', credits: 3, day: 2, start: 1, end: 3, room: 'Phòng A302', teacher: 'ThS. Phạm C', color: '#8b5cf6' },
-    { code: 'NT201', name: 'Mạng máy tính cơ bản', credits: 3, day: 3, start: 7, end: 9, room: 'Phòng Lab 2', teacher: 'ThS. Lê Văn A', color: '#f59e0b' },
-    { code: 'PR202', name: 'Lập trình Web nâng cao', credits: 4, day: 4, start: 9, end: 11, room: 'Phòng C201', teacher: 'ThS. Nguyễn E', color: '#ef6472' }
-  ];
+  const COURSES = getRegisteredCourses().map((course) => ({
+    ...course,
+    ...getCourseSchedule(course)
+  }));
 
   const dateAtMidnight = (date) => new Date(date.getFullYear(), date.getMonth(), date.getDate());
   const mondayOf = (date) => {
@@ -84,7 +108,7 @@ document.addEventListener('DOMContentLoaded', () => {
       .sort((first, second) => first.start - second.start);
 
     if (!lessons.length) {
-      $('#today-list').innerHTML = '<p class="empty-day"><i class="fa-regular fa-calendar"></i> Hôm nay bạn không có tiết học theo lịch minh họa.</p>';
+      $('#today-list').innerHTML = `<p class="empty-day"><i class="fa-regular fa-calendar"></i> ${COURSES.length ? 'Hôm nay bạn không có tiết học.' : 'Bạn chưa đăng ký môn học nào.'}</p>`;
       return;
     }
 

@@ -50,9 +50,15 @@ document.addEventListener('DOMContentLoaded', () => {
     status.classList.add('is-visible');
   };
 
-  if (loginForm && new URLSearchParams(window.location.search).get('registered') === '1') {
-    showStatus('Đăng ký tài khoản thành công. Hãy đăng nhập bằng MSSV và mật khẩu vừa tạo.');
-    window.history.replaceState({}, '', window.location.pathname);
+  if (loginForm) {
+    const params = new URLSearchParams(window.location.search);
+    if (params.get('registrationRequired') === '1') {
+      showStatus('Bạn chưa đăng nhập! Hãy đăng nhập tài khoản sinh viên trước khi đăng ký môn!');
+      window.history.replaceState({}, '', window.location.pathname);
+    } else if (params.get('registered') === '1') {
+      showStatus('Đăng ký tài khoản thành công. Hãy đăng nhập bằng MSSV và mật khẩu vừa tạo.');
+      window.history.replaceState({}, '', window.location.pathname);
+    }
   }
 
   const getAccounts = () => {
@@ -243,7 +249,7 @@ document.addEventListener('DOMContentLoaded', () => {
         } catch (error) {
           throw new Error('Đăng nhập thành công nhưng không thể lưu phiên đăng nhập trong trình duyệt.');
         }
-        window.location.href = '../../index.html';
+        window.location.href = '../index.html';
       } catch (error) {
         showStatus(error.message || 'Không thể đăng nhập. Vui lòng thử lại.', true);
       } finally {

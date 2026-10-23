@@ -32,16 +32,27 @@ const MOCK_DATA = [
   { id: 24, code: 'MD402', name: 'Nhiếp ảnh thương mại', major: 'Truyền Thông Đa Phương Tiện', type: 'Tự chọn', credits: 3, teacher: 'ThS Trần H', slots: 35, enrolled: 20 }
 ];
 
-// Quản lý danh sách các môn đã đăng ký của sinh viên (lưu vào localStorage)
-const registeredCourseIds = new Set(
-  (() => {
-    try {
-      return JSON.parse(localStorage.getItem('sc_registered_courses') || '[]');
-    } catch {
-      return [];
+const CREDIT_PRICE = 500000;
+const formatCoursePrice = (amount) => `${Number(amount).toLocaleString('vi-VN')} ₫`;
+const readCourseRegistrations = () => {
+  try {
+    const saved = localStorage.getItem('sc_registered');
+    if (saved !== null) {
+      const registrations = JSON.parse(saved);
+      if (!Array.isArray(registrations)) throw new Error('Danh sách môn đăng ký không hợp lệ.');
+      return registrations
+        .map(registration => Number(typeof registration === 'object' ? registration.courseId : registration))
+        .filter(Number.isFinite);
     }
-  })()
-);
+    const legacyIds = JSON.parse(localStorage.getItem('sc_registered_courses') || '[]');
+    if (!Array.isArray(legacyIds)) throw new Error('Danh sách môn đăng ký cũ không hợp lệ.');
+    return legacyIds.map(Number).filter(Number.isFinite);
+  } catch (error) {
+    console.error('Không thể đọc danh sách môn đã đăng ký:', error);
+    return [];
+  }
+};
+const registeredCourseIds = new Set(readCourseRegistrations());
 const courseUser = (() => {
   try {
     return JSON.parse(sessionStorage.getItem('sc_user') || 'null');
@@ -50,21 +61,39 @@ const courseUser = (() => {
   }
 })();
 
+registeredCourseIds.forEach(id => {
+  const course = MOCK_DATA.find(item => item.id === id);
+  if (course && course.enrolled < course.slots) course.enrolled += 1;
+});
+
 function saveRegisteredState() {
   try {
-    localStorage.setItem('sc_registered_courses', JSON.stringify([...registeredCourseIds]));
-  } catch (e) {
-    console.error('Không thể lưu trạng thái đăng ký:', e);
+    localStorage.setItem('sc_registered', JSON.stringify(
+      [...registeredCourseIds].map(courseId => ({ courseId, classId: null }))
+    ));
+    localStorage.removeItem('sc_paid');
+    return true;
+  } catch (error) {
+    console.error('Không thể lưu trạng thái đăng ký:', error);
+    return false;
   }
 }
 
-// Đồng bộ sĩ số ban đầu nếu sinh viên đã có môn đăng ký từ phiên trước
-registeredCourseIds.forEach(id => {
-  const course = MOCK_DATA.find(c => c.id === id);
-  if (course && course.enrolled < course.slots) {
-    course.enrolled += 1;
-  }
-});
+function getRegisteredCourses() {
+  return MOCK_DATA.filter(course => registeredCourseIds.has(course.id));
+}
+
+function getCourseSchedule(course) {
+  const index = MOCK_DATA.findIndex(item => item.id === course.id);
+  const start = (index % 4) * 3 + 1;
+  return {
+    day: Math.floor(index / 4) % 6,
+    start,
+    end: start + (course.credits >= 4 ? 2 : 1),
+    room: `Phòng ${String.fromCharCode(65 + (index % 5))}${101 + (index % 12)}`,
+    color: ['#0d9488', '#0ea5e9', '#8b5cf6', '#f59e0b', '#ef6472'][index % 5]
+  };
+}
 
 // Hàm hiển thị thông báo toast nổi mượt mà
 function showToast(message, type = 'success') {
@@ -94,6 +123,11 @@ function registerCourse(courseId) {
   const course = MOCK_DATA.find(c => c.id === courseId);
   if (!course) return;
 
+  if (!courseUser) {
+    window.location.href = '../Login_Register/login.html?registrationRequired=1';
+    return;
+  }
+
   if (courseUser && course.major !== courseUser.major) {
     showToast('Bạn chỉ có thể đăng ký môn học thuộc ngành của mình.', 'error');
     return;
@@ -103,7 +137,12 @@ function registerCourse(courseId) {
   if (registeredCourseIds.has(courseId)) {
     registeredCourseIds.delete(courseId);
     course.enrolled = Math.max(0, course.enrolled - 1);
-    saveRegisteredState();
+    if (!saveRegisteredState()) {
+      registeredCourseIds.add(courseId);
+      course.enrolled += 1;
+      showToast('Không thể lưu thay đổi. Vui lòng kiểm tra bộ nhớ trình duyệt.', 'error');
+      return;
+    }
     showToast(`Đã hủy đăng ký môn: [${course.code}] ${course.name}`, 'info');
 
     if (typeof window.applyCourseFilter === 'function') {
@@ -121,7 +160,12 @@ function registerCourse(courseId) {
   // Trường hợp 3: Đăng ký thành công lần đầu cho môn này
   registeredCourseIds.add(courseId);
   course.enrolled += 1;
-  saveRegisteredState();
+  if (!saveRegisteredState()) {
+    registeredCourseIds.delete(courseId);
+    course.enrolled -= 1;
+    showToast('Không thể lưu thay đổi. Vui lòng kiểm tra bộ nhớ trình duyệt.', 'error');
+    return;
+  }
   showToast(`Đăng ký thành công môn: [${course.code}] ${course.name}`, 'success');
 
   // Cập nhật lại giao diện ngay lập tức
@@ -149,12 +193,14 @@ function updateRegistrationSummary() {
   const selectedModalBody = document.getElementById('selectedModalBody');
 
   let totalCredits = 0;
+  let totalFee = 0;
   const registeredCourses = [];
 
   registeredCourseIds.forEach(id => {
     const course = MOCK_DATA.find(c => c.id === id);
     if (course) {
       totalCredits += course.credits;
+      totalFee += course.credits * CREDIT_PRICE;
       registeredCourses.push(course);
     }
   });
@@ -189,6 +235,8 @@ function updateRegistrationSummary() {
 
   // Cập nhật danh sách trong Modal
   if (modalCreditsEl) modalCreditsEl.textContent = totalCredits;
+  const modalTotalFeeEl = document.getElementById('modalTotalFee');
+  if (modalTotalFeeEl) modalTotalFeeEl.textContent = formatCoursePrice(totalFee);
   if (selectedModalBody) {
     if (registeredCourses.length === 0) {
       selectedModalBody.innerHTML = `
@@ -202,7 +250,7 @@ function updateRegistrationSummary() {
         <div class="modal-course-item">
           <div class="mci-info">
             <span class="mci-title">[${c.code}] ${c.name}</span>
-            <span class="mci-sub">GV: ${c.teacher} • <b>${c.credits} tín chỉ</b></span>
+            <span class="mci-sub">GV: ${c.teacher} • <b>${c.credits} tín chỉ</b> • ${formatCoursePrice(c.credits * CREDIT_PRICE)}</span>
           </div>
           <button type="button" class="mci-btn-del" onclick="registerCourse(${c.id})" title="Hủy đăng ký môn này">
             <i class="fa-solid fa-trash-can"></i>
@@ -282,6 +330,7 @@ function renderCourses(courses) {
             <span><i class="fa-solid fa-barcode"></i> Mã môn: <b>${c.code}</b></span>
             <span><i class="fa-solid fa-chalkboard-user"></i> Giảng viên: ${c.teacher}</span>
             <span><i class="fa-solid fa-coins"></i> Tín chỉ: ${c.credits}</span>
+            <span><i class="fa-solid fa-money-bill-wave"></i> Học phí: <b>${formatCoursePrice(c.credits * CREDIT_PRICE)}</b></span>
             <span>
               <i class="fa-solid fa-user-group"></i> Sĩ số: <b>${c.enrolled}/${c.slots}</b>
             </span>

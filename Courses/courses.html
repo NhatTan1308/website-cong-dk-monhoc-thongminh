@@ -8,6 +8,17 @@
   <script>
     try { document.documentElement.dataset.theme = localStorage.getItem('sc_theme') || 'light'; } catch (e) { }
   </script>
+  <script>
+    try {
+      const user = JSON.parse(sessionStorage.getItem('sc_user') || 'null');
+      if (!user || typeof user.mssv !== 'string') {
+        window.location.replace('../Login_Register/login.html?registrationRequired=1');
+      }
+    } catch (error) {
+      console.error('Không thể xác minh phiên đăng nhập.', error);
+      window.location.replace('../Login_Register/login.html?registrationRequired=1');
+    }
+  </script>
   <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&display=swap"
     rel="stylesheet" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
@@ -112,6 +123,7 @@
       <div class="modal-footer">
         <div class="modal-summary">
           <span>Tổng số: <b id="modalCredits">0</b> tín chỉ</span>
+          <span>Tổng học phí: <b id="modalTotalFee">0 ₫</b></span>
         </div>
         <button type="button" class="btn-sm solid" onclick="toggleSelectedModal()">Xong</button>
       </div>

@@ -22,12 +22,26 @@
       <a class="logo" href="../index.html"><i class="fa-solid fa-graduation-cap"></i><span>Smart Course LHU</span></a>
       <nav class="nav" aria-label="Điều hướng chính">
         <a href="../index.html"><i class="fa-solid fa-house"></i><span>Trang chủ</span></a>
-        <a href="../Courses/courses.html"><i class="fa-solid fa-book"></i><span>Đăng ký môn học</span></a>
-        <a class="on" href="Schedule.html" aria-current="page"><i class="fa-solid fa-calendar-week"></i><span>Thời khóa
-            biểu</span></a>
+        <a href="../Courses/courses.html"><i class="fa-solid fa-book-open"></i><span>Đăng ký môn học</span></a>
+        <a class="on" href="Schedule.html" aria-current="page"><i class="fa-solid fa-calendar-week"></i><span>Thời khóa biểu</span></a>
+        <a href="../Tuition/tuition.html"><i class="fa-solid fa-file-invoice-dollar"></i><span>Học phí</span></a>
+        <a href="../Settings/settings.html"><i class="fa-solid fa-user-gear"></i><span>Hồ sơ cá nhân</span></a>
       </nav>
-      <a class="schedule-login" href="../Login_Register/login.html"><i class="fa-solid fa-right-to-bracket"></i> Đăng
-        nhập</a>
+      <div class="side-user hidden" id="side-user">
+        <span class="av" id="side-av"></span>
+        <div>
+          <b id="side-name"></b>
+          <small id="side-id"></small>
+        </div>
+      </div>
+      <button class="logout js-logout hidden" id="side-logout" type="button">
+        <i class="fa-solid fa-right-from-bracket"></i>
+        Đăng xuất
+      </button>
+      <a class="schedule-login" id="schedule-login" href="../Login_Register/login.html">
+        <i class="fa-solid fa-right-to-bracket"></i>
+        Đăng nhập
+      </a>
     </aside>
     <div class="overlay" id="overlay"></div>
 
@@ -84,8 +98,8 @@
                   class="fa-solid fa-chevron-right"></i></button>
             </div>
           </div>
-          <p class="demo-note"><i class="fa-solid fa-circle-info"></i> Đây là lịch minh họa; dữ liệu sẽ được nối với các
-            môn đã đăng ký sau.</p>
+          <p class="demo-note"><i class="fa-solid fa-circle-info"></i> Thời khóa biểu được cập nhật từ các môn bạn đã
+            đăng ký.</p>
           <div class="schedule-scroll" tabindex="0" aria-label="Bảng thời khóa biểu, có thể cuộn ngang">
             <div class="schedule-board" id="schedule-board"></div>
           </div>
@@ -104,6 +118,7 @@
     </main>
   </div>
 
+  <script src="../data.js"></script>
   <script src="Schedule.js"></script>
 </body>
 

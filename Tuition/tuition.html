@@ -22,6 +22,7 @@
             } catch (e) { }
         })();
     </script>
+    <script src="../data.js" defer></script>
     <script src="tuition.js" defer></script>
 </head>
 
@@ -58,7 +59,7 @@
                 </a>
             </nav>
 
-            <div class="side-user">
+            <div class="side-user hidden" id="side-user">
                 <div class="av" id="side-avatar">SV</div>
                 <div>
                     <b id="side-name">Nguyen Hoang Anh</b>
@@ -66,21 +67,15 @@
                 </div>
             </div>
 
-            <button class="logout" id="side-logout" type="button">
+            <button class="logout hidden" id="side-logout" type="button">
                 <i class="fa-solid fa-right-from-bracket"></i>
                 <span>Đăng xuất</span>
             </button>
         </aside>
 
-        <div class="overlay" id="overlay"></div>
-
         <main class="main">
 
             <header class="top">
-                <button class="icon-btn menu" id="menu" type="button" aria-label="Mở menu">
-                    <i class="fa-solid fa-bars"></i>
-                </button>
-
                 <div class="top-title">Học phí</div>
 
                 <div class="tb-right">
@@ -315,7 +310,10 @@
                                 <p class="qr-modal-desc">Quét mã QR bên dưới để thanh toán</p>
 
                                 <div class="qr-image-box">
-                                    <img src="../imgs/qr.jpg" alt="Mã QR thanh toán học phí" id="payment-qr-image">
+                                    <div class="qr-placeholder">
+                                        <i class="fa-solid fa-circle-info"></i>
+                                        <span>Thanh toán mô phỏng, chưa kết nối mã QR ngân hàng.</span>
+                                    </div>
                                 </div>
 
                                 <div class="qr-payment-total">
@@ -324,8 +322,11 @@
                                 </div>
 
                                 <p class="qr-modal-note">
-                                    Vui lòng kiểm tra thông tin trước khi thanh toán.
+                                    Nút xác nhận bên dưới chỉ cập nhật trạng thái minh họa, không chuyển tiền thật.
                                 </p>
+                                <button class="payment-confirm-btn" id="confirm-payment" type="button">
+                                    Xác nhận đã thanh toán
+                                </button>
                             </div>
                         </div>
 

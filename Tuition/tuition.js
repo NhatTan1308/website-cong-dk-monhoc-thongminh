@@ -31,13 +31,11 @@ document.addEventListener('DOMContentLoaded', () => {
         'index.html': '../index.html'
     }[link] || link);
 
-    const price = typeof CREDIT_PRICE === 'number' ? CREDIT_PRICE : 500000;
+    const price = CREDIT_PRICE;
     const extraFeeRate = 150000;
     const deadline = new Date(2026, 9, 15, 23, 59, 59);
-    const courses = typeof MOCK_COURSES !== 'undefined' && Array.isArray(MOCK_COURSES)
-        ? MOCK_COURSES
-        : [];
-    const user = read(sessionStorage, 'sc_user', null);
+    const savedUser = read(sessionStorage, 'sc_user', null);
+    const user = savedUser && typeof savedUser.mssv === 'string' ? savedUser : null;
 
     // Theme
     const setTheme = (theme) => {
@@ -56,14 +54,6 @@ document.addEventListener('DOMContentLoaded', () => {
         setTheme(nextTheme);
     });
 
-    // Mobile navigation
-    const toggleSide = (open) => {
-        $('#side')?.classList.toggle('open', open);
-        $('#overlay')?.classList.toggle('show', open);
-    };
-    $('#menu')?.addEventListener('click', () => toggleSide(!$('#side')?.classList.contains('open')));
-    $('#overlay')?.addEventListener('click', () => toggleSide(false));
-
     // Account display and logout
     if (user) {
         const name = String(user.name || 'Sinh viên').trim();
@@ -73,14 +63,14 @@ document.addEventListener('DOMContentLoaded', () => {
             : name.slice(0, 2)).toUpperCase();
         $('#guest-actions')?.classList.add('hidden');
         $('#user')?.classList.remove('hidden');
+        $('#side-user')?.classList.remove('hidden');
+        $('#side-logout')?.classList.remove('hidden');
         $('#side-avatar').textContent = initials;
         $('#user-avatar').textContent = initials;
         $('#side-name').textContent = name;
         $('#user-name').textContent = parts.at(-1);
         $('#user-fullname').textContent = name;
         $('#user-email').textContent = user.email || user.mssv || 'Tài khoản sinh viên';
-        $('#welcome-title').textContent = `Xin chào, ${parts.at(-1)}!`;
-        $('#welcome-desc').textContent = 'Dưới đây là thông tin học phí dựa trên các môn học đã đăng ký.';
     }
 
     const logout = () => {
@@ -151,16 +141,14 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // Registered subjects and tuition totals
-    const registrations = read(localStorage, 'sc_registered', []);
-    const items = (Array.isArray(registrations) ? registrations : []).map((registration) => {
-        const course = courses.find((item) => String(item.id) === String(registration.courseId));
-        if (!course) return null;
-        return { course, fee: Number(course.credits || 0) * price };
-    }).filter(Boolean);
+    const items = getRegisteredCourses().map((course) => ({
+        course,
+        fee: Number(course.credits || 0) * price
+    }));
     const courseFee = items.reduce((sum, item) => sum + item.fee, 0);
     const extraFee = items.length ? extraFeeRate : 0;
     const totalFee = courseFee + extraFee;
-    const paid = localStorage.getItem('sc_paid') === '1';
+    let paid = String(read(localStorage, 'sc_paid', '0')) === '1';
 
     $('#total-fee').textContent = money(totalFee);
     $('#course-fee').textContent = money(courseFee);
@@ -168,7 +156,7 @@ document.addEventListener('DOMContentLoaded', () => {
     $('#total-fee-desc').textContent = `${items.length} môn học đã ghi nhận`;
     $('#course-fee-desc').textContent = `${items.reduce((sum, item) => sum + Number(item.course.credits || 0), 0)} tín chỉ`;
     $('#payment-status').textContent = paid ? 'Đã thanh toán' : 'Chưa thanh toán';
-    $('#payment-status-desc').textContent = paid ? 'Theo dữ liệu mô phỏng' : 'Chưa có xác nhận thanh toán';
+    $('#payment-status-desc').textContent = paid ? 'Đã xác nhận thanh toán mô phỏng' : 'Chưa có xác nhận thanh toán';
     $('#course-count').textContent = `${items.length} môn`;
     $('#tuition-table-body').innerHTML = items.length
         ? items.map(({ course, fee }) => `
@@ -181,6 +169,38 @@ document.addEventListener('DOMContentLoaded', () => {
     $('#summary-course-fee').textContent = money(courseFee);
     $('#summary-extra-fee').textContent = money(extraFee);
     $('#summary-total-fee').textContent = money(totalFee);
+    const paymentButton = $('#confirm-payment');
+    const qrButton = $('#open-qr-btn');
+    const updatePaymentControls = () => {
+        paymentButton.disabled = !user || totalFee === 0 || paid;
+        paymentButton.textContent = paid ? 'Đã thanh toán' : 'Xác nhận đã thanh toán';
+        qrButton.disabled = !user || totalFee === 0 || paid;
+        qrButton.title = !user
+            ? 'Đăng nhập để thanh toán'
+            : totalFee === 0
+                ? 'Chưa có học phí cần thanh toán'
+                : paid
+                    ? 'Học phí đã được thanh toán'
+                    : 'Thanh toán bằng QR';
+    };
+    updatePaymentControls();
+    paymentButton.addEventListener('click', () => {
+        if (!user) {
+            window.location.href = '../Login_Register/login.html';
+            return;
+        }
+        if (totalFee === 0 || paid) return;
+        try {
+            localStorage.setItem('sc_paid', '1');
+            paid = true;
+            $('#payment-status').textContent = 'Đã thanh toán';
+            $('#payment-status-desc').textContent = 'Đã xác nhận thanh toán mô phỏng';
+            updatePaymentControls();
+        } catch (error) {
+            console.error('Không thể lưu trạng thái thanh toán:', error);
+            $('#payment-status-desc').textContent = 'Không thể lưu thanh toán. Vui lòng thử lại.';
+        }
+    });
 
     // Deadline
     $('#deadline-date').textContent = '15/10/2026';

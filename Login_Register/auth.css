@@ -68,7 +68,7 @@ body.auth-page {
   padding: 34px clamp(28px, 5vw, 76px);
   overflow: hidden;
   color: #fff;
-  background: linear-gradient(145deg, rgba(4, 48, 55, .78), rgba(8, 116, 107, .58) 60%, rgba(13, 148, 136, .3)), url("../imgs/lhu.jpg") center / cover no-repeat;
+  background: linear-gradient(145deg, rgba(4, 48, 55, .78), rgba(8, 116, 107, .58) 60%, rgba(13, 148, 136, .3)), url("../imgs/lhu2.jpg") center / cover no-repeat;
 }
 
 .auth-intro::after {

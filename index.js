@@ -86,7 +86,7 @@ document.addEventListener('DOMContentLoaded', () => {
     ['#me-id', '#side-id'].forEach(s => $(s).textContent = user.mssv);
   }
   document.querySelectorAll('.js-logout').forEach(b => b.addEventListener('click', () => {
-    sessionStorage.clear(); localStorage.removeItem('sc_cart'); localStorage.removeItem('sc_registered');
+    sessionStorage.clear(); localStorage.removeItem('sc_cart');
     window.location.href = 'index.html';
   }));
 
