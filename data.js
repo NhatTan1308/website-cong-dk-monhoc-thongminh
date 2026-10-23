@@ -32,6 +32,23 @@ const MOCK_DATA = [
   { id: 24, code: 'MD402', name: 'Nhiếp ảnh thương mại', major: 'Truyền Thông Đa Phương Tiện', type: 'Tự chọn', credits: 3, teacher: 'ThS Trần H', slots: 35, enrolled: 20 }
 ];
 
+const CREDIT_PRICE = 500000;
+const BASE_FEE = 150000;
+
+// Dữ liệu lịch minh họa để thử chức năng xếp lịch; thay bằng lịch lớp chính thức khi có.
+const DEMO_CLASS_OPTIONS = new Map(MOCK_DATA.map((course, index) => {
+  const duration = course.credits >= 4 ? 3 : 2;
+  const group = Math.floor(index / 6);
+  const firstStart = 1 + ((group * 3 + index) % 8);
+  const secondStart = 1 + ((index * 3 + group) % 8);
+  const firstDay = index % 6;
+  const secondDay = (firstDay + 2 + group % 3) % 6;
+  return [course.id, [
+    { section: 'A', day: firstDay, start: firstStart, end: firstStart + duration - 1, room: `A${201 + course.id}` },
+    { section: 'B', day: secondDay, start: secondStart, end: secondStart + duration - 1, room: `B${101 + course.id}` }
+  ]];
+}));
+
 // Quản lý danh sách các môn đã đăng ký của sinh viên (lưu vào localStorage)
 const registeredCourseIds = new Set(
   (() => {

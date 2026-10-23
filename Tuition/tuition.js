@@ -34,8 +34,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const price = typeof CREDIT_PRICE === 'number' ? CREDIT_PRICE : 500000;
     const extraFeeRate = 150000;
     const deadline = new Date(2026, 9, 15, 23, 59, 59);
-    const courses = typeof MOCK_COURSES !== 'undefined' && Array.isArray(MOCK_COURSES)
-        ? MOCK_COURSES
+    const courses = typeof MOCK_DATA !== 'undefined' && Array.isArray(MOCK_DATA)
+        ? MOCK_DATA
         : [];
     const user = read(sessionStorage, 'sc_user', null);
 
@@ -150,37 +150,52 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // Registered subjects and tuition totals
-    const registrations = read(localStorage, 'sc_registered', []);
-    const items = (Array.isArray(registrations) ? registrations : []).map((registration) => {
-        const course = courses.find((item) => String(item.id) === String(registration.courseId));
-        if (!course) return null;
-        return { course, fee: Number(course.credits || 0) * price };
-    }).filter(Boolean);
-    const courseFee = items.reduce((sum, item) => sum + item.fee, 0);
-    const extraFee = items.length ? extraFeeRate : 0;
-    const totalFee = courseFee + extraFee;
-    const paid = localStorage.getItem('sc_paid') === '1';
+    function renderTuition() {
+        const savedIds = read(localStorage, 'sc_registered_courses', null);
+        const legacyRegistrations = read(localStorage, 'sc_registered', []);
+        const registrations = Array.isArray(savedIds)
+            ? savedIds
+            : (Array.isArray(legacyRegistrations) ? legacyRegistrations : [])
+                .map((registration) => registration.courseId);
+        const registeredIds = new Set(registrations.map(String));
+        const items = courses
+            .filter((course) => registeredIds.has(String(course.id)))
+            .map((course) => ({ course, fee: Number(course.credits || 0) * price }));
+        const courseFee = items.reduce((sum, item) => sum + item.fee, 0);
+        const extraFee = items.length ? extraFeeRate : 0;
+        const totalFee = courseFee + extraFee;
+        let paid = false;
+        try { paid = localStorage.getItem('sc_paid') === '1'; } catch (error) {
+            console.warn('Không thể đọc trạng thái thanh toán.', error);
+        }
 
-    $('#total-fee').textContent = money(totalFee);
-    $('#course-fee').textContent = money(courseFee);
-    $('#extra-fee').textContent = money(extraFee);
-    $('#total-fee-desc').textContent = `${items.length} môn học đã ghi nhận`;
-    $('#course-fee-desc').textContent = `${items.reduce((sum, item) => sum + Number(item.course.credits || 0), 0)} tín chỉ`;
-    $('#payment-status').textContent = paid ? 'Đã thanh toán' : 'Chưa thanh toán';
-    $('#payment-status-desc').textContent = paid ? 'Theo dữ liệu mô phỏng' : 'Chưa có xác nhận thanh toán';
-    $('#course-count').textContent = `${items.length} môn`;
-    $('#tuition-table-body').innerHTML = items.length
-        ? items.map(({ course, fee }) => `
-            <tr><td class="course-name">${escapeHTML(course.name)}<span class="course-code">${escapeHTML(course.code || '')}</span></td>
-                <td>${Number(course.credits || 0)}</td><td class="text-right">${money(price)}</td>
-                <td class="text-right amount">${money(fee)}</td></tr>`).join('')
-        : `<tr><td colspan="4" class="empty-cell"><i class="fa-solid fa-receipt"></i><br>
-            ${user ? 'Chưa có môn học được ghi nhận. Hãy đăng ký môn học trước.' : 'Đăng nhập để xem dữ liệu học phí theo tài khoản.'}<br>
-            <a href="${user ? '../Courses/courses.html' : '../Login_Register/login.html'}">${user ? 'Đăng ký môn học' : 'Đăng nhập ngay'} →</a></td></tr>`;
-    $('#summary-course-fee').textContent = money(courseFee);
-    $('#summary-extra-fee').textContent = money(extraFee);
-    $('#summary-total-fee').textContent = money(totalFee);
+        $('#total-fee').textContent = money(totalFee);
+        $('#course-fee').textContent = money(courseFee);
+        $('#extra-fee').textContent = money(extraFee);
+        $('#total-fee-desc').textContent = `${items.length} môn học đã ghi nhận`;
+        $('#course-fee-desc').textContent = `${items.reduce((sum, item) => sum + Number(item.course.credits || 0), 0)} tín chỉ`;
+        $('#payment-status').textContent = paid ? 'Đã thanh toán' : 'Chưa thanh toán';
+        $('#payment-status-desc').textContent = paid ? 'Theo dữ liệu mô phỏng' : 'Chưa có xác nhận thanh toán';
+        $('#course-count').textContent = `${items.length} môn`;
+        $('#tuition-table-body').innerHTML = items.length
+            ? items.map(({ course, fee }) => `
+                <tr><td class="course-name">${escapeHTML(course.name)}<span class="course-code">${escapeHTML(course.code || '')}</span></td>
+                    <td>${Number(course.credits || 0)}</td><td class="text-right">${money(price)}</td>
+                    <td class="text-right amount">${money(fee)}</td></tr>`).join('')
+            : `<tr><td colspan="4" class="empty-cell"><i class="fa-solid fa-receipt"></i><br>
+                ${user ? 'Chưa có môn học được ghi nhận. Hãy đăng ký môn học trước.' : 'Đăng nhập để xem dữ liệu học phí theo tài khoản.'}<br>
+                <a href="${user ? '../Courses/courses.html' : '../Login_Register/login.html'}">${user ? 'Đăng ký môn học' : 'Đăng nhập ngay'} →</a></td></tr>`;
+        $('#summary-course-fee').textContent = money(courseFee);
+        $('#summary-extra-fee').textContent = money(extraFee);
+        $('#summary-total-fee').textContent = money(totalFee);
+    }
+
+    renderTuition();
+    window.addEventListener('storage', (event) => {
+        if (event.key === 'sc_registered_courses' || event.key === 'sc_registered' || event.key === 'sc_paid') {
+            renderTuition();
+        }
+    });
 
     // Deadline
     $('#deadline-date').textContent = '15/10/2026';
