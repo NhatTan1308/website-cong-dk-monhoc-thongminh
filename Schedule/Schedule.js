@@ -202,18 +202,20 @@ document.addEventListener('DOMContentLoaded', () => {
     weekEnd.setDate(weekEnd.getDate() + 5);
     $('#week-range').textContent = `${formatDate(weekStart, { day: '2-digit', month: '2-digit' })} – ${formatDate(weekEnd, { day: '2-digit', month: '2-digit', year: 'numeric' })}`;
 
-    const cells = ['<div class="board-cell board-corner">Tiết</div>'];
+    const cells = ['<div class="board-cell board-corner" style="grid-column:1;grid-row:1">Tiết</div>'];
     DAYS.forEach((day, index) => {
       const date = new Date(weekStart);
       date.setDate(date.getDate() + index);
       const isToday = date.getTime() === today.getTime();
-      cells.push(`<div class="board-cell board-day${isToday ? ' is-today' : ''}">${day}<small>${formatDate(date, { day: '2-digit', month: '2-digit' })}</small></div>`);
+      cells.push(`<div class="board-cell board-day${isToday ? ' is-today' : ''}" style="grid-column:${index + 2};grid-row:1">${day}<small>${formatDate(date, { day: '2-digit', month: '2-digit' })}</small></div>`);
     });
 
     PERIODS.forEach(([start, end], index) => {
       const period = index + 1;
-      cells.push(`<div class="board-cell board-time"><strong>Tiết ${period}</strong><small>${start}–${end}</small></div>`);
-      DAYS.forEach(() => cells.push('<div class="board-cell board-slot" aria-hidden="true"></div>'));
+      cells.push(`<div class="board-cell board-time" style="grid-column:1;grid-row:${period + 1}"><strong>Tiết ${period}</strong><small>${start}–${end}</small></div>`);
+      DAYS.forEach((_, dayIndex) => {
+        cells.push(`<div class="board-cell board-slot" style="grid-column:${dayIndex + 2};grid-row:${period + 1}" aria-hidden="true"></div>`);
+      });
     });
 
     const classes = scheduledCourses.map((course) => {

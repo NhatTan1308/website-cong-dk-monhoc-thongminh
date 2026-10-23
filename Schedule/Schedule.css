@@ -268,14 +268,24 @@
   overflow-x: auto;
   border-top: 1px solid var(--line);
   scrollbar-color: var(--line) transparent;
+  scrollbar-width: thin;
+}
+
+.schedule-scroll::-webkit-scrollbar {
+  height: 8px;
+}
+
+.schedule-scroll::-webkit-scrollbar-thumb {
+  border-radius: 999px;
+  background: var(--line);
 }
 
 .schedule-board {
   display: grid;
-  grid-template-columns: 72px repeat(6, minmax(138px, 1fr));
-  grid-template-rows: 52px repeat(12, 62px);
+  grid-template-columns: 64px repeat(6, minmax(100px, 1fr));
+  grid-template-rows: 48px repeat(12, 56px);
   gap: 1px;
-  min-width: 990px;
+  min-width: 664px;
   background: var(--line);
 }
 
@@ -452,14 +462,16 @@
   }
 }
 
-@media (max-width: 600px) {
+@media (max-width: 800px) {
   .schedule-heading {
     align-items: flex-start;
     flex-direction: column;
+    gap: 12px;
   }
 
   .schedule-actions {
     justify-content: flex-start;
+    width: 100%;
   }
 
   .schedule-heading h2 {
@@ -520,6 +532,7 @@
 
   .week-controls {
     align-self: stretch;
+    flex-wrap: wrap;
   }
 
   .today-button {
