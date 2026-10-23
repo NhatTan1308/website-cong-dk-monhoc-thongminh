@@ -34,15 +34,11 @@ document.addEventListener('DOMContentLoaded', () => {
     ['13:00', '13:50'], ['13:50', '14:40'], ['14:40', '15:30'],
     ['15:50', '16:40'], ['16:40', '17:30'], ['17:30', '18:20']
   ];
-<<<<<<< HEAD
   const COURSES = getRegisteredCourses().map((course) => ({
     ...course,
     ...getCourseSchedule(course)
   }));
-
-=======
   const COLORS = ['#0d9488', '#0ea5e9', '#8b5cf6', '#f59e0b', '#ef6472', '#22c55e'];
->>>>>>> 95a76d4441f649e35849dffe26f0d78f5ec78007
   const dateAtMidnight = (date) => new Date(date.getFullYear(), date.getMonth(), date.getDate());
   const mondayOf = (date) => {
     const monday = dateAtMidnight(date);
@@ -79,10 +75,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   function loadRegisteredCourses() {
-    const savedIds = readJSON('sc_registered_courses', []);
-    const ids = Array.isArray(savedIds) ? new Set(savedIds.map(String)) : new Set();
-    const catalog = typeof MOCK_DATA !== 'undefined' && Array.isArray(MOCK_DATA) ? MOCK_DATA : [];
-    return catalog.filter((course) => ids.has(String(course.id)));
+    return getRegisteredCourses();
   }
 
   function loadSavedPlan(courses) {
@@ -249,11 +242,7 @@ document.addEventListener('DOMContentLoaded', () => {
       .sort((first, second) => first.start - second.start);
 
     if (!lessons.length) {
-<<<<<<< HEAD
       $('#today-list').innerHTML = `<p class="empty-day"><i class="fa-regular fa-calendar"></i> ${COURSES.length ? 'Hôm nay bạn không có tiết học.' : 'Bạn chưa đăng ký môn học nào.'}</p>`;
-=======
-      $('#today-list').innerHTML = '<p class="empty-day"><i class="fa-regular fa-calendar"></i> Hôm nay bạn không có tiết học đã đăng ký.</p>';
->>>>>>> 95a76d4441f649e35849dffe26f0d78f5ec78007
       return;
     }
 

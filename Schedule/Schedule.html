@@ -7,6 +7,17 @@
   <meta name="theme-color" content="#f1faf7" />
   <title>Thời khóa biểu - Smart Course LHU</title>
   <script>try { document.documentElement.dataset.theme = localStorage.getItem('sc_theme') || 'light'; } catch (e) { }</script>
+  <script>
+    try {
+      const user = JSON.parse(sessionStorage.getItem('sc_user') || 'null');
+      if (!user || typeof user.mssv !== 'string') {
+        window.location.replace('../Login_Register/login.html?accessRequired=schedule');
+      }
+    } catch (error) {
+      console.error('Không thể xác minh phiên đăng nhập.', error);
+      window.location.replace('../Login_Register/login.html?accessRequired=schedule');
+    }
+  </script>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&display=swap"
@@ -27,7 +38,6 @@
         <a href="../Tuition/tuition.html"><i class="fa-solid fa-file-invoice-dollar"></i><span>Học phí</span></a>
         <a href="../Settings/settings.html"><i class="fa-solid fa-user-gear"></i><span>Hồ sơ cá nhân</span></a>
       </nav>
-<<<<<<< HEAD
       <div class="side-user hidden" id="side-user">
         <span class="av" id="side-av"></span>
         <div>
@@ -43,9 +53,6 @@
         <i class="fa-solid fa-right-to-bracket"></i>
         Đăng nhập
       </a>
-=======
-      <a class="schedule-login" href="../Tuition/tuition.html"><i class="fa-solid fa-wallet"></i> Học phí</a>
->>>>>>> 95a76d4441f649e35849dffe26f0d78f5ec78007
     </aside>
     <div class="overlay" id="overlay"></div>
 
@@ -114,12 +121,7 @@
                   class="fa-solid fa-chevron-right"></i></button>
             </div>
           </div>
-<<<<<<< HEAD
-          <p class="demo-note"><i class="fa-solid fa-circle-info"></i> Thời khóa biểu được cập nhật từ các môn bạn đã
-            đăng ký.</p>
-=======
           <p class="demo-note" id="schedule-note" aria-live="polite"></p>
->>>>>>> 95a76d4441f649e35849dffe26f0d78f5ec78007
           <div class="schedule-scroll" tabindex="0" aria-label="Bảng thời khóa biểu, có thể cuộn ngang">
             <div class="schedule-board" id="schedule-board"></div>
           </div>

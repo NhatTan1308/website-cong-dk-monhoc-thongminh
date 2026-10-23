@@ -57,7 +57,6 @@ document.addEventListener('DOMContentLoaded', () => {
   const MAX = 21, GRAD = 130, FEE0 = 150000;
   const DAYS = ['Thứ 2', 'Thứ 3', 'Thứ 4', 'Thứ 5', 'Thứ 6', 'Thứ 7'];
   const user = getU(), now = new Date();
-  let role = user && localStorage.getItem('sc_role') === 'teacher' ? 'teacher' : 'student';
   const toMin = (t) => { const [h, m] = t.split(':'); return +h * 60 + +m; };
   const per = (p) => PT.find(x => x.period === p);
   const slot = (c) => ({ s: per(c.periods[0]).start, e: per(c.periods[c.periods.length - 1]).end });
@@ -127,8 +126,7 @@ document.addEventListener('DOMContentLoaded', () => {
   /* ---------- Thành phần giao diện ---------- */
   const stat = (href, c, icon, v, l) => `<a class="stat" href="${href}" style="--c:${c}"><span class="si"><i class="fa-solid ${icon}"></i></span><span><b>${v}</b><small>${l}</small></span></a>`;
   const card = (icon, title, link, body) => `<section class="card"><div class="card-h"><h3><i class="fa-solid ${icon}"></i> ${title}</h3>${link || ''}</div><div class="card-b">${body}</div></section>`;
-  const seg = () => user ? `<div class="seg" id="seg"><button type="button" data-role="student" class="${role === 'student' ? 'on' : ''}"><i class="fa-solid fa-user-graduate"></i> Sinh viên</button><button type="button" data-role="teacher" class="${role === 'teacher' ? 'on' : ''}"><i class="fa-solid fa-chalkboard-user"></i> Giảng viên</button></div>` : '';
-  const banner = (h1, sub, actions, pill, side) => `<section class="banner"><div>${seg()}<h1>${h1}</h1><p>${sub}</p><div class="bn-act">${actions}</div>${pill || ''}</div></section>`;
+  const banner = (h1, sub, actions, pill, side) => `<section class="banner"><div><h1>${h1}</h1><p>${sub}</p><div class="bn-act">${actions}</div>${pill || ''}</div></section>`;
 
   function nextOf(items) {
     const nowMin = now.getHours() * 60 + now.getMinutes();
@@ -147,7 +145,6 @@ document.addEventListener('DOMContentLoaded', () => {
     return `<div class="glass"><small>Lớp tiếp theo</small><b>${nx.name}</b><p><i class="fa-regular fa-clock"></i> ${when} · ${nx.s} – ${nx.e}</p>
       <p><i class="fa-solid fa-location-dot"></i> Phòng ${nx.room}</p><span class="cd">${nx.d === 0 ? `Còn ${left >= 60 ? Math.floor(left / 60) + ' giờ ' : ''}${left % 60} phút` : when}</span></div>`;
   }
-  const greeting = () => { const h = now.getHours(); return h < 11 ? 'Chào buổi sáng ☀️' : h < 14 ? 'Chào buổi trưa 🌤️' : h < 18 ? 'Chào buổi chiều 🌇' : 'Chào buổi tối 🌙'; };
   const lastName = () => esc(user.name.trim().split(' ').pop());
 
   /* ---------- Khách (chưa đăng nhập) ---------- */
@@ -160,7 +157,7 @@ document.addEventListener('DOMContentLoaded', () => {
       stat('Courses/courses.html', '#22c55e', 'fa-people-group', classes, 'Lớp học phần') +
       stat('index.html', '#0ea5e9', 'fa-layer-group', MAX, 'Tín chỉ tối đa mỗi học kỳ') +
       stat('Tuition/tuition.html', '#ff9f1c', 'fa-coins', vnd(PRICE), 'Học phí mỗi tín chỉ');
-    const how = [['Đăng nhập', 'Dùng mã số sinh viên hoặc tài khoản giảng viên'], ['Chọn môn & lớp', 'Hệ thống tự kiểm tra trùng lịch và giới hạn tín chỉ'],
+    const how = [['Đăng nhập', 'Đăng nhập bằng mã số sinh viên và mật khẩu'], ['Chọn môn & lớp', 'Hệ thống tự kiểm tra trùng lịch và giới hạn tín chỉ'],
     ['Xem thời khóa biểu', 'Lịch tuần hiển thị trực quan, có phòng học'], ['Đóng học phí', 'Theo dõi số tiền và hạn nộp']];
     const open = COURSES.slice(0, 6).map(c => {
       const left = c.classes.reduce((s, x) => s + x.max - x.enrolled, 0);
@@ -184,7 +181,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const pill = diff > 0
       ? `<span class="pill"><i class="fa-solid fa-hourglass-half"></i> Còn ${Math.ceil(diff / 864e5)} ngày đến hạn đăng ký (15/10/2026)</span>`
       : '<span class="pill late"><i class="fa-solid fa-triangle-exclamation"></i> Đã qua hạn đăng ký 15/10/2026 – liên hệ phòng Đào tạo nếu cần hỗ trợ</span>';
-    $('#banner').innerHTML = banner(`${greeting()}, ${lastName()}!`, `${esc(user.majorName)} · Năm ${user.year} · Học kỳ 1 – 2025/2026`,
+    $('#banner').innerHTML = banner(`Chúc một ngày tốt lành, ${lastName()}!`, `${esc(user.majorName)} · Năm ${user.year} · Học kỳ 1 – 2025/2026`,
       '<a class="bn-btn w" href="Courses/courses.html"><i class="fa-solid fa-wand-magic-sparkles"></i> Đăng ký môn học</a><a class="bn-btn g" href="Schedule/Schedule.html"><i class="fa-solid fa-calendar-week"></i> Thời khóa biểu</a>', pill, nextCard(items));
 
     const total = user.totalCredits + tc, pct = Math.min(100, Math.round(total / GRAD * 100));
@@ -210,33 +207,8 @@ document.addEventListener('DOMContentLoaded', () => {
     handleSyncTuyenData(reg);
   }
 
-  /* ---------- Giảng viên ---------- */
-  function teacher() {
-    const all = [];
-    COURSES.forEach(c => c.classes.forEach(cl => all.push({ c, cl })));
-    const names = [...new Set(all.map(x => x.cl.teacher))].filter(t => t !== 'Nhiều giảng viên').sort((a, b) => a.localeCompare(b, 'vi'));
-    const saved = localStorage.getItem('sc_teacher'), sel = names.includes(saved) ? saved : names[0];
-    const mine = all.filter(x => x.cl.teacher === sel);
-    const items = mine.map(({ c, cl }) => ({ day: cl.day, name: `${c.name} · ${cl.id}`, color: c.color, room: cl.room, ...slot(cl) }));
-    $('#banner').innerHTML = banner('Xin chào quý thầy cô! 👩‍🏫', 'Theo dõi lớp phụ trách, sĩ số và lịch giảng dạy của bạn trong một màn hình.',
-      '<a class="bn-btn w" href="Schedule/Schedule.html"><i class="fa-solid fa-calendar-week"></i> Lịch giảng dạy</a><a class="bn-btn g" href="Settings/settings.html"><i class="fa-solid fa-user-gear"></i> Hồ sơ</a>', '', nextCard(items));
-    $('#stats').innerHTML = stat('Schedule/Schedule.html', '#0d9488', 'fa-people-group', mine.length, 'Lớp phụ trách') + stat('Schedule/Schedule.html', '#22c55e', 'fa-user-graduate', mine.reduce((s, x) => s + x.cl.enrolled, 0), 'Tổng sinh viên') +
-      stat('Schedule/Schedule.html', '#0ea5e9', 'fa-clock', mine.reduce((s, x) => s + x.cl.periods.length, 0), 'Tiết dạy mỗi tuần') + stat('Courses/courses.html', '#ff9f1c', 'fa-book', new Set(mine.map(x => x.c.id)).size, 'Môn giảng dạy');
-    $('#two').innerHTML = card('chalkboard-user', 'Giảng viên', '', `<select id="t-sel">${names.map(x => `<option ${x === sel ? 'selected' : ''}>${x}</option>`).join('')}</select><p class="empty">Dữ liệu minh họa lấy từ danh mục môn học. Chọn giảng viên để xem lớp phụ trách.</p>`) +
-      card('list-check', 'Lớp phụ trách', '<a href="Courses/courses.html">Danh mục môn →</a>', `<ul class="list">${mine.map(({ c, cl }) => {
-        const p = Math.round(cl.enrolled / cl.max * 100);
-        return `<li><span class="dot" style="background:${c.color}"></span><div><b>${c.name} · ${cl.id}</b><small>${cl.day} · ${slot(cl).s} – ${slot(cl).e} · ${cl.room}</small><div class="bar" style="margin-top:6px"><i style="width:${p}%"></i></div></div><span class="tc">${cl.enrolled}/${cl.max}</span></li>`;
-      }).join('')}</ul>`);
-    $('#extra').innerHTML = '';
-    $('#t-sel').addEventListener('change', (e) => { localStorage.setItem('sc_teacher', e.target.value); render(); });
-  }
-
   /* ---------- Khởi chạy ---------- */
-  function render() { !user ? guest() : role === 'teacher' ? teacher() : student(); }
-  $('#content').addEventListener('click', (e) => {
-    const b = e.target.closest('#seg button'); if (!b) return;
-    role = b.dataset.role; localStorage.setItem('sc_role', role); render();
-  });
+  function render() { !user ? guest() : student(); }
   renderNews();
   render();
 });

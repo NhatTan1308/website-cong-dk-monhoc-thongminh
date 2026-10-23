@@ -33,21 +33,8 @@ const MOCK_DATA = [
 ];
 
 const CREDIT_PRICE = 500000;
-<<<<<<< HEAD
-const formatCoursePrice = (amount) => `${Number(amount).toLocaleString('vi-VN')} ₫`;
-const readCourseRegistrations = () => {
-  try {
-    const saved = localStorage.getItem('sc_registered');
-    if (saved !== null) {
-      const registrations = JSON.parse(saved);
-      if (!Array.isArray(registrations)) throw new Error('Danh sách môn đăng ký không hợp lệ.');
-      return registrations
-        .map(registration => Number(typeof registration === 'object' ? registration.courseId : registration))
-        .filter(Number.isFinite);
-=======
 const BASE_FEE = 150000;
-
-// Dữ liệu lịch minh họa để thử chức năng xếp lịch; thay bằng lịch lớp chính thức khi có.
+const formatCoursePrice = (amount) => `${Number(amount).toLocaleString('vi-VN')} ₫`;
 const DEMO_CLASS_OPTIONS = new Map(MOCK_DATA.map((course, index) => {
   const duration = course.credits >= 4 ? 3 : 2;
   const group = Math.floor(index / 6);
@@ -61,14 +48,15 @@ const DEMO_CLASS_OPTIONS = new Map(MOCK_DATA.map((course, index) => {
   ]];
 }));
 
-// Quản lý danh sách các môn đã đăng ký của sinh viên (lưu vào localStorage)
-const registeredCourseIds = new Set(
-  (() => {
-    try {
-      return JSON.parse(localStorage.getItem('sc_registered_courses') || '[]');
-    } catch {
-      return [];
->>>>>>> 95a76d4441f649e35849dffe26f0d78f5ec78007
+const readCourseRegistrations = () => {
+  try {
+    const saved = localStorage.getItem('sc_registered');
+    if (saved !== null) {
+      const registrations = JSON.parse(saved);
+      if (!Array.isArray(registrations)) throw new Error('Danh sách môn đăng ký không hợp lệ.');
+      return registrations
+        .map(registration => Number(typeof registration === 'object' ? registration.courseId : registration))
+        .filter(Number.isFinite);
     }
     const legacyIds = JSON.parse(localStorage.getItem('sc_registered_courses') || '[]');
     if (!Array.isArray(legacyIds)) throw new Error('Danh sách môn đăng ký cũ không hợp lệ.');

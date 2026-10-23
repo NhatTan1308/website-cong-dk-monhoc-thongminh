@@ -6,6 +6,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SmartCourse LHU – Học phí</title>
 
+    <script>
+        try {
+            const user = JSON.parse(sessionStorage.getItem('sc_user') || 'null');
+            if (!user || typeof user.mssv !== 'string') {
+                window.location.replace('../Login_Register/login.html?accessRequired=tuition');
+            }
+        } catch (error) {
+            console.error('Không thể xác minh phiên đăng nhập.', error);
+            window.location.replace('../Login_Register/login.html?accessRequired=tuition');
+        }
+    </script>
     <link rel="stylesheet" href="../index.css">
     <link rel="stylesheet" href="tuition.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">

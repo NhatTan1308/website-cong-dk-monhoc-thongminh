@@ -55,6 +55,12 @@ document.addEventListener('DOMContentLoaded', () => {
     if (params.get('registrationRequired') === '1') {
       showStatus('Bạn chưa đăng nhập! Hãy đăng nhập tài khoản sinh viên trước khi đăng ký môn!');
       window.history.replaceState({}, '', window.location.pathname);
+    } else if (params.get('accessRequired') === 'schedule') {
+      showStatus('Bạn chưa đăng nhập! Hãy đăng nhập tài khoản sinh viên trước khi xem thời khóa biểu!');
+      window.history.replaceState({}, '', window.location.pathname);
+    } else if (params.get('accessRequired') === 'tuition') {
+      showStatus('Bạn chưa đăng nhập! Hãy đăng nhập tài khoản sinh viên trước khi xem học phí!');
+      window.history.replaceState({}, '', window.location.pathname);
     } else if (params.get('registered') === '1') {
       showStatus('Đăng ký tài khoản thành công. Hãy đăng nhập bằng MSSV và mật khẩu vừa tạo.');
       window.history.replaceState({}, '', window.location.pathname);

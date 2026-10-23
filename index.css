@@ -545,32 +545,6 @@ ol {
   margin-right: 10px;
 }
 
-.seg {
-  display: inline-flex;
-  padding: 3px;
-  margin-bottom: 14px;
-  border-radius: 999px;
-  background: rgba(255, 255, 255, .16);
-}
-
-.seg button {
-  display: flex;
-  gap: 6px;
-  align-items: center;
-  padding: 5px 14px;
-  border-radius: 999px;
-  font-size: .8rem;
-  font-weight: 600;
-  color: #fff;
-  opacity: .8;
-}
-
-.seg .on {
-  background: #fff;
-  color: #0b6b64;
-  opacity: 1;
-}
-
 .bn-act {
   display: flex;
   gap: 10px;
