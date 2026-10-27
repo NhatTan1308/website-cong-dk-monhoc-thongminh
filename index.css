@@ -15,6 +15,7 @@
   --r: 16px;
   --sh: 0 1px 3px rgba(11, 42, 46, .06), 0 8px 24px rgba(13, 148, 136, .08);
   --sw: 248px;
+  --fx-ease: cubic-bezier(.2, .7, .2, 1);
 }
 
 [data-theme="dark"] {
@@ -119,6 +120,11 @@ ol {
   background: linear-gradient(135deg, #14b8a6, #0ea5e9);
   color: #fff;
   font-size: 1.05rem;
+  transition: transform .5s var(--fx-ease);
+}
+
+.logo:hover i {
+  transform: rotate(-12deg) scale(1.12);
 }
 
 .nav {
@@ -149,7 +155,7 @@ ol {
   content: "";
   opacity: 0;
   transform: translateX(-120%);
-  transition: transform .55s ease, opacity .2s ease;
+  transition: transform 1s ease, opacity .2s ease;
 }
 
 .nav a:hover::before,
