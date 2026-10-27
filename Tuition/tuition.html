@@ -243,7 +243,8 @@
 
                 <section class="tuition-grid" data-scroll-reveal>
 
-                    <article class="tuition-panel animate__animated animate__fadeInUp animate__fast" id="tuition-details">
+                    <article class="tuition-panel animate__animated animate__fadeInUp animate__fast"
+                        id="tuition-details">
                         <div class="panel-heading">
                             <div>
                                 <span class="panel-kicker">BẢNG KÊ CHI TIẾT</span>
@@ -255,7 +256,8 @@
                         <div class="course-confirmation">
                             <div>
                                 <b>Xác nhận môn đăng ký</b>
-                                <p id="course-confirmation-status" aria-live="polite">Chọn các môn để cập nhật vào thời khóa biểu.</p>
+                                <p id="course-confirmation-status" aria-live="polite">Chọn các môn để cập nhật vào thời
+                                    khóa biểu.</p>
                             </div>
                             <button type="button" class="payment-confirm-btn" id="confirm-courses">
                                 Xác nhận môn đã chọn
@@ -285,6 +287,7 @@
                                 </tbody>
                             </table>
                         </div>
+
 
 
                         <div class="fee-summary">
@@ -318,6 +321,29 @@
                             </div>
                         </div>
 
+                        <div class="cash-payment-banner">
+                            <div class="cash-payment-icon">
+                                <i class="fa-solid fa-money-bill-wave"></i>
+                            </div>
+
+                            <div class="cash-payment-content">
+                                <h3>Thanh toán bằng tiền mặt</h3>
+
+                                <p>
+                                    Sinh viên muốn thanh toán học phí bằng tiền mặt
+                                    vui lòng liên hệ trực tiếp
+                                    <strong>Phòng Đào tạo</strong>
+                                    để được hướng dẫn.
+                                </p>
+
+                                <div class="cash-payment-location">
+                                    <i class="fa-solid fa-location-dot"></i>
+                                    <span>Địa điểm: Phòng Đào tạo</span>
+                                </div>
+                            </div>
+                        </div>
+
+
                         <!-- Cửa sổ QR thanh toán -->
                         <div class="qr-modal" id="qr-modal" aria-hidden="true">
                             <div class="qr-modal-overlay" id="qr-overlay"></div>
@@ -334,10 +360,7 @@
                                 <p class="qr-modal-desc">Quét mã QR bên dưới để thanh toán</p>
 
                                 <div class="qr-image-box">
-                                    <div class="qr-placeholder">
-                                        <i class="fa-solid fa-circle-info"></i>
-                                        <span>Thanh toán mô phỏng, chưa kết nối mã QR ngân hàng.</span>
-                                    </div>
+                                    <img src="../imgs/qr.jpg" id="payment-qr-image" alt="Mã QR thanh toán học phí">
                                 </div>
 
                                 <div class="qr-payment-total">
@@ -346,7 +369,8 @@
                                 </div>
 
                                 <p class="qr-modal-note">
-                                    Nút xác nhận bên dưới chỉ cập nhật trạng thái minh họa, không chuyển tiền thật.
+                                    Nút xác nhận bên dưới chỉ cập nhật trạng thái minh họa, không chuyển
+                                    tiền thật.
                                 </p>
                                 <button class="payment-confirm-btn" id="confirm-payment" type="button">
                                     Xác nhận đã thanh toán
@@ -362,10 +386,14 @@
                                     <i class="fa-solid fa-triangle-exclamation"></i>
                                 </div>
                                 <h2 id="course-confirm-title">Xác nhận môn học</h2>
-                                <p id="course-confirm-message">Bạn chắc chắn xác nhận môn học không? Sẽ không thể hủy đăng ký!</p>
+                                <p id="course-confirm-message">Bạn chắc chắn xác nhận môn học không? Sẽ
+                                    không thể hủy
+                                    đăng ký!</p>
                                 <div class="course-confirm-actions">
-                                    <button type="button" class="course-confirm-yes" id="course-confirm-yes">Xác nhận</button>
-                                    <button type="button" class="course-confirm-no" id="course-confirm-no">Không</button>
+                                    <button type="button" class="course-confirm-yes" id="course-confirm-yes">Xác
+                                        nhận</button>
+                                    <button type="button" class="course-confirm-no"
+                                        id="course-confirm-no">Không</button>
                                 </div>
                             </div>
                         </div>
@@ -395,7 +423,8 @@
                             </div>
                         </article>
 
-                        <article class="tuition-panel payment-panel animate__animated animate__fadeInUp animate__fast" id="payment-guide">
+                        <article class="tuition-panel payment-panel animate__animated animate__fadeInUp animate__fast"
+                            id="payment-guide">
                             <div class="panel-heading">
                                 <div>
                                     <span class="panel-kicker">HỖ TRỢ SINH VIÊN</span>
