@@ -85,6 +85,11 @@ button {
   border-radius: 12px;
   background: linear-gradient(135deg, #14b8a6, #0ea5e9);
   color: #fff;
+  transition: transform .5s cubic-bezier(.2, .7, .2, 1);
+}
+
+.brand:hover i {
+  transform: rotate(-12deg) scale(1.12);
 }
 
 .top-actions {
