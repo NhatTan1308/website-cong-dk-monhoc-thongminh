@@ -130,6 +130,8 @@ ol {
 }
 
 .nav a {
+  position: relative;
+  overflow: hidden;
   display: flex;
   align-items: center;
   gap: 14px;
@@ -140,9 +142,36 @@ ol {
   transition: .2s;
 }
 
+.nav a::before {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(110deg, transparent 20%, rgba(13, 148, 136, .28) 50%, transparent 80%);
+  content: "";
+  opacity: 0;
+  transform: translateX(-120%);
+  transition: transform .55s ease, opacity .2s ease;
+}
+
+.nav a:hover::before,
+.nav a:focus-visible::before {
+  opacity: 1;
+  transform: translateX(120%);
+}
+
 .nav a i {
   width: 18px;
   text-align: center;
+  transition: transform .2s ease;
+}
+
+.nav a:hover i,
+.nav a:focus-visible i {
+  transform: scale(1.12);
+}
+
+.nav a:focus-visible {
+  outline: 3px solid var(--pri);
+  outline-offset: 2px;
 }
 
 .nav a:hover {
@@ -246,6 +275,13 @@ ol {
   display: none;
   font-size: 1.2rem;
   color: var(--mute);
+  transition: color .2s ease, transform .2s ease;
+}
+
+.menu:hover,
+.menu:focus-visible {
+  color: var(--pri);
+  transform: scale(1.08);
 }
 
 .tb-right {
@@ -267,9 +303,17 @@ ol {
   transition: .2s;
 }
 
+.icon-btn i {
+  transition: transform .2s ease;
+}
+
 .icon-btn:hover {
   background: var(--pri-s);
   color: var(--pri);
+}
+
+.icon-btn:hover i {
+  transform: scale(1.12);
 }
 
 .dot-n {
@@ -651,7 +695,7 @@ ol {
   border-radius: var(--r);
   background: var(--card);
   box-shadow: var(--sh);
-  transition: .2s;
+  transition: transform .22s ease, box-shadow .22s ease;
 }
 
 .stat:hover {
@@ -693,6 +737,14 @@ ol {
   border-radius: var(--r);
   box-shadow: var(--sh);
   overflow: hidden;
+  transition: box-shadow .22s ease, border-color .22s ease;
+  border: 1px solid transparent;
+}
+
+.card:hover,
+.card:focus-within {
+  border-color: var(--line);
+  box-shadow: 0 14px 32px rgba(13, 148, 136, .12);
 }
 
 .card-h {
@@ -917,11 +969,12 @@ select {
   border-radius: 12px;
   background: color-mix(in srgb, var(--c) 11%, transparent);
   border: 1px solid color-mix(in srgb, var(--c) 30%, transparent);
-  transition: .2s;
+  transition: transform .2s ease, box-shadow .2s ease;
 }
 
 .sg:hover {
   transform: translateY(-2px);
+  box-shadow: 0 10px 24px rgba(11, 42, 46, .1);
 }
 
 .sg i {
@@ -952,11 +1005,12 @@ select {
   border-radius: 10px;
   border-left: 4px solid var(--c, var(--pri));
   background: color-mix(in srgb, var(--c, var(--pri)) 8%, transparent);
-  transition: .2s;
+  transition: transform .2s ease, box-shadow .2s ease;
 }
 
 .ann:hover {
   transform: translateX(3px);
+  box-shadow: 0 8px 20px rgba(11, 42, 46, .08);
 }
 
 .ann.urgent {

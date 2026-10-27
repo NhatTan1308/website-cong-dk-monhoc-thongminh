@@ -166,7 +166,10 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   /* ---------- Thành phần giao diện ---------- */
-  const stat = (href, c, icon, v, l) => `<a class="stat animate__animated animate__fadeInUp animate__faster" href="${href}" style="--c:${c}"><span class="si"><i class="fa-solid ${icon}"></i></span><span><b>${v}</b><small>${l}</small></span></a>`;
+  const stat = (href, c, icon, v, l) => {
+    const countAttribute = typeof v === 'number' && Number.isFinite(v) ? ` data-count-to="${v}"` : '';
+    return `<a class="stat animate__animated animate__fadeInUp animate__faster" href="${href}" style="--c:${c}"><span class="si"><i class="fa-solid ${icon}"></i></span><span><b${countAttribute}>${v}</b><small>${l}</small></span></a>`;
+  };
   const card = (icon, title, link, body) => `<section class="card animate__animated animate__fadeInUp animate__slow"><div class="card-h"><h3><i class="fa-solid ${icon}"></i> ${title}</h3>${link || ''}</div><div class="card-b">${body}</div></section>`;
   const banner = (h1, sub, actions, pill, side) => `<section class="banner animate__animated animate__fadeInDown animate__slow"><div><h1>${h1}</h1><p>${sub}</p><div class="bn-act">${actions}</div>${pill || ''}</div></section>`;
 
@@ -245,7 +248,7 @@ document.addEventListener('DOMContentLoaded', () => {
     $('#stats').innerHTML = stat('Courses/courses.html', '#0d9488', 'fa-book-open', n, 'Môn đã đăng ký') + stat('Courses/courses.html', '#22c55e', 'fa-circle-check', tc, `Tín chỉ đã đăng ký · ${confirmedCredits} đã xác nhận`) +
       stat('index.html', '#0ea5e9', 'fa-chart-line', total, 'Tổng tín chỉ tích lũy') + stat('Tuition/tuition.html', '#ff9f1c', 'fa-coins', vnd(outstandingFee), paid ? 'Học phí · đã thanh toán' : 'Học phí đang nợ');
 
-    const ring = `<div class="prog"><div class="ring-wrap"><svg class="ring" viewBox="0 0 100 100"><circle class="bg" cx="50" cy="50" r="42"/><circle class="fg" cx="50" cy="50" r="42" pathLength="100" stroke-dasharray="${pct} 100"/></svg>
+    const ring = `<div class="prog"><div class="ring-wrap" data-progress-value="${pct}"><svg class="ring" viewBox="0 0 100 100"><circle class="bg" cx="50" cy="50" r="42"/><circle class="fg" cx="50" cy="50" r="42" pathLength="100" stroke-dasharray="${pct} 100"/></svg>
       <div class="ring-lb"><b>${pct}%</b><small>hoàn thành</small></div></div>
       <div class="prog-d"><div><span>Đã tích lũy</span><b>${total} / ${GRAD} TC</b></div><div class="bar"><i style="width:${pct}%"></i></div><div><span>Cần thêm</span><b>${Math.max(0, GRAD - total)} TC</b></div></div></div>`;
     const courses = n ? `<ul class="list">${registered.map(({ c, cl }) => `<li><span class="dot" style="background:${c.color}"></span><div><b>${c.name}</b><small>${c.code} · ${c.credits} TC · ${confirmedIds.has(c.id) ? 'Đã xác nhận' : 'Chờ xác nhận học phí'}</small></div><span class="tc">${c.credits} TC</span></li>`).join('')}</ul>`
@@ -276,6 +279,7 @@ document.addEventListener('DOMContentLoaded', () => {
   });
   renderNews();
   render();
+  window.initUIEffects?.();
 });
 
 function renderTuitionSyncBox(reg) {

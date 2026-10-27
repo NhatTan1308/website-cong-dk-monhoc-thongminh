@@ -112,6 +112,14 @@ button {
   border-radius: 50%;
   background: var(--card);
   color: var(--mute);
+  transition: color .2s ease, border-color .2s ease, background .2s ease, transform .2s ease;
+}
+
+.theme-button:hover {
+  border-color: var(--pri);
+  background: var(--pri-soft);
+  color: var(--pri);
+  transform: rotate(12deg);
 }
 
 .profile-content {
@@ -167,6 +175,13 @@ button {
   border-radius: 18px;
   background: var(--card);
   box-shadow: var(--shadow);
+  transition: transform .22s ease, box-shadow .22s ease, border-color .22s ease;
+}
+
+.profile-card:hover,
+.profile-card:focus-within {
+  border-color: color-mix(in srgb, var(--pri) 35%, var(--line));
+  box-shadow: 0 16px 38px rgba(11, 42, 46, .12);
 }
 
 .avatar-area {
@@ -290,6 +305,10 @@ button {
 .field textarea:focus {
   border-color: var(--pri);
   box-shadow: 0 0 0 3px color-mix(in srgb, var(--pri) 15%, transparent);
+}
+
+.field:focus-within label {
+  color: var(--pri);
 }
 
 .field input:disabled {

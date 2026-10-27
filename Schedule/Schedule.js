@@ -1,5 +1,8 @@
 document.addEventListener('DOMContentLoaded', () => {
   const $ = (selector) => document.querySelector(selector);
+  const escapeHTML = (value) => String(value).replace(/[&<>"']/g, (character) => ({
+    '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+  })[character]);
   let user = null;
   try {
     user = JSON.parse(sessionStorage.getItem('sc_user') || 'null');
@@ -13,11 +16,26 @@ document.addEventListener('DOMContentLoaded', () => {
       ? parts[0][0] + parts[parts.length - 1][0]
       : name.slice(0, 2)).toUpperCase();
     $('#schedule-login').classList.add('hidden');
+    $('#user').classList.remove('hidden');
     $('#side-user').classList.remove('hidden');
     $('#side-logout').classList.remove('hidden');
-    $('#side-av').textContent = initials;
+    ['#me-av', '#side-av'].forEach((selector) => {
+      const avatar = $(selector);
+      if (typeof user.avatar === 'string' && user.avatar.startsWith('data:image/')) {
+        const image = document.createElement('img');
+        image.src = user.avatar;
+        image.alt = '';
+        image.className = 'avatar-image';
+        avatar.replaceChildren(image);
+      } else {
+        avatar.textContent = initials;
+      }
+    });
     $('#side-name').textContent = name;
     $('#side-id').textContent = user.mssv || '';
+    $('#me-short').textContent = parts[parts.length - 1];
+    $('#me-name').textContent = name;
+    $('#me-id').textContent = user.mssv || '';
   }
   document.querySelectorAll('.js-logout').forEach((button) => {
     button.addEventListener('click', () => {
@@ -26,6 +44,87 @@ document.addEventListener('DOMContentLoaded', () => {
       window.location.href = '../index.html';
     });
   });
+  const accountButton = $('#me-btn');
+  const accountMenu = $('#me-pop');
+  accountButton.addEventListener('click', (event) => {
+    event.stopPropagation();
+    $('#notif-pop').classList.add('hidden');
+    $('#notif-btn').setAttribute('aria-expanded', 'false');
+    const isOpen = accountMenu.classList.toggle('hidden') === false;
+    accountButton.setAttribute('aria-expanded', String(isOpen));
+  });
+  const notificationButton = $('#notif-btn');
+  const notificationMenu = $('#notif-pop');
+  const defaultNotifications = [
+    { id: 1, title: 'Hạn đăng ký môn học: 15/10/2026', desc: 'Hệ thống đăng ký môn HK1 sẽ đóng vào 23:59 ngày 15/10. Vui lòng hoàn tất đăng ký.', time: '10 phút trước', type: 'urgent', icon: 'fa-triangle-exclamation', unread: true, link: '../Courses/courses.html' },
+    { id: 2, title: 'Nhắc nhở học phí HK1 – 2025/2026', desc: 'Hạn nộp học phí trước ngày 15/10/2026. Kiểm tra chi tiết trong mục Học phí.', time: '2 giờ trước', type: 'warning', icon: 'fa-receipt', unread: true, link: '../Tuition/tuition.html' },
+    { id: 3, title: 'Lịch thi giữa kỳ đã cập nhật', desc: 'Đã có lịch thi các môn chuyên ngành trên cổng thời khóa biểu.', time: '1 ngày trước', type: 'info', icon: 'fa-calendar-days', unread: true, link: 'Schedule.html' },
+    { id: 4, title: 'Học bổng khuyến học đợt 2 mở nộp đơn', desc: 'Sinh viên có GPA ≥ 3.2 có thể nộp hồ sơ xét học bổng khuyến học đến 20/10/2026.', time: '2 ngày trước', type: 'success', icon: 'fa-award', unread: true, link: '../index.html' }
+  ];
+  const getNotifications = () => {
+    try {
+      const saved = localStorage.getItem('sc_notifications');
+      if (saved === null) return defaultNotifications.map((item) => ({ ...item }));
+      const notifications = JSON.parse(saved);
+      if (!Array.isArray(notifications)) throw new Error('Dữ liệu thông báo không hợp lệ.');
+      return notifications;
+    } catch (error) {
+      console.error('Không thể đọc thông báo.', error);
+      return defaultNotifications.map((item) => ({ ...item }));
+    }
+  };
+  const saveNotifications = (notifications) => {
+    try {
+      localStorage.setItem('sc_notifications', JSON.stringify(notifications));
+    } catch (error) {
+      console.error('Không thể lưu trạng thái thông báo.', error);
+    }
+  };
+  const renderNotifications = () => {
+    const notifications = getNotifications();
+    const unreadCount = notifications.filter((item) => item.unread).length;
+    const badge = $('#notif-n');
+    badge.textContent = unreadCount > 99 ? '99+' : String(unreadCount);
+    badge.classList.toggle('hidden', unreadCount === 0);
+    $('#notif-list').innerHTML = notifications.map((item) => `
+      <a class="nitem ${item.unread ? 'unread' : ''}" href="${escapeHTML(item.link || '#')}" data-id="${escapeHTML(item.id)}">
+        <span class="ni ${escapeHTML(item.type || 'info')}"><i class="fa-solid ${escapeHTML(item.icon || 'fa-bell')}"></i></span>
+        <span><b>${escapeHTML(item.title || 'Thông báo')}</b><small>${escapeHTML(item.desc || '')}</small><em>${escapeHTML(item.time || '')}</em></span>
+      </a>`).join('');
+  };
+  notificationButton.addEventListener('click', (event) => {
+    event.stopPropagation();
+    accountMenu.classList.add('hidden');
+    accountButton.setAttribute('aria-expanded', 'false');
+    const isOpen = notificationMenu.classList.toggle('hidden') === false;
+    notificationButton.setAttribute('aria-expanded', String(isOpen));
+  });
+  $('#notif-all').addEventListener('click', (event) => {
+    event.stopPropagation();
+    saveNotifications(getNotifications().map((item) => ({ ...item, unread: false })));
+    renderNotifications();
+  });
+  $('#notif-list').addEventListener('click', (event) => {
+    const notification = event.target.closest('.nitem');
+    if (!notification) return;
+    const notifications = getNotifications();
+    const selected = notifications.find((item) => String(item.id) === notification.dataset.id);
+    if (!selected || !selected.unread) return;
+    selected.unread = false;
+    saveNotifications(notifications);
+    renderNotifications();
+  });
+  document.addEventListener('click', (event) => {
+    if (!accountMenu.contains(event.target) && !accountButton.contains(event.target)) {
+      accountMenu.classList.add('hidden');
+      accountButton.setAttribute('aria-expanded', 'false');
+    }
+    if (!notificationMenu.contains(event.target) && !notificationButton.contains(event.target)) {
+      notificationMenu.classList.add('hidden');
+      notificationButton.setAttribute('aria-expanded', 'false');
+    }
+  });
+  renderNotifications();
 
   const DAYS = ['Thứ 2', 'Thứ 3', 'Thứ 4', 'Thứ 5', 'Thứ 6', 'Thứ 7'];
   const PERIODS = [
@@ -42,9 +141,6 @@ document.addEventListener('DOMContentLoaded', () => {
     return monday;
   };
   const formatDate = (date, options) => new Intl.DateTimeFormat('vi-VN', options).format(date);
-  const escapeHTML = (value) => String(value).replace(/[&<>"']/g, (character) => ({
-    '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
-  })[character]);
   const getClassTimes = (section) => ({
     start: PERIODS[section.start - 1][0],
     end: PERIODS[section.end - 1][1]

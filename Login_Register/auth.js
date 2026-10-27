@@ -44,6 +44,18 @@ document.addEventListener('DOMContentLoaded', () => {
 
   if (!form) return;
 
+  const submitButton = form.querySelector('.auth-submit');
+  submitButton.addEventListener('click', () => {
+    submitButton.classList.remove('animate__animated', 'animate__bounceIn');
+    void submitButton.offsetWidth;
+    submitButton.classList.add('animate__animated', 'animate__bounceIn');
+  });
+  submitButton.addEventListener('animationend', (event) => {
+    if (event.animationName === 'bounceIn') {
+      submitButton.classList.remove('animate__animated', 'animate__bounceIn');
+    }
+  });
+
   const showStatus = (message, isError = false) => {
     status.textContent = message;
     status.classList.toggle('is-error', isError);
@@ -60,6 +72,9 @@ document.addEventListener('DOMContentLoaded', () => {
       window.history.replaceState({}, '', window.location.pathname);
     } else if (params.get('accessRequired') === 'tuition') {
       showStatus('Bạn chưa đăng nhập! Hãy đăng nhập tài khoản sinh viên trước khi xem học phí!');
+      window.history.replaceState({}, '', window.location.pathname);
+    } else if (params.get('accessRequired') === 'profile') {
+      showStatus('Bạn chưa đăng nhập! Hãy đăng nhập tài khoản sinh viên trước khi xem hồ sơ cá nhân.');
       window.history.replaceState({}, '', window.location.pathname);
     } else if (params.get('registered') === '1') {
       showStatus('Đăng ký tài khoản thành công. Hãy đăng nhập bằng MSSV và mật khẩu vừa tạo.');

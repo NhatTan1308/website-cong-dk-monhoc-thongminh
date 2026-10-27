@@ -4,6 +4,25 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="icon" href="../imgs/iconlhu.ico" sizes="any" />
+  <style>
+    html.auth-redirecting body {
+      display: none;
+    }
+  </style>
+  <script>
+    try {
+      const user = JSON.parse(sessionStorage.getItem('sc_user') || 'null');
+      if (!user || typeof user.mssv !== 'string') {
+        document.documentElement.classList.add('auth-redirecting');
+        window.location.replace('../Login_Register/login.html?accessRequired=profile');
+      }
+    } catch (error) {
+      console.error('Không thể xác minh phiên đăng nhập.', error);
+      document.documentElement.classList.add('auth-redirecting');
+      window.location.replace('../Login_Register/login.html?accessRequired=profile');
+    }
+  </script>
   <title>Hồ sơ cá nhân – Smart Course LHU</title>
   <script>try { document.documentElement.dataset.theme = localStorage.getItem('sc_theme') || 'light'; } catch (error) { }</script>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -13,6 +32,7 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
   <link rel="stylesheet" href="settings.css" />
+  <link rel="stylesheet" href="../effects/ui-effects.css" />
 </head>
 
 <body>
@@ -105,9 +125,10 @@
         </section>
       </form>
     </section>
-    <footer>© 2026 Smart Course LHU · Đại học Lạc Hồng</footer>
+    <footer data-scroll-reveal>© 2026 Smart Course LHU · Đại học Lạc Hồng</footer>
   </main>
   <script src="settings.js" defer></script>
+  <script src="../effects/ui-effects.js" defer></script>
 </body>
 
 </html>

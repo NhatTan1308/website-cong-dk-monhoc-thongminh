@@ -489,7 +489,7 @@ function renderCourses(courses) {
       }
 
       return `
-        <div class="course-card ${isRegistered ? 'is-registered' : ''}${shouldAnimate ? ' animate__animated animate__fadeInUp animate__faster' : ''}">
+        <div class="course-card${isRegistered ? ' is-registered' : ''}${shouldAnimate ? ' animate__animated animate__fadeInUp animate__faster' : ''}">
           <span class="course-badge ${badgeClass}">${c.type}</span>
           <h3 class="course-title" title="${c.name}">${c.name}</h3>
           
@@ -519,6 +519,7 @@ function renderCourses(courses) {
 
   container.innerHTML = html;
   container.dataset.hasRendered = 'true';
+  window.initUIEffects?.();
 }
 
 function initCoursePage() {

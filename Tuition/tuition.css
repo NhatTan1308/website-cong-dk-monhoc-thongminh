@@ -32,6 +32,12 @@
     background: linear-gradient(120deg, #e0f8f1 0%, #f0fbf8 58%, #e0f2fe 100%);
 }
 
+.tuition-hero > .hero-text,
+.tuition-hero > .hero-illustration {
+    position: relative;
+    z-index: 1;
+}
+
 [data-theme="dark"] .tuition-hero {
     background: linear-gradient(120deg, #123b36 0%, #142d31 58%, #15394b 100%);
 }
@@ -218,6 +224,13 @@
     border-radius: 16px;
     background: var(--card);
     box-shadow: var(--sh);
+    transition: transform .22s ease, box-shadow .22s ease, border-color .22s ease;
+}
+
+.tuition-stat:hover {
+    transform: translateY(-3px);
+    border-color: var(--pri);
+    box-shadow: 0 14px 30px rgba(13, 148, 136, .12);
 }
 
 .stat-icon {
@@ -290,6 +303,21 @@
     border-radius: 17px;
     background: var(--card);
     box-shadow: var(--sh);
+    transition: border-color .22s ease, box-shadow .22s ease;
+}
+
+.tuition-panel:hover,
+.tuition-panel:focus-within {
+    border-color: color-mix(in srgb, var(--pri) 35%, var(--line));
+    box-shadow: 0 14px 30px rgba(13, 148, 136, .1);
+}
+
+.tuition-panel > .panel-heading,
+.tuition-panel > .course-confirmation,
+.tuition-panel > .table-wrap,
+.tuition-panel > .fee-summary {
+    position: relative;
+    z-index: 1;
 }
 
 .panel-heading {

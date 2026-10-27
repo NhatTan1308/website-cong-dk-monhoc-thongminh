@@ -5,6 +5,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="theme-color" content="#f1faf7" />
+  <link rel="icon" href="../imgs/iconlhu.ico" sizes="any" />
   <title>Thời khóa biểu - Smart Course LHU</title>
   <script>try { document.documentElement.dataset.theme = localStorage.getItem('sc_theme') || 'light'; } catch (e) { }</script>
   <script>
@@ -26,6 +27,7 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
   <link rel="stylesheet" href="../index.css" />
   <link rel="stylesheet" href="Schedule.css" />
+  <link rel="stylesheet" href="../effects/ui-effects.css" />
 </head>
 
 <body>
@@ -63,6 +65,44 @@
         <h1 class="top-title">Thời khóa biểu</h1>
         <div class="tb-right">
           <button id="mode-btn" class="icon-btn" type="button" aria-label="Chuyển chế độ sáng/tối"></button>
+          <div class="pop-wrap">
+            <button id="notif-btn" class="icon-btn" type="button" aria-label="Thông báo" aria-expanded="false" aria-controls="notif-pop">
+              <i class="fa-solid fa-bell" aria-hidden="true"></i>
+              <b id="notif-n" class="dot-n hidden"></b>
+            </button>
+            <div id="notif-pop" class="pop hidden">
+              <div class="pop-h">
+                <strong><i class="fa-solid fa-bell"></i> Thông báo</strong>
+                <button id="notif-all" type="button">Đã đọc tất cả</button>
+              </div>
+              <div class="pop-list" id="notif-list"></div>
+              <a class="pop-f" href="../index.html#bulletin">
+                <i class="fa-solid fa-bullhorn"></i>
+                Xem tất cả trong bảng tin
+              </a>
+            </div>
+          </div>
+          <div class="pop-wrap hidden" id="user">
+            <button id="me-btn" class="me" type="button" aria-expanded="false" aria-controls="me-pop">
+              <span class="av" id="me-av"></span>
+              <span id="me-short"></span>
+              <i class="fa-solid fa-chevron-down" aria-hidden="true"></i>
+            </button>
+            <div id="me-pop" class="pop pop-sm hidden">
+              <div class="me-info">
+                <b id="me-name"></b>
+                <small id="me-id"></small>
+              </div>
+              <a href="../Settings/settings.html">
+                <i class="fa-solid fa-user-gear"></i>
+                Hồ sơ cá nhân
+              </a>
+              <button class="js-logout" type="button">
+                <i class="fa-solid fa-right-from-bracket"></i>
+                Đăng xuất
+              </button>
+            </div>
+          </div>
         </div>
       </header>
 
@@ -123,7 +163,7 @@
             </div>
           </div>
           <p class="demo-note" id="schedule-note" aria-live="polite"></p>
-          <div class="schedule-scroll" tabindex="0" aria-label="Bảng thời khóa biểu, có thể cuộn ngang">
+          <div class="schedule-scroll" data-scroll-reveal tabindex="0" aria-label="Bảng thời khóa biểu, có thể cuộn ngang">
             <div class="schedule-board" id="schedule-board"></div>
           </div>
         </section>
@@ -143,6 +183,7 @@
 
   <script src="../data.js"></script>
   <script src="Schedule.js"></script>
+  <script src="../effects/ui-effects.js"></script>
 </body>
 
 </html>

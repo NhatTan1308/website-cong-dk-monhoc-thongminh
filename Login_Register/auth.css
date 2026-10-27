@@ -86,6 +86,12 @@ body.auth-page {
   content: "";
   box-shadow: 0 0 0 50px rgba(255, 255, 255, .035), 0 0 0 100px rgba(255, 255, 255, .025);
   pointer-events: none;
+  transition: color .2s ease, transform .2s ease;
+}
+
+.auth-input-wrap:focus-within>i {
+  color: var(--auth-pri);
+  transform: scale(1.08);
 }
 
 .auth-brand {
@@ -266,6 +272,12 @@ body.auth-page {
   position: relative;
   display: flex;
   align-items: center;
+  border-radius: 11px;
+  transition: box-shadow .2s ease;
+}
+
+.auth-input-wrap:focus-within {
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--auth-pri) 15%, transparent);
 }
 
 .auth-input-wrap>i {
@@ -308,7 +320,7 @@ body.auth-page {
 
 .auth-input-wrap select:focus {
   border-color: var(--auth-pri);
-  box-shadow: 0 0 0 3px color-mix(in srgb, var(--auth-pri) 15%, transparent);
+  box-shadow: none;
 }
 
 .auth-input-wrap input#student-id {
@@ -330,7 +342,7 @@ body.auth-page {
 
 .auth-input-wrap input:focus {
   border-color: var(--auth-pri);
-  box-shadow: 0 0 0 3px color-mix(in srgb, var(--auth-pri) 15%, transparent);
+  box-shadow: none;
 }
 
 .auth-input-wrap input[aria-invalid="true"] {

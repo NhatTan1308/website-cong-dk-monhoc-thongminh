@@ -4,6 +4,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon" href="../imgs/iconlhu.ico" sizes="any" />
   <title>Đăng ký môn học - Smart Course LHU</title>
   <script>
     try { document.documentElement.dataset.theme = localStorage.getItem('sc_theme') || 'light'; } catch (e) { }
@@ -25,6 +26,7 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
   <link rel="stylesheet" href="../index.css" />
   <link rel="stylesheet" href="courses.css" />
+  <link rel="stylesheet" href="../effects/ui-effects.css" />
 </head>
 
 <body>
@@ -70,7 +72,7 @@
         </select>
       </div>
 
-      <div id="courseContainer">
+      <div id="courseContainer" data-scroll-reveal>
         <!-- JS sẽ render thẻ môn học vào đây -->
       </div>
     </div>
@@ -135,6 +137,7 @@
   </div>
 
   <script src="../data.js"></script>
+  <script src="../effects/ui-effects.js"></script>
 </body>
 
 </html>

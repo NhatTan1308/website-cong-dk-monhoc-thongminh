@@ -105,6 +105,15 @@
   min-width: 260px;
 }
 
+.search-box {
+  border-radius: 12px;
+  transition: box-shadow .2s ease;
+}
+
+.search-box:focus-within {
+  box-shadow: 0 0 0 3px var(--pri-s, rgba(13, 148, 136, 0.15));
+}
+
 .search-box i {
   position: absolute;
   left: 16px;
@@ -112,6 +121,12 @@
   transform: translateY(-50%);
   color: var(--mute);
   font-size: 0.95rem;
+  transition: color .2s ease, transform .2s ease;
+}
+
+.search-box:focus-within i {
+  color: var(--pri);
+  transform: translateY(-50%) scale(1.08);
 }
 
 #searchInput {
@@ -142,6 +157,16 @@
   color: var(--ink);
   cursor: pointer;
   transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.filter-box:hover {
+  border-color: var(--pri);
+}
+
+.filter-box:focus-visible,
+#searchInput:focus-visible {
+  outline: 2px solid var(--pri);
+  outline-offset: 2px;
 }
 
 .major-lock {
@@ -184,6 +209,7 @@
 
 /* Card môn học */
 .course-card {
+  position: relative;
   background: var(--card);
   border: 1px solid var(--line);
   border-radius: 16px;
@@ -305,6 +331,13 @@
   transition: 0.2s ease;
   border: none;
   cursor: pointer;
+}
+
+.btn-act:focus-visible,
+.fc-view-btn:focus-visible,
+.modal-close:focus-visible {
+  outline: 3px solid var(--pri);
+  outline-offset: 3px;
 }
 
 /* Nút đăng ký khả dụng */

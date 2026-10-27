@@ -59,6 +59,15 @@
   transition: .2s;
 }
 
+.schedule-link:focus-visible,
+.ai-button:focus-visible,
+.print-button:focus-visible,
+.today-button:focus-visible,
+.week-arrow:focus-visible {
+  outline: 3px solid var(--pri);
+  outline-offset: 2px;
+}
+
 .schedule-link:hover,
 .ai-button:hover {
   border-color: var(--pri);
@@ -177,6 +186,13 @@
   border: 1px solid var(--line);
   border-radius: 14px;
   background: var(--card);
+  transition: transform .22s ease, box-shadow .22s ease, border-color .22s ease;
+}
+
+.schedule-stat:hover {
+  transform: translateY(-3px);
+  border-color: var(--pri);
+  box-shadow: var(--sh);
 }
 
 .stat-icon {
@@ -371,6 +387,13 @@
   color: var(--ink);
   font-size: .7rem;
   line-height: 1.4;
+  transition: filter .2s ease, box-shadow .2s ease;
+}
+
+.schedule-class:hover,
+.schedule-class:focus-within {
+  filter: brightness(1.04);
+  box-shadow: 0 6px 16px rgba(11, 42, 46, .14);
 }
 
 .schedule-class strong,

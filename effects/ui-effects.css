@@ -1,0 +1,43 @@
+.scroll-reveal {
+  opacity: 0;
+  transform: translateY(18px);
+  transition: opacity .55s ease, transform .55s cubic-bezier(.2, .7, .2, 1);
+}
+
+.scroll-reveal.is-visible {
+  opacity: 1;
+  transform: none;
+}
+
+:where(a, button, input, select, textarea):focus-visible {
+  outline: 3px solid var(--pri, var(--auth-pri, #0d9488));
+  outline-offset: 3px;
+}
+
+.icon-btn:focus-visible i,
+.theme-button:focus-visible i,
+.auth-theme:focus-visible i,
+.menu:focus-visible i {
+  animation: icon-focus .45s ease-out;
+}
+
+@keyframes icon-focus {
+  50% {
+    transform: scale(1.18);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .scroll-reveal {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+
+  .icon-btn:focus-visible i,
+  .theme-button:focus-visible i,
+  .auth-theme:focus-visible i,
+  .menu:focus-visible i {
+    animation: none;
+  }
+}
