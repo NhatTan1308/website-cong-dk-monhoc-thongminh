@@ -21,6 +21,7 @@
   </script>
   <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&display=swap"
     rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
   <link rel="stylesheet" href="../index.css" />
   <link rel="stylesheet" href="courses.css" />
@@ -29,7 +30,7 @@
 <body>
   <div class="courses-wrapper">
     <div class="main courses-main">
-      <div class="courses-header">
+      <div class="courses-header animate__animated animate__fadeInDown animate__faster">
         <div class="title-wrap">
           <a href="../index.html" class="back-btn" title="Quay về trang chủ" aria-label="Quay về trang chủ">
             <i class="fa-solid fa-arrow-left"></i>
@@ -40,7 +41,7 @@
           </h2>
         </div>
 
-        <div class="reg-summary-pill" id="regSummary">
+        <div class="reg-summary-pill animate__animated animate__pulse animate__repeat-2" id="regSummary">
           <i class="fa-solid fa-circle-check"></i>
           <span>Đã đăng ký: <b id="regCount">0</b> môn (<b id="regCredits">0</b> tín chỉ)</span>
         </div>
@@ -77,7 +78,7 @@
 
   <!-- Thanh nổi theo dõi tín chỉ khi cuộn trang (Sticky/Floating Credit Bar) -->
   <aside class="floating-credit-bar" id="floatingCreditBar" aria-label="Thanh theo dõi tín chỉ đăng ký">
-    <div class="fc-container">
+    <div class="fc-container animate__animated animate__slideInUp animate__faster">
       <div class="fc-left">
         <div class="fc-badge-icon">
           <i class="fa-solid fa-graduation-cap"></i>
@@ -104,8 +105,8 @@
 
   <!-- Modal xem nhanh danh sách môn học đã đăng ký -->
   <div class="selected-modal hidden" id="selectedModal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
-    <div class="modal-backdrop" onclick="toggleSelectedModal()"></div>
-    <div class="modal-card">
+    <div class="modal-backdrop animate__animated animate__fadeIn animate__faster" onclick="toggleSelectedModal()"></div>
+    <div class="modal-card animate__animated animate__zoomIn animate__faster">
       <div class="modal-header">
         <h3 id="modalTitle">
           <i class="fa-solid fa-clipboard-check"></i>

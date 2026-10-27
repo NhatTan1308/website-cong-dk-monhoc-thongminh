@@ -35,6 +35,11 @@
   padding: 0;
 }
 
+/* Let existing hover transforms take over after Animate.css entrance effects. */
+.animate__animated {
+  animation-fill-mode: none;
+}
+
 html {
   scroll-behavior: smooth;
 }

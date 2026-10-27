@@ -15,6 +15,10 @@
   gap: 18px;
 }
 
+.schedule-content > .animate__animated {
+  animation-fill-mode: both;
+}
+
 .schedule-heading,
 .schedule-toolbar,
 .week-controls,

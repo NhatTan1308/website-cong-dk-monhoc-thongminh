@@ -308,9 +308,33 @@ function registerCourse(courseId) {
 // Đóng/Mở popup xem danh sách môn đã chọn
 function toggleSelectedModal() {
   const modal = document.getElementById('selectedModal');
-  if (modal) {
-    modal.classList.toggle('hidden');
+  const card = modal && modal.querySelector('.modal-card');
+  if (!modal || !card) return;
+
+  if (modal.classList.contains('hidden')) {
+    if (card._closeAnimationHandler) {
+      card.removeEventListener('animationend', card._closeAnimationHandler);
+      card._closeAnimationHandler = null;
+    }
+    modal.classList.remove('hidden');
+    card.classList.remove('animate__zoomOut');
+    card.classList.add('animate__zoomIn');
+    return;
   }
+
+  card.classList.remove('animate__zoomIn');
+  card.classList.add('animate__zoomOut');
+  const closeAfterAnimation = (event) => {
+    if (event && event.target !== card) return;
+    if (modal.classList.contains('hidden') || !card.classList.contains('animate__zoomOut')) return;
+    modal.classList.add('hidden');
+    card.classList.remove('animate__zoomOut');
+    card.removeEventListener('animationend', closeAfterAnimation);
+    card._closeAnimationHandler = null;
+  };
+  card._closeAnimationHandler = closeAfterAnimation;
+  card.addEventListener('animationend', closeAfterAnimation);
+  window.setTimeout(() => closeAfterAnimation(null), 600);
 }
 
 // Cập nhật thống kê số môn & tín chỉ đã đăng ký lên cả Header & Thanh nổi
@@ -400,14 +424,16 @@ function updateRegistrationSummary() {
 function renderCourses(courses) {
   const container = document.getElementById('courseContainer');
   if (!container) return;
+  const shouldAnimate = !container.dataset.hasRendered;
 
   if (courses.length === 0) {
     container.innerHTML = `
-      <div class="empty-state">
+      <div class="empty-state animate__animated animate__fadeIn animate__faster">
         <i class="fa-solid fa-folder-open"></i>
         <p>Không tìm thấy môn học nào phù hợp với bộ lọc hiện tại.</p>
       </div>
     `;
+    container.dataset.hasRendered = 'true';
     return;
   }
 
@@ -422,7 +448,7 @@ function renderCourses(courses) {
 
   for (const major in groupedCourses) {
     html += `
-      <h3 class="major-title">
+      <h3 class="major-title${shouldAnimate ? ' animate__animated animate__slideInLeft animate__faster' : ''}">
         <i class="fa-solid fa-layer-group"></i> Ngành ${major}
       </h3>
     `;
@@ -463,7 +489,7 @@ function renderCourses(courses) {
       }
 
       return `
-        <div class="course-card ${isRegistered ? 'is-registered' : ''}">
+        <div class="course-card ${isRegistered ? 'is-registered' : ''}${shouldAnimate ? ' animate__animated animate__fadeInUp animate__faster' : ''}">
           <span class="course-badge ${badgeClass}">${c.type}</span>
           <h3 class="course-title" title="${c.name}">${c.name}</h3>
           
@@ -492,6 +518,7 @@ function renderCourses(courses) {
   }
 
   container.innerHTML = html;
+  container.dataset.hasRendered = 'true';
 }
 
 function initCoursePage() {

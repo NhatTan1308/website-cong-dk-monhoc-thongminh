@@ -147,10 +147,10 @@ document.addEventListener('DOMContentLoaded', () => {
     const list = getNews(), unread = list.filter(n => n.unread).length;
     const badge = $('#notif-n'); badge.textContent = unread; badge.classList.toggle('hidden', !unread);
     $('#bulletin-n').textContent = list.length;
-    $('#notif-list').innerHTML = list.map(n => `<a class="nitem ${n.unread ? 'unread' : ''}" href="${n.link || '#'}" data-id="${n.id}">
+    $('#notif-list').innerHTML = list.map(n => `<a class="nitem ${n.unread ? 'unread' : ''} animate__animated animate__fadeInUp animate__faster" href="${n.link || '#'}" data-id="${n.id}">
       <span class="ni ${n.type}"><i class="fa-solid ${n.icon}"></i></span>
       <span><b>${n.title}</b><small>${n.desc}</small><em><i class="fa-regular fa-clock"></i> ${n.time}</em></span></a>`).join('');
-    $('#bulletin-list').innerHTML = list.map(n => `<a class="ann ${n.type} ${n.unread ? 'unread' : ''}" href="${n.link || '#'}" data-id="${n.id}">
+    $('#bulletin-list').innerHTML = list.map(n => `<a class="ann ${n.type} ${n.unread ? 'unread' : ''} animate__animated animate__fadeInUp animate__faster" href="${n.link || '#'}" data-id="${n.id}">
       <span class="ni ${n.type}"><i class="fa-solid ${n.icon}"></i></span>
       <div><b>${n.title}</b><p>${n.desc}</p><em><i class="fa-regular fa-clock"></i> ${n.time}</em></div></a>`).join('');
   }
@@ -166,9 +166,9 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   /* ---------- Thành phần giao diện ---------- */
-  const stat = (href, c, icon, v, l) => `<a class="stat" href="${href}" style="--c:${c}"><span class="si"><i class="fa-solid ${icon}"></i></span><span><b>${v}</b><small>${l}</small></span></a>`;
-  const card = (icon, title, link, body) => `<section class="card"><div class="card-h"><h3><i class="fa-solid ${icon}"></i> ${title}</h3>${link || ''}</div><div class="card-b">${body}</div></section>`;
-  const banner = (h1, sub, actions, pill, side) => `<section class="banner"><div><h1>${h1}</h1><p>${sub}</p><div class="bn-act">${actions}</div>${pill || ''}</div></section>`;
+  const stat = (href, c, icon, v, l) => `<a class="stat animate__animated animate__fadeInUp animate__faster" href="${href}" style="--c:${c}"><span class="si"><i class="fa-solid ${icon}"></i></span><span><b>${v}</b><small>${l}</small></span></a>`;
+  const card = (icon, title, link, body) => `<section class="card animate__animated animate__fadeInUp animate__slow"><div class="card-h"><h3><i class="fa-solid ${icon}"></i> ${title}</h3>${link || ''}</div><div class="card-b">${body}</div></section>`;
+  const banner = (h1, sub, actions, pill, side) => `<section class="banner animate__animated animate__fadeInDown animate__slow"><div><h1>${h1}</h1><p>${sub}</p><div class="bn-act">${actions}</div>${pill || ''}</div></section>`;
 
   function nextOf(items) {
     const nowMin = now.getHours() * 60 + now.getMinutes();

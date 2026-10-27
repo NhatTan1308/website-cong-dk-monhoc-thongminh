@@ -1,5 +1,11 @@
 /* SmartCourse LHU - Giao dien hoc phi */
 
+.tuition-hero.animate__animated,
+.tuition-stats.animate__animated,
+.tuition-panel.animate__animated {
+    animation-fill-mode: both;
+}
+
 .tuition-content {
     display: flex;
     flex-direction: column;
