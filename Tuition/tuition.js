@@ -312,7 +312,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
         modal.classList.add("show");
         modal.setAttribute("aria-hidden", "false");
-        document.body.style.overflow = "hidden";
         closeBtn.focus();
     }
 
