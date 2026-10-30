@@ -217,18 +217,26 @@ document.addEventListener('DOMContentLoaded', () => {
         document.body.style.overflow = '';
         confirmCoursesButton.focus();
     };
+
     confirmCoursesButton.addEventListener('click', () => {
-        selectedCourseIdsToConfirm = [...document.querySelectorAll('.course-confirm-checkbox:checked:not(:disabled)')]
-            .map((checkbox) => Number(checkbox.dataset.courseId));
+        selectedCourseIdsToConfirm = [
+            ...document.querySelectorAll(
+                '.course-confirm-checkbox:checked:not(:disabled)'
+            )
+        ].map((checkbox) => Number(checkbox.dataset.courseId));
+
         if (selectedCourseIdsToConfirm.length === 0) {
-            updateCourseConfirmation('Hãy chọn ít nhất một môn trước khi xác nhận.');
+            updateCourseConfirmation(
+                'Hãy chọn ít nhất một môn trước khi xác nhận.'
+            );
             return;
         }
+
         confirmModal.classList.add('show');
         confirmModal.setAttribute('aria-hidden', 'false');
-        document.body.style.overflow = 'hidden';
         confirmNoButton.focus();
     });
+
     confirmNoButton.addEventListener('click', closeCourseConfirmation);
     confirmModalOverlay.addEventListener('click', closeCourseConfirmation);
     confirmYesButton.addEventListener('click', () => {

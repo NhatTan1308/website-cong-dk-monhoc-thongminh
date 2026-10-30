@@ -1458,3 +1458,35 @@
     position: fixed;
     inset: 0;
 }
+
+/* Cho phép cuộn khi mở xác nhận môn học */
+.course-confirm-modal.show {
+    position: fixed;
+    inset: 0;
+    z-index: 99999;
+
+    display: flex;
+    justify-content: center;
+    align-items: safe center;
+
+    overflow-x: hidden;
+    overflow-y: auto;
+
+    padding: 24px 16px;
+    box-sizing: border-box;
+    overscroll-behavior: contain;
+}
+
+.course-confirm-dialog {
+    position: relative;
+    flex-shrink: 0;
+    margin: auto;
+    max-width: 100%;
+    max-height: none;
+    overflow: visible;
+}
+
+.course-confirm-overlay {
+    position: fixed;
+    inset: 0;
+}
