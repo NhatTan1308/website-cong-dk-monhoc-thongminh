@@ -390,6 +390,81 @@
   transition: filter .2s ease, box-shadow .2s ease;
 }
 
+.schedule-class.is-editing {
+  overflow-y: auto;
+  scrollbar-width: thin;
+  cursor: grab;
+}
+
+.schedule-class.is-editing select {
+  cursor: pointer;
+}
+
+.schedule-class.is-dragging {
+  opacity: .45;
+  cursor: grabbing;
+}
+
+.schedule-board.is-dragging .board-slot {
+  background: color-mix(in srgb, var(--pri) 10%, var(--card));
+}
+
+.schedule-board.is-dragging .schedule-class {
+  outline: 1px dashed color-mix(in srgb, var(--pri) 55%, transparent);
+}
+
+.schedule-class.has-schedule-issue {
+  border-left-color: #dc2626;
+  background: color-mix(in srgb, #dc2626 13%, var(--card));
+  box-shadow: inset 0 0 0 1px rgba(220, 38, 38, .45);
+}
+
+.schedule-class.has-schedule-issue strong,
+.schedule-class-issue {
+  color: #dc2626;
+}
+
+.manual-class-editor {
+  display: block;
+  margin-top: 5px;
+  color: var(--mute);
+  font-size: .66rem;
+  font-weight: 700;
+}
+
+.manual-class-editor select {
+  display: block;
+  width: 100%;
+  margin-top: 2px;
+  padding: 4px;
+  border: 1px solid var(--line);
+  border-radius: 5px;
+  background: var(--card);
+  color: var(--ink);
+  font: inherit;
+}
+
+.schedule-class .schedule-class-issue {
+  display: block;
+  height: auto;
+  margin-top: 4px;
+  overflow: visible;
+  white-space: normal;
+  font-size: .65rem;
+  font-weight: 700;
+}
+
+.schedule-class-issue i {
+  margin-right: 4px;
+}
+
+.schedule-issue-summary {
+  display: block;
+  margin: 6px 0 0 18px;
+  color: #dc2626;
+  font-weight: 700;
+}
+
 .schedule-class:hover,
 .schedule-class:focus-within {
   filter: brightness(1.04);
@@ -445,6 +520,23 @@
   border: 1px solid var(--line);
   border-left: 3px solid var(--class-color);
   border-radius: 10px;
+}
+
+.today-item.has-schedule-issue {
+  border-color: rgba(220, 38, 38, .55);
+  border-left-color: #dc2626;
+  background: color-mix(in srgb, #dc2626 8%, var(--card));
+}
+
+.today-issue {
+  grid-column: 1 / -1;
+  color: #dc2626;
+  font-size: .75rem;
+  font-weight: 700;
+}
+
+.today-issue i {
+  margin-right: 5px;
 }
 
 .today-time {
@@ -560,6 +652,11 @@
   .week-controls {
     align-self: stretch;
     flex-wrap: wrap;
+  }
+
+  .week-controls .ai-button {
+    flex: 1 1 145px;
+    white-space: normal;
   }
 
   .today-button {

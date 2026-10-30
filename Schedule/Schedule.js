@@ -149,10 +149,15 @@ document.addEventListener('DOMContentLoaded', () => {
   let weekStart = mondayOf(today);
   let registeredCourses = [];
   let plan = new Map();
-  let aiMode = false;
+  let scheduleMode = 'manual';
+  let manualEditing = false;
   let scheduleMessage = '';
+  let scheduleStorageError = '';
+  let draggedCourseId = null;
+  let dragMessage = '';
   try {
-    aiMode = getStudentStorageItem('sc_schedule_mode') === 'ai';
+    const savedMode = getStudentStorageItem('sc_schedule_mode');
+    scheduleMode = savedMode === 'ai' || savedMode === 'auto' || savedMode === 'smart' ? 'smart' : 'manual';
   } catch (error) {
     console.warn('Không thể đọc chế độ xếp lịch.', error);
   }
@@ -174,7 +179,10 @@ document.addEventListener('DOMContentLoaded', () => {
     const result = new Map();
     courses.forEach((course) => {
       const options = DEMO_CLASS_OPTIONS.get(course.id) || [];
-      const selection = Number(savedPlan && savedPlan[course.id]);
+      const savedSelection = scheduleStorageError && plan.has(course.id)
+        ? plan.get(course.id)
+        : savedPlan && savedPlan[course.id];
+      const selection = Number(savedSelection);
       result.set(course.id, Number.isInteger(selection) && options[selection] ? selection : 0);
     });
     return result;
@@ -185,17 +193,20 @@ document.addEventListener('DOMContentLoaded', () => {
     try {
       setStudentStorageItem('sc_schedule_plan', JSON.stringify(serializable));
       plan = nextPlan;
+      scheduleStorageError = '';
+      return true;
     } catch (error) {
       console.error('Không thể lưu thời khóa biểu.', error);
-      scheduleMessage = 'Không thể lưu lịch trên thiết bị này. Hãy kiểm tra quyền truy cập bộ nhớ trình duyệt.';
+      scheduleStorageError = 'Không thể lưu lịch trên thiết bị này. Hãy kiểm tra quyền truy cập bộ nhớ trình duyệt.';
+      return false;
     }
   }
 
   function saveMode() {
     try {
-      setStudentStorageItem('sc_schedule_mode', aiMode ? 'ai' : 'manual');
+      setStudentStorageItem('sc_schedule_mode', scheduleMode);
     } catch (error) {
-      console.warn('Không thể lưu chế độ xếp lịch.', error);
+      console.error('Không thể lưu chế độ xếp lịch.', error);
     }
   }
 
@@ -273,6 +284,34 @@ document.addEventListener('DOMContentLoaded', () => {
     return new Map(candidates[0].assignments.map(({ course, sectionIndex }) => [course.id, sectionIndex]));
   }
 
+  function getScheduleIssues(scheduledCourses) {
+    const issues = new Map();
+    const addIssue = (courseId, reason) => {
+      if (!issues.has(courseId)) issues.set(courseId, []);
+      issues.get(courseId).push(reason);
+    };
+
+    scheduledCourses.forEach((course, index) => {
+      scheduledCourses.slice(index + 1).forEach((other) => {
+        if (course.day !== other.day) return;
+        if (course.start <= other.end && other.start <= course.end) {
+          addIssue(course.id, `Trùng lịch với ${other.code} (${DAYS[other.day]}, tiết ${other.start}–${other.end}).`);
+          addIssue(other.id, `Trùng lịch với ${course.code} (${DAYS[course.day]}, tiết ${course.start}–${course.end}).`);
+          return;
+        }
+
+        const earlier = course.end < other.start ? course : other;
+        const later = earlier === course ? other : course;
+        if (earlier.end + 1 === later.start
+          && PERIODS[earlier.end - 1][1] === PERIODS[later.start - 1][0]) {
+          addIssue(earlier.id, `Lịch sát với ${later.code}, không có thời gian nghỉ hoặc di chuyển.`);
+          addIssue(later.id, `Lịch sát với ${earlier.code}, không có thời gian nghỉ hoặc di chuyển.`);
+        }
+      });
+    });
+    return issues;
+  }
+
   function renderSummary(scheduledCourses) {
     const credits = registeredCourses.reduce((total, course) => total + Number(course.credits || 0), 0);
     const periods = scheduledCourses.reduce((total, course) => total + course.end - course.start + 1, 0);
@@ -289,6 +328,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   function renderWeek(scheduledCourses) {
+    const issues = manualEditing ? getScheduleIssues(scheduledCourses) : new Map();
     const weekEnd = new Date(weekStart);
     weekEnd.setDate(weekEnd.getDate() + 5);
     $('#week-range').textContent = `${formatDate(weekStart, { day: '2-digit', month: '2-digit' })} – ${formatDate(weekEnd, { day: '2-digit', month: '2-digit', year: 'numeric' })}`;
@@ -305,7 +345,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const period = index + 1;
       cells.push(`<div class="board-cell board-time" style="grid-column:1;grid-row:${period + 1}"><strong>Tiết ${period}</strong><small>${start}–${end}</small></div>`);
       DAYS.forEach((_, dayIndex) => {
-        cells.push(`<div class="board-cell board-slot" style="grid-column:${dayIndex + 2};grid-row:${period + 1}" aria-hidden="true"></div>`);
+        cells.push(`<div class="board-cell board-slot" data-day="${dayIndex}" data-period="${period}" style="grid-column:${dayIndex + 2};grid-row:${period + 1}" aria-hidden="true"></div>`);
       });
     });
 
@@ -315,12 +355,23 @@ document.addEventListener('DOMContentLoaded', () => {
       const safeCode = escapeHTML(course.code);
       const safeRoom = escapeHTML(`Phòng ${course.room}`);
       const safeTeacher = escapeHTML(course.teacher);
-      return `<article class="schedule-class" style="--class-color:${course.color};grid-column:${course.day + 2};grid-row:${course.start + 1}/${course.end + 2}" aria-label="${safeName}, ${DAYS[course.day]}, ${times.start} đến ${times.end}, ${safeRoom}">
+      const courseIssues = issues.get(course.id) || [];
+      const safeIssues = courseIssues.map(escapeHTML);
+      const options = DEMO_CLASS_OPTIONS.get(course.id) || [];
+      const selectedIndex = plan.get(course.id) || 0;
+      const editor = manualEditing ? `<label class="manual-class-editor">Chọn lớp
+        <select data-course-id="${escapeHTML(course.id)}" aria-label="Chọn lớp cho ${safeCode}">
+          ${options.map((section, index) => `<option value="${index}"${index === selectedIndex ? ' selected' : ''}>Lớp ${escapeHTML(section.section)} · ${DAYS[section.day]} · tiết ${section.start}–${section.end}</option>`).join('')}
+        </select>
+      </label>` : '';
+      const issueDetails = safeIssues.map((reason) => `<span class="schedule-class-issue"><i class="fa-solid fa-triangle-exclamation"></i>${reason}</span>`).join('');
+      return `<article class="schedule-class${manualEditing ? ' is-editing' : ''}${courseIssues.length ? ' has-schedule-issue' : ''}" data-course-id="${course.id}" data-day="${course.day}" data-start="${course.start}" data-end="${course.end}" draggable="${manualEditing}" style="--class-color:${course.color};grid-column:${course.day + 2};grid-row:${course.start + 1}/${course.end + 2}" aria-label="${safeName}, ${DAYS[course.day]}, ${times.start} đến ${times.end}, ${safeRoom}${manualEditing ? ', có thể kéo sang ca học đã mở' : ''}${courseIssues.length ? `, Lỗi lịch: ${safeIssues.join(' ')}` : ''}">
         <strong>${safeCode} · Lớp ${course.section}</strong>
         <span class="class-name">${safeName}</span>
         <span><i class="fa-regular fa-clock"></i>${times.start}–${times.end}</span>
         <span><i class="fa-solid fa-location-dot"></i>${safeRoom}</span>
         <span><i class="fa-solid fa-user"></i>${safeTeacher}</span>
+        ${editor}${issueDetails}
       </article>`;
     });
 
@@ -330,6 +381,7 @@ document.addEventListener('DOMContentLoaded', () => {
   function renderToday(scheduledCourses) {
     const dayIndex = (today.getDay() + 6) % 7;
     $('#today-date').textContent = formatDate(today, { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
+    const issues = manualEditing ? getScheduleIssues(scheduledCourses) : new Map();
     const lessons = scheduledCourses
       .filter((course) => course.day === dayIndex)
       .sort((first, second) => first.start - second.start);
@@ -341,47 +393,65 @@ document.addEventListener('DOMContentLoaded', () => {
 
     $('#today-list').innerHTML = lessons.map((course) => {
       const times = getClassTimes(course);
-      return `<article class="today-item" style="--class-color:${course.color}">
+      const courseIssues = issues.get(course.id) || [];
+      return `<article class="today-item${courseIssues.length ? ' has-schedule-issue' : ''}" style="--class-color:${course.color}">
         <span class="today-time">${times.start} – ${times.end}</span>
         <span><strong>${escapeHTML(course.name)}</strong><small>${escapeHTML(course.code)} · ${escapeHTML(course.teacher)}</small></span>
         <span class="today-room"><i class="fa-solid fa-location-dot"></i> Phòng ${escapeHTML(course.room)}</span>
+        ${courseIssues.map((reason) => `<span class="today-issue"><i class="fa-solid fa-triangle-exclamation"></i>${escapeHTML(reason)}</span>`).join('')}
       </article>`;
     }).join('');
   }
 
-  function renderSchedule(recomputeAI = false) {
+  function renderSchedule(recomputeMode = false) {
     registeredCourses = loadConfirmedCourses();
     plan = loadSavedPlan(registeredCourses);
-    if (aiMode) {
-      if (recomputeAI) {
-        const recommendation = recommendSchedule(registeredCourses);
-        if (recommendation) {
-          plan = recommendation;
-          savePlan(recommendation);
-          scheduleMessage = 'Bộ gợi ý AI cục bộ đã chọn các lớp không trùng giờ, ưu tiên ít ngày đến trường và giảm giờ trống.';
-        } else {
-          scheduleMessage = 'Không tìm được phương án minh họa không trùng lịch cho toàn bộ môn đã đăng ký. Hãy kiểm tra dữ liệu lớp học.';
-        }
+    if (scheduleMode === 'smart' && recomputeMode) {
+      const recommendation = recommendSchedule(registeredCourses);
+      if (recommendation) {
+        plan = recommendation;
+        savePlan(recommendation);
+        scheduleMessage = 'Đã chọn phương án không trùng giờ, ưu tiên ít ngày đến trường và giảm giờ trống.';
       } else {
-        scheduleMessage = 'Đang dùng lịch AI đã lưu. Lịch lớp hiện là dữ liệu minh họa.';
+        scheduleMessage = 'Không tìm được phương án minh họa không trùng lịch cho toàn bộ môn đã đăng ký. Hãy kiểm tra dữ liệu lớp học.';
       }
+    } else if (scheduleMode === 'smart') {
+      scheduleMessage = 'Đang dùng lịch tự động thông minh đã lưu. Lịch lớp hiện là dữ liệu minh họa.';
     } else {
       scheduleMessage = registeredCourses.length
-        ? 'Lịch lớp hiện dùng dữ liệu minh họa. Bật gợi ý AI cục bộ để ưu tiên ít ngày học và hạn chế giờ trống.'
+        ? manualEditing
+          ? 'Chế độ chỉnh tay: thay đổi lớp bên dưới để cập nhật thời khóa biểu.'
+          : 'Lịch lớp hiện dùng dữ liệu minh họa. Chọn “Chỉnh lịch tay” để thay đổi lớp học.'
         : 'Chưa có môn đăng ký. Hãy chọn môn trong Courses để đồng bộ thời khóa biểu và học phí.';
     }
 
     const scheduledCourses = getScheduledCourses();
+    const issues = manualEditing ? getScheduleIssues(scheduledCourses) : new Map();
     renderSummary(scheduledCourses);
     renderWeek(scheduledCourses);
     renderToday(scheduledCourses);
-    $('#schedule-note').innerHTML = `<i class="fa-solid fa-circle-info"></i> ${escapeHTML(scheduleMessage)} Dữ liệu giờ học hiện là minh họa.`;
-    const aiButton = $('#ai-schedule');
-    aiButton.classList.toggle('is-active', aiMode);
-    aiButton.setAttribute('aria-pressed', String(aiMode));
-    aiButton.innerHTML = aiMode
-      ? '<i class="fa-solid fa-wand-magic-sparkles"></i> Tắt chế độ AI'
-      : '<i class="fa-solid fa-wand-magic-sparkles"></i> AI xếp lịch';
+    const issueMessages = [...new Set([...issues.values()].flat())];
+    const issueSummary = issueMessages.length
+      ? `<span class="schedule-issue-summary"><i class="fa-solid fa-triangle-exclamation"></i> Có ${issueMessages.length} vấn đề cần xử lý: ${issueMessages.map(escapeHTML).join(' ')}</span>`
+      : '';
+    const storageError = scheduleStorageError
+      ? `<span class="schedule-issue-summary"><i class="fa-solid fa-triangle-exclamation"></i> ${escapeHTML(scheduleStorageError)}</span>`
+      : '';
+    const dragHelp = manualEditing
+      ? ' Kéo thẻ lớp đến một ca học được mở cho môn đó; dùng danh sách chọn lớp nếu cần.'
+      : '';
+    const dragNotice = dragMessage
+      ? `<span class="schedule-issue-summary">${escapeHTML(dragMessage)}</span>`
+      : '';
+    $('#schedule-note').innerHTML = `<i class="fa-solid fa-circle-info"></i> ${escapeHTML(scheduleMessage)} Dữ liệu giờ học hiện là minh họa.${escapeHTML(dragHelp)}${issueSummary}${storageError}${dragNotice}`;
+    const smartButton = $('#smart-schedule');
+    smartButton.classList.toggle('is-active', scheduleMode === 'smart');
+    smartButton.setAttribute('aria-pressed', String(scheduleMode === 'smart'));
+    $('#manual-schedule').classList.toggle('is-active', manualEditing);
+    $('#manual-schedule').setAttribute('aria-pressed', String(manualEditing));
+    $('#manual-schedule').innerHTML = manualEditing
+      ? '<i class="fa-solid fa-check"></i> Xong chỉnh sửa'
+      : '<i class="fa-solid fa-pen-to-square"></i> Chỉnh lịch tay';
   }
 
   const setTheme = (theme) => {
@@ -401,22 +471,115 @@ document.addEventListener('DOMContentLoaded', () => {
     setTheme(theme);
   });
 
-  $('#ai-schedule').addEventListener('click', () => {
-    if (aiMode) {
-      aiMode = false;
-      saveMode();
-      renderSchedule();
-      return;
-    }
+  $('#smart-schedule').addEventListener('click', () => {
     const recommendation = recommendSchedule(loadConfirmedCourses());
     if (!recommendation) {
       scheduleMessage = 'Không tìm được phương án minh họa không trùng lịch cho toàn bộ môn đã đăng ký.';
       $('#schedule-note').textContent = scheduleMessage;
       return;
     }
-    aiMode = true;
+    scheduleMode = 'smart';
+    manualEditing = false;
+    plan = recommendation;
     saveMode();
     savePlan(recommendation);
+    scheduleMessage = 'Đã chọn phương án không trùng giờ, ưu tiên ít ngày đến trường và giảm giờ trống.';
+    dragMessage = '';
+    renderSchedule();
+  });
+
+  $('#manual-schedule').addEventListener('click', () => {
+    scheduleMode = 'manual';
+    manualEditing = !manualEditing;
+    saveMode();
+    dragMessage = '';
+    renderSchedule();
+  });
+
+  $('#schedule-board').addEventListener('change', (event) => {
+    const selector = event.target.closest('select[data-course-id]');
+    if (!selector) return;
+    const courseId = Number(selector.dataset.courseId);
+    const sectionIndex = Number(selector.value);
+    const options = DEMO_CLASS_OPTIONS.get(courseId) || [];
+    if (!Number.isInteger(sectionIndex) || !options[sectionIndex]) {
+      console.error('Không thể cập nhật lịch: lớp học được chọn không hợp lệ.');
+      return;
+    }
+
+    const nextPlan = new Map(plan);
+    nextPlan.set(courseId, sectionIndex);
+    scheduleMode = 'manual';
+    manualEditing = true;
+    saveMode();
+    if (!savePlan(nextPlan)) {
+      plan = nextPlan;
+    }
+    dragMessage = '';
+    renderSchedule();
+  });
+
+  const scheduleBoard = $('#schedule-board');
+  scheduleBoard.addEventListener('dragstart', (event) => {
+    const scheduleClass = event.target.closest('.schedule-class[draggable="true"]');
+    if (!scheduleClass || !manualEditing) {
+      event.preventDefault();
+      return;
+    }
+    draggedCourseId = Number(scheduleClass.dataset.courseId);
+    scheduleBoard.classList.add('is-dragging');
+    scheduleClass.classList.add('is-dragging');
+    event.dataTransfer.effectAllowed = 'move';
+    event.dataTransfer.setData('text/plain', String(draggedCourseId));
+  });
+
+  scheduleBoard.addEventListener('dragend', (event) => {
+    const scheduleClass = event.target.closest('.schedule-class');
+    if (scheduleClass) scheduleClass.classList.remove('is-dragging');
+    scheduleBoard.classList.remove('is-dragging');
+    draggedCourseId = null;
+  });
+
+  scheduleBoard.addEventListener('dragover', (event) => {
+    if (!manualEditing || draggedCourseId === null) return;
+    if (event.target.closest('.board-slot, .schedule-class')) event.preventDefault();
+  });
+
+  scheduleBoard.addEventListener('drop', (event) => {
+    if (!manualEditing || draggedCourseId === null) return;
+    const target = event.target.closest('.board-slot, .schedule-class');
+    if (!target) return;
+    event.preventDefault();
+    const courseId = draggedCourseId;
+    draggedCourseId = null;
+    scheduleBoard.classList.remove('is-dragging');
+
+    let targetDay = Number(target.dataset.day);
+    let targetPeriod = Number(target.dataset.period || target.dataset.start);
+    if (target.classList.contains('schedule-class')) {
+      const periodCount = Number(target.dataset.end) - Number(target.dataset.start) + 1;
+      const targetBounds = target.getBoundingClientRect();
+      const periodHeight = targetBounds.height / periodCount;
+      targetPeriod = Number(target.dataset.start)
+        + Math.min(periodCount - 1, Math.floor((event.clientY - targetBounds.top) / periodHeight));
+    }
+
+    const options = DEMO_CLASS_OPTIONS.get(courseId) || [];
+    const sectionIndex = options.findIndex((section) => (
+      section.day === targetDay && section.start <= targetPeriod && section.end >= targetPeriod
+    ));
+    if (sectionIndex < 0) {
+      dragMessage = 'Không thể thả vào vị trí này: môn học không mở lớp ở ca đó. Hãy thả vào một ca lớp đang mở.';
+      renderSchedule();
+      return;
+    }
+
+    const nextPlan = new Map(plan);
+    nextPlan.set(courseId, sectionIndex);
+    scheduleMode = 'manual';
+    saveMode();
+    if (!savePlan(nextPlan)) plan = nextPlan;
+    dragMessage = '';
     renderSchedule();
   });
 
@@ -444,7 +607,7 @@ document.addEventListener('DOMContentLoaded', () => {
   overlay.addEventListener('click', () => toggleSide(false));
   window.addEventListener('storage', (event) => {
     if (event.key === getStudentStorageKey('sc_schedule_mode')) {
-      aiMode = event.newValue === 'ai';
+      scheduleMode = event.newValue === 'ai' || event.newValue === 'auto' || event.newValue === 'smart' ? 'smart' : 'manual';
       renderSchedule();
     } else if (event.key === null || [
       'sc_registered',
@@ -452,9 +615,9 @@ document.addEventListener('DOMContentLoaded', () => {
       'sc_confirmed_courses',
       'sc_schedule_plan'
     ].map((key) => getStudentStorageKey(key)).includes(event.key)) {
-      renderSchedule(aiMode && (event.key === null || event.key === getStudentStorageKey('sc_registered_courses')));
+      renderSchedule(scheduleMode !== 'manual' && (event.key === null || event.key === getStudentStorageKey('sc_registered_courses')));
     }
   });
 
-  renderSchedule(aiMode);
+  renderSchedule(scheduleMode !== 'manual');
 });
