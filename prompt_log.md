@@ -114,6 +114,19 @@ Kết quả / Cải tiến: AI đã xây dựng thành công một Sticky/Floati
 
 ##Prompt của Phạm Cường Thịnh :
 
+#	Thời gian
+06/11/2026	
+	Prompt (nguyên văn)
+Tạo nút dark mode/light trong phần cài đặt cạnh nút thông báo, và vẫn giữ nguyên phần chọn thay đổi dark mode khi đăng nhập
+
+1	16/10/2026 16:33:45 (kèm ảnh trang chủ cũ)	dựa vào giao diện trang chủ thiết kế cho tôi cổng đăng kí môn học thông minh, chỉ trang chủ, liên kết với các mục trang con khác. Trang chủ: thiết kế sáng tạo hơn, gần gũi với người dùng (sinh viên, giáo viên)
+2	Sau #1, trước 19/10/2026 14:47 (không có giờ chính xác)	thêm css và js
+3	Sau #2, trước 19/10/2026 14:47 (không có giờ chính xác)	tôi muốn bạn thiết kế một trang chủ hoàn toàn mới và tốt hơn, chứ không phải code đè lên với css lủng củng như vậy
+4	19/10/2026 14:47:26 và 14:53:50	bên trái nút thông báo thêm nút darkmode và bên phải là nút đăng nhập/ đăng kí, thêm cả những thông báo từ bảng tin, nút thông báo bên phía trên cũng có thể xổ ra cho người xem có thể thấy, thêm chân trang cho trang chủ như (địa chỉ, facebook , số điện thoại,....). thiết kế layout như hình 2
+5	19/10/2026 15:02:58 	thế này là sao với lại mất bảng tin với nút thông báo không xổ ra
+6	Khoảng 19/10/2026 từ 15:03 đến 15:20 (không có giờ chính xác)	thay màu tươi mới hơn đi
+7	19/10/2026 15:20:44 (kèm js.zip)	dưới đây là trang chủ tôi đã sửa lại, thêm cho tôi thanh tiến độ tốt nghiệp, hoàn thành chứng chỉ được không
+
 
 ##Prompt của Phạm Vũ Công Tuyền :
 
