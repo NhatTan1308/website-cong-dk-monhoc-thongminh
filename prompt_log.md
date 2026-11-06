@@ -119,3 +119,12 @@ Kết quả / Cải tiến: AI đã xây dựng thành công một Sticky/Floati
 
 
 ##Prompt của Vũ Trọng Trần Hiếu :
+Ngày 19/10/2026:
+-Hãy đọc file sau và cho biết đoạn code sau sử dụng những thư viện nào, màu chủ đạo, và các liên kết mô hình(models).
+Ngày 22/10/2026:
+-Hãy giúp tôi đồng bộ các local storage của các folder “Khóa học(Courses)” , “Học phí(Tuition)”, để tạo liên kết cho thời khóa biểu 
+Ngày 30/10/2026:
+-Một số thuật toán sắp xếp thông minh của AI cho việc sắp xếp thời khóa biểu.
+Ngày 30/10/2026:
+-Hãy giúp tôi thêm thuật toán “heuristic beam search”  để sắp xếp lịch học.
+
