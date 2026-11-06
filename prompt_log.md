@@ -126,7 +126,7 @@ Ngày 27/10/2026:
 Ngày 30/10/2026:
 - Hãy bổ sung chức năng theo dõi trạng thái thanh toán học phí, bao gồm: chưa thanh toán, đã thanh toán và đang chờ xác nhận.
 Ngày 30/10/2026:
-- Sửa lỗi khóa màn hình khi bấm vô thánh toán qr
+-Sửa lỗi khóa màn hình khi bấm vô thánh toán qr
 
 
 ##Prompt của Vũ Trọng Trần Hiếu :
