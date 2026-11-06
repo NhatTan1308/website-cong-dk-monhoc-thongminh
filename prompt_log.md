@@ -117,9 +117,19 @@ Kết quả / Cải tiến: AI đã xây dựng thành công một Sticky/Floati
 
 ##Prompt của Phạm Vũ Công Tuyền :
 
+Ngày 19/10/2026:
+- Hãy đọc file tuition.html và cho biết cấu trúc HTML, các thư viện được sử dụng, màu sắc chủ đạo và những chức năng chính của trang học phí.
+Ngày 22/10/2026:
+- Hãy giúp tôi đồng bộ dữ liệu học phí giữa trang Courses và Tuition thông qua Local Storage để tự động cập nhật học phí dựa trên các môn học sinh viên đã đăng ký.
+Ngày 27/10/2026:
+- Hãy giúp tôi xây dựng chức năng tính tổng học phí tự động dựa trên số tín chỉ, đơn giá mỗi tín chỉ và các khoản phí phát sinh.
+Ngày 30/10/2026:
+- Hãy bổ sung chức năng theo dõi trạng thái thanh toán học phí, bao gồm: chưa thanh toán, đã thanh toán và đang chờ xác nhận.
+Ngày 30/10/2026:
+-Sửa lỗi khóa màn hình khi bấm vô thánh toán qr
+
 
 ##Prompt của Vũ Trọng Trần Hiếu :
-
 
 Ngày 19/10/2026:
 -Hãy đọc file sau và cho biết đoạn code sau sử dụng những thư viện nào, màu chủ đạo, và các liên kết mô hình(models).
