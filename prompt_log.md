@@ -1,4 +1,4 @@
-##Prompt của Nguyễn Vũ Nhật Tân :
+#Prompt của Nguyễn Vũ Nhật Tân :
 
 20/10/2026 6:34 PM :  Đọc được các file hiện tại mà tôi đang để ở Folder CuoiKy_LTWeb không?
 
@@ -54,7 +54,7 @@
 
 23/10/2026 12:06 AM : màn nhỏ xuống cỡ 1674 × 924 thì thay bằng màu nền đi
 
-##Prompt của Trần Văn Khoa :
+#Prompt của Trần Văn Khoa :
 
 Lần 1: Khởi tạo bộ khung cơ bản theo bảng phân công
 
@@ -112,9 +112,9 @@ Câu lệnh (Prompt): "Tôi nghĩ là bạn hãy làm một thanh để mà khi 
 
 Kết quả / Cải tiến: AI đã xây dựng thành công một Sticky/Floating Credit Bar nổi ở dưới cùng màn hình, kết hợp thông báo Toast hiện ở góc phải mỗi khi thao tác thành công, và bổ sung nút Quay về trang chủ để tạo ra trải nghiệm UI/UX hoàn mỹ nhất.
 
-##Prompt của Phạm Cường Thịnh :
+#Prompt của Phạm Cường Thịnh :
 
-#	Thời gian
+Thời gian
 06/11/2026	
 	Prompt (nguyên văn)
 Tạo nút dark mode/light trong phần cài đặt cạnh nút thông báo, và vẫn giữ nguyên phần chọn thay đổi dark mode khi đăng nhập
@@ -128,7 +128,7 @@ Tạo nút dark mode/light trong phần cài đặt cạnh nút thông báo, và
 7	19/10/2026 15:20:44 (kèm js.zip)	dưới đây là trang chủ tôi đã sửa lại, thêm cho tôi thanh tiến độ tốt nghiệp, hoàn thành chứng chỉ được không
 
 
-##Prompt của Phạm Vũ Công Tuyền :
+#Prompt của Phạm Vũ Công Tuyền :
 
 Ngày 19/10/2026:
 - Hãy đọc file tuition.html và cho biết cấu trúc HTML, các thư viện được sử dụng, màu sắc chủ đạo và những chức năng chính của trang học phí.
@@ -142,7 +142,7 @@ Ngày 30/10/2026:
 -Sửa lỗi khóa màn hình khi bấm vô thánh toán qr
 
 
-##Prompt của Vũ Trọng Trần Hiếu :
+#Prompt của Vũ Trọng Trần Hiếu :
 
 Ngày 19/10/2026:
 -Hãy đọc file sau và cho biết đoạn code sau sử dụng những thư viện nào, màu chủ đạo, và các liên kết mô hình(models).
